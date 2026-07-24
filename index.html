@@ -3,65 +3,312 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Lingo makes WordPress multilingual without duplicating your content." />
+    <meta name="description" content="Lingo keeps multilingual WordPress clean: one canonical post, every language." />
     <title>Lingo — One post. Every language.</title>
+    <script>
+      document.documentElement.classList.add('motion-booting')
+      window.setTimeout(() => document.documentElement.classList.remove('motion-booting'), 2500)
+    </script>
     <link rel="stylesheet" href="./src/style.css" />
+    <script type="module" src="./src/main.js"></script>
   </head>
   <body>
-    <div class="announcement"><div>Free forever for one additional language <span>|</span> Limited time Save 10% on Pro</div><a href="#migration">Migrate from WPML <img src="./assets/figma/arrow-up.svg" alt="" /></a></div>
-    <header class="site-header"><a class="logo" href="#top" aria-label="Lingo home"><img src="./assets/figma/logo.svg" alt="Lingo" /></a><nav aria-label="Main navigation"><a href="#features">Features</a><a href="#migration">Migration</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></nav><a class="start-free" href="#start">Start Free</a></header>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Lingo home">
+        <img src="./assets/figma/logo.svg" alt="Lingo" />
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#comparison">Compare</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#footer">FAQ</a>
+      </nav>
+      <a class="start-free" href="#pricing">Start Free</a>
+    </header>
+    <header class="sticky-header" aria-label="Sticky navigation">
+      <a class="sticky-brand" href="#top" aria-label="Lingo home"><img src="./assets/figma/logo.svg" alt="Lingo" /></a>
+      <nav aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#comparison">Compare</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#footer">FAQ</a>
+      </nav>
+      <a class="sticky-start" href="#pricing">Start Free</a>
+    </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title"><p class="eyebrow">The multilingual layer for WordPress</p><h1 id="hero-title">One post.<br />Every language.</h1><p class="hero-copy">Translate WordPress without duplicating your content. One canonical post. Clean URLs. Automatic hreflang. Built to stay fast.</p><ul class="proof-list" aria-label="Lingo benefits"><li><img src="./assets/figma/check.svg" alt="" />One canonical post</li><li><img src="./assets/figma/check.svg" alt="" />No duplicated posts</li><li><img src="./assets/figma/check.svg" alt="" />Clean URLs &amp; hreflang</li><li><img src="./assets/figma/check.svg" alt="" />Migrate from WPML</li></ul><div class="hero-actions"><a class="hero-button hero-button-dark" href="#start">Start with Lingo <b>↗</b></a><a class="hero-button" href="#features">How it works <b>↓</b></a></div><p class="micro-proof"><i></i>Free for one additional language <span>/</span> No WPML required</p></section>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="ambient-copy ambient-copy-a" aria-hidden="true"></div>
+        <div class="ambient-copy ambient-copy-b" aria-hidden="true"></div>
+        <div class="ambient-copy ambient-copy-c" aria-hidden="true"></div>
 
-      <section class="difference" id="features" aria-labelledby="difference-title"><a class="how-it-works" href="#migration">How it works</a><h2 id="difference-title">Your site should not multiply to speak.</h2><p>Most multilingual plugins create a new post for every language. That is a workaround, not a system. Lingo keeps the original whole and lets every language live alongside it.</p></section>
+        <div class="hero-content">
+          <p class="eyebrow">The multilingual layer for WordPress</p>
+          <h1 id="hero-title">One post.<br />Every language.</h1>
+          <p class="hero-copy">Translate WordPress without duplicating your content. One canonical post. Clean URLs. Automatic hreflang. Built to stay fast.</p>
 
-      <section class="comparison" aria-label="The old way compared with the Lingo way"><article class="old-way"><p class="card-label">The old way</p><h3>More languages.<br />More mess.</h3><div class="post-cloud" aria-hidden="true"><div class="post active"><b>Post-1068</b><span>EN</span><small>The city is a language...</small></div><div class="post faded-30"><b>Post-1284</b><span>FR</span><small>La ville est une langue...</small></div><div class="post faded-50"><b>Post-1542</b><span>DE</span><small>Die Stadt ist eine Sprache...</small></div><div class="post faded-70"><b>Post-1876</b><span>ES</span><small>La ciudad es un idioma...</small></div><div class="post faded-60"><b>Post-2135</b><span>JA</span><small>都市はひとつの言語です...</small></div><div class="post faded-30"><b>Post-2135</b><span>TC</span><small>城市本身就是一種語言……</small></div></div><p class="card-foot">Separate IDs. Separate posts. More to maintain.</p></article><article class="lingo-way"><p class="card-label">The lingo way</p><h3>One for all.</h3><div class="canonical-post"><span class="frame-line frame-top" aria-hidden="true"></span><span class="frame-line frame-right" aria-hidden="true"></span><span class="frame-line frame-bottom" aria-hidden="true"></span><span class="frame-line frame-left" aria-hidden="true"></span><img src="./assets/figma/logo-small.svg" alt="Lingo" /><strong>post-078</strong><span class="language-count"><b data-language-count>8</b> languages</span></div><p class="card-foot">Stable IDs. A clean admin. Every field, translated.</p></article></section>
+          <ul class="proof-list" aria-label="Core benefits">
+            <li><img src="./assets/figma/check.svg" alt="" />One canonical post</li>
+            <li><img src="./assets/figma/check.svg" alt="" />No duplicated posts</li>
+            <li><img src="./assets/figma/check.svg" alt="" />Clean URLs &amp; hreflang</li>
+            <li><img src="./assets/figma/check.svg" alt="" />Migrate from WPML</li>
+          </ul>
 
-      <section class="feature-deck" id="migration" aria-label="Lingo product capabilities">
-        <article class="feature-card migration-card"><div class="feature-copy"><h2>Leave the bloat.<br />Keep <em>everything.</em></h2><div class="feature-description"><b>Move With Confidence</b><p>See what will change before it does. Migrate your existing content in one command, with an undo ready when you need it.</p></div></div><div class="migration-body"><div class="migration-list"><div><b>01</b><h3>Preview</h3><p>Run a free dry-run. Know every post and language Lingo will bring across.</p></div><div><b>02</b><h3>Apply</h3><p>Move from WPML, Polylang, qTranslate-XT or TranslatePress.</p></div><div><b>03</b><h3>Undo</h3><p>Change your mind? Reverse safely. Original content stays intact.</p></div><a href="#start">Migration guide <span>↗</span></a></div><div class="terminal-demo"><div class="terminal-head"><i></i><i></i><i></i><b>Terminal</b></div><p><strong>~ wp lingo wpml-dryrun</strong></p><p>✓ 248 posts ready to migrate</p><p>✓ 8 languages found</p><p class="terminal-warn">No content will be destroyed.</p><p class="terminal-warn">~ <span class="cursor"></span></p></div></div></article>
+          <div class="hero-actions">
+            <a class="pill pill-dark" href="#pricing"><span>Start with Lingo</span> <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+            <a class="pill pill-light" href="#how-it-works"><span>How it works</span> <img src="./assets/figma/arrow-down.svg" alt="" /></a>
+          </div>
+          <p class="micro-proof"><i></i>Free for one additional language <span>/</span> No WPML required</p>
+        </div>
 
-        <article class="feature-card editor-card"><div class="editor-copy"><h2>Translate where<br />you already write.</h2><div><b>Built into WordPress</b><p>Lingo lives inside the block editor. Switch a language, copy your original as a starting point, then make it local.</p></div><section><strong>Only translate<br />what needs translating.</strong><ul><li>Titles, content and excerpts</li><li>Custom fields and taxonomies</li><li>Media alt text and captions</li><li>Source content stays untouched</li></ul></section></div><div class="editor-stage"><div class="stage-grid"></div><div class="stage-orb"></div><div class="editor-float"><span>LINGO / EDITOR</span><h3>English <i>→</i> Français</h3><p>Translation ready</p><b>✓</b></div><div class="editor-surface"><i></i><i></i><i></i><i></i><em></em><em></em></div></div></article>
+        <div class="notice-bar">
+          <p>Free forever for one additional language <span>|</span> Limited time Save 10% on Pro</p>
+          <a href="#features">Migrate from WPML <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+        </div>
+      </section>
 
-        <article class="feature-card seo-card"><div class="seo-card-copy"><h2>One site.<br />Everywhere.</h2><div><b>SEO, WITHOUT THE GYMNASTICS</b><p>Clean URLs, correct alternates and language-aware metadata - ready before your first translation ships.</p></div></div><div class="seo-routes"><p>example.com <span>Default language</span></p><p>example.com/fr/ <span>Français</span></p><p>example.com/de/ <span>Deutsch</span></p><p>example.com/zh-hant/ <span>繁體中文</span></p><p>example.com/xx/ <span>More</span></p></div><strong>SEO</strong></article>
+      <section class="how-it-works" id="how-it-works" aria-labelledby="how-title">
+        <p class="section-kicker">How it works</p>
+        <h2 id="how-title">Your site should not multiply to speak.</h2>
+        <p class="section-intro">Most multilingual plugins create a new post for every language. That is a workaround, not a system. Lingo keeps the original whole and lets every language live alongside it.</p>
 
-        <article class="feature-card commerce-card"><div class="commerce-copy"><h2>Ready for<br /><em>commerce.</em></h2><div><b>WOOCOMMERCE, BUILT IN</b><p>Translate product content, categories, variations and the complete customer journey - without another extension.</p></div><a href="#start">Explore commerce <span>↗</span></a></div><div class="commerce-stage"><div class="commerce-product"><span>FR / PRODUCT</span><h3>La lampe<br />qui change<br />l'ambiance.</h3><b>$129</b></div><div class="commerce-pill">FR</div><div class="commerce-pill">Cart <b>2</b></div><div class="commerce-orb"></div></div></article>
+        <div class="architecture-comparison">
+          <article class="architecture-card old-way">
+            <p class="architecture-label">The old way</p>
+            <h3>More languages.<br />More mess.</h3>
+            <div class="post-cloud" aria-hidden="true">
+              <div class="post active"><b>Post-1068</b><span>EN</span><small>The city is a language...</small></div>
+              <div class="post faded-30"><b>Post-1284</b><span>FR</span><small>La ville est une langue...</small></div>
+              <div class="post faded-50"><b>Post-1542</b><span>DE</span><small>Die Stadt ist eine Sprache...</small></div>
+              <div class="post faded-70"><b>Post-1876</b><span>ES</span><small>La ciudad es un idioma...</small></div>
+              <div class="post faded-60"><b>Post-2135</b><span>JA</span><small>都市はひとつの言語です...</small></div>
+              <div class="post faded-30"><b>Post-2135</b><span>TC</span><small>城市本身就是一種語言……</small></div>
+            </div>
+            <p class="architecture-foot">Separate IDs. Separate posts. More to maintain.</p>
+          </article>
+
+          <article class="architecture-card lingo-way">
+            <p class="architecture-label">The lingo way</p>
+            <h3>One for all.</h3>
+            <div class="canonical-post">
+              <span class="frame-line frame-top"></span>
+              <span class="frame-line frame-right"></span>
+              <span class="frame-line frame-bottom"></span>
+              <span class="frame-line frame-left"></span>
+              <img src="./assets/figma/logo-small.svg" alt="Lingo" />
+              <strong>post-078</strong>
+              <span class="language-count"><b data-language-count>8</b> languages</span>
+            </div>
+            <p class="architecture-foot">Stable IDs. A clean admin. Every field, translated.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="features" id="features" aria-labelledby="features-title">
+        <div class="feature-stage">
+          <p class="section-kicker" id="features-title">Features</p>
+
+          <div class="feature-stack">
+          <article class="feature-card migration-card">
+            <h2>Leave the bloat.<br />Keep <em>everything.</em></h2>
+            <div class="feature-lede">
+              <strong>Move With Confidence</strong>
+              <p>See what will change before it does. Migrate your existing content in one command, with an undo ready when you need it.</p>
+            </div>
+            <div class="migration-steps">
+              <div><b>01</b><h3>Preview</h3><p>Run a free dry-run. Know every post and language Lingo will bring across.</p></div>
+              <div><b>02</b><h3>Apply</h3><p>Move from WPML, Polylang, qTranslate-XT or TranslatePress.</p></div>
+              <div><b>03</b><h3>Undo</h3><p>Change your mind? Reverse safely. Original content stays intact.</p></div>
+              <a class="pill pill-white" href="#comparison">Migration guide <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+            </div>
+            <div class="terminal" aria-label="Terminal showing a successful Lingo migration dry run">
+              <div class="terminal-head"><span><i></i><i></i><i></i></span><b>Terminal</b></div>
+              <div class="terminal-body" aria-hidden="true">
+                <p><strong data-terminal-line="~ wp lingo wpml-dryrun"></strong></p>
+                <p><span data-terminal-line="✓ 248 posts ready to migrate"></span></p>
+                <p><span data-terminal-line="✓ 8 languages found"></span></p>
+                <p class="terminal-accent"><span data-terminal-line="No content will be destroyed."></span></p>
+                <p class="terminal-accent terminal-prompt-final">~ <i class="cursor"></i></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-card editor-card">
+            <h2>Translate where<br />you already write.</h2>
+            <div class="feature-lede">
+              <strong>Built into WordPress</strong>
+              <p>Lingo lives inside the block editor. Switch a language, copy your original as a starting point, then make it local.</p>
+            </div>
+            <div class="editor-points">
+              <strong>Only translate<br />what needs translating.</strong>
+              <ul>
+                <li>Titles, content and excerpts</li>
+                <li>Custom fields and taxonomies</li>
+                <li>Media alt text and captions</li>
+                <li>Source content stays untouched</li>
+              </ul>
+            </div>
+            <div class="editor-demo" aria-label="Interactive multilingual WordPress editor demo">
+              <div class="editor-demo-bar">
+                <span class="editor-dots"><i></i><i></i><i></i></span>
+                <span>editor / post-1024</span>
+                <b><i></i> LIVE</b>
+              </div>
+              <div class="editor-demo-workspace">
+                <aside class="editor-rail" aria-hidden="true"><b>W</b><i></i><i></i><i></i><i></i></aside>
+                <div class="editor-canvas">
+                  <small>POST / LINGO DEMO</small>
+                  <h3 data-editor-title>The city is a language<br />we learn to read.</h3>
+                  <span class="editor-line editor-line-long"></span>
+                  <span class="editor-line editor-line-mid"></span>
+                  <span class="editor-line editor-line-short"></span>
+                  <div class="editor-art">
+                    <span data-editor-location>LONDON, 2026</span>
+                    <i class="editor-sun"></i>
+                    <i class="editor-hill editor-hill-left"></i>
+                    <i class="editor-hill editor-hill-right"></i>
+                  </div>
+                </div>
+                <aside class="editor-languages">
+                  <header><strong>Language</strong><em>LINGO</em></header>
+                  <div class="editor-current"><span data-editor-code>EN</span><b data-editor-name>English</b><i>⌄</i></div>
+                  <div class="editor-language-list" role="group" aria-label="Preview language">
+                    <button type="button" data-editor-language="0" aria-pressed="true"><span>EN</span>English</button>
+                    <button type="button" data-editor-language="1" aria-pressed="false"><span>FR</span>Français</button>
+                    <button type="button" data-editor-language="2" aria-pressed="false"><span>繁</span>繁體中文</button>
+                    <button type="button" data-editor-language="3" aria-pressed="false"><span>DE</span>Deutsch</button>
+                  </div>
+                  <button class="editor-copy-button" type="button">Copy from English <span>→</span></button>
+                </aside>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-card seo-card">
+            <img class="seo-bg" src="./assets/figma/earth.png" alt="" />
+            <h2>One site.<br />Everywhere.</h2>
+            <div class="feature-lede">
+              <strong>SEO, without the gymnastics</strong>
+              <p>Clean URLs, correct alternates and language-aware metadata — ready before your first translation ships.</p>
+            </div>
+            <div class="seo-routes">
+              <p><span>example.com</span><b>Default language</b></p>
+              <p><span>example.com/fr/</span><b>Français</b></p>
+              <p><span>example.com/de/</span><b>Deutsch</b></p>
+              <p><span>example.com/zh-hant/</span><b>繁體中文</b></p>
+              <p><span>example.com/xx/</span><b>More</b></p>
+            </div>
+            <img class="seo-word" src="./assets/figma/seo-word.svg" alt="" />
+          </article>
+
+          <article class="feature-card commerce-card">
+            <h2>One store.<br />Every customer.</h2>
+            <div class="feature-lede">
+              <strong>WooCommerce, built in</strong>
+              <p>Translate products, categories, attributes, and the entire shopping journey — from /shop to checkout — without another plugin.</p>
+            </div>
+            <div class="commerce-copy">
+              <img src="./assets/figma/woocommerce.svg" alt="WooCommerce" />
+              <p>Built-in WooCommerce translation for products, categories, cart, checkout and customer accounts.</p>
+            </div>
+            <div class="product-card">
+              <img src="./assets/figma/juice.png" alt="Orange, grape and pear juice product" />
+              <div class="product-card-copy" aria-live="polite">
+                <span class="product-language" data-product-language>EN</span>
+                <h3 data-product-title>Orange Grape Pear</h3>
+                <p data-product-description>Freshly squeezed.<br />100% Natural.</p>
+                <strong data-product-price>$9.80</strong>
+              </div>
+            </div>
+          </article>
+          </div>
+        </div>
+
+        <div class="supporting-features">
+          <article><img src="./assets/figma/icon-theme.svg" alt="" /><h3>Fits any theme.</h3><p>Block, shortcode, widget, menu or template tag.</p></article>
+          <article><img src="./assets/figma/icon-code.svg" alt="" /><h3>Built for developers.</h3><p>REST API, hooks, filters, and WP-CLI commands.</p></article>
+          <article><img src="./assets/figma/icon-lock.svg" alt="" /><h3>Your data stays yours.</h3><p>Standalone storage. No third-party lock-in.</p></article>
+          <article><img src="./assets/figma/icon-update.svg" alt="" /><h3>Native WordPress updates.</h3><p>Self-hosted updates through the native WordPress updater.</p></article>
+          <article><img src="./assets/figma/icon-acf.svg" alt="" /><h3>Works with ACF.</h3><p>Translate custom fields without extra plugins.</p></article>
+          <article><img src="./assets/figma/icon-search.svg" alt="" /><h3>Search-ready by default.</h3><p>Automatic hreflang and localized metadata.</p></article>
+          <div class="make-sense">
+            <img src="./assets/figma/make-sense.svg" alt="" />
+            <span>Just make<br />WordPress <em>make sense.</em></span>
+          </div>
+        </div>
+
+        <div class="notice-bar feature-notice">
+          <p>Free forever for one additional language <span>|</span> Limited time Save 10% on Pro</p>
+          <a href="#pricing">View all pricing <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+        </div>
+      </section>
+
+      <section class="comparison-section" id="comparison" aria-labelledby="comparison-title">
+        <p class="section-kicker">Comparison</p>
+        <h2 id="comparison-title">See the difference.</h2>
+        <p class="section-intro">Lingo focuses on what matters most: clean architecture, native workflows, and complete ownership of your content. Compare the essentials at a glance.</p>
+
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th><img src="./assets/figma/logo-small.svg" alt="Lingo" /></th><th>WPML</th><th>Polylang</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>One canonical post</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td></tr>
+              <tr><th>No duplicated posts</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td></tr>
+              <tr><th>Native Gutenberg editing</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td>Separate workflow</td><td><img src="./assets/figma/status-no.svg" alt="No" /></td></tr>
+              <tr><th>Built-in migration</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td><td>Import tools</td></tr>
+              <tr><th>WooCommerce</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td>Add-on</td><td>Add-on</td></tr>
+              <tr><th>Automatic hreflang</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-partial.svg" alt="Supported" /></td><td><img src="./assets/figma/status-partial.svg" alt="Supported" /></td></tr>
+              <tr><th>REST API &amp; WP-CLI</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-partial.svg" alt="Supported" /></td><td>Partial support</td></tr>
+              <tr><th>Standalone architecture</th><td><img src="./assets/figma/status-yes.svg" alt="Yes" /></td><td><img src="./assets/figma/status-no.svg" alt="No" /></td><td><img src="./assets/figma/status-partial.svg" alt="Supported" /></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+        <p class="section-kicker">Pricing</p>
+        <h2 id="pricing-title">Start small. Go everywhere</h2>
+        <p class="section-intro">Every plan has the same clean core. Choose the scale that fits your work.</p>
+
+        <div class="price-grid">
+          <article class="price-card">
+            <h3>Free</h3>
+            <p class="price">$0</p>
+            <p>One secondary language</p>
+            <ul><li>All core translation tools</li><li>Clean URLs + hreflang</li><li>Migration preview + undo</li></ul>
+            <a href="#top">Get the free version</a>
+          </article>
+          <article class="price-card featured">
+            <div class="popular">Most Popular</div>
+            <h3>Business</h3>
+            <p class="price">$129 <small>/ year</small></p>
+            <p>Five sites. Unlimited languages</p>
+            <ul><li><strong>Everything in Free</strong></li><li>One-command migration</li><li>WooCommerce translation</li><li>Priority support + updates</li></ul>
+            <a class="pill business-cta" href="#top">Get Business <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+          </article>
+          <article class="price-card">
+            <h3>Agency</h3>
+            <p class="price">$199 <small>/ year</small></p>
+            <p>Unlimited sites for client work</p>
+            <ul><li><strong>Everything in Business</strong></li><li>Unlimited site activations</li><li>Built for client handoffs</li></ul>
+            <a href="#top">Get Agency</a>
+          </article>
+        </div>
+        <div class="pricing-trust"><span>7-day money-back guarantee</span><i></i><span>Your data stays yours</span><i></i><span>No WPML required</span></div>
       </section>
     </main>
-    <script>
-      const comparison = document.querySelector('.comparison')
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (comparison && !reducedMotion) {
-        let hasPlayed = false
-        const countUp = () => { const count = comparison.querySelector('[data-language-count]'); if (!count) return; count.textContent = '0'; let value = 0; const timer = window.setInterval(() => { value += 1; count.textContent = String(value); if (value === 8) window.clearInterval(timer) }, 78) }
-        const reveal = () => { if (hasPlayed) return; const bounds = comparison.getBoundingClientRect(); if (bounds.top > window.innerHeight * 0.92 || bounds.bottom < 0) return; hasPlayed = true; comparison.classList.add('is-visible'); window.setTimeout(countUp, 920) }
-        comparison.classList.add('animation-ready')
-        if ('IntersectionObserver' in window) { const observer = new IntersectionObserver(() => { reveal(); if (hasPlayed) observer.disconnect() }, { threshold: 0.08 }); observer.observe(comparison) }
-        window.addEventListener('scroll', reveal, { passive: true }); window.addEventListener('pageshow', reveal, { once: true }); requestAnimationFrame(reveal)
-      }
 
-      const featureCards = [...document.querySelectorAll('.feature-deck .feature-card')]
-      if (featureCards.length && !reducedMotion && window.matchMedia('(min-width: 901px)').matches) {
-        let pending = false
-        const updateCardStack = () => {
-          const viewportHeight = window.innerHeight
-          featureCards.forEach((card, index) => {
-            if (index === featureCards.length - 1) return
-            const nextTop = featureCards[index + 1].getBoundingClientRect().top
-            const progress = Math.min(1, Math.max(0, (viewportHeight * .88 - nextTop) / (viewportHeight * .58)))
-            card.style.setProperty('--stack-scale', String(1 - progress * .055))
-            card.style.setProperty('--stack-y', `${-progress * 18}px`)
-            card.style.setProperty('--stack-brightness', String(1 - progress * .14))
-            card.classList.toggle('is-stacked', progress > .02)
-          })
-          pending = false
-        }
-        const queueCardStack = () => { if (!pending) { pending = true; requestAnimationFrame(updateCardStack) } }
-        window.addEventListener('scroll', queueCardStack, { passive: true })
-        window.addEventListener('resize', queueCardStack)
-        window.addEventListener('pageshow', queueCardStack)
-        queueCardStack()
-      }
-    </script>
+    <footer id="footer">
+      <img src="./assets/figma/logo.svg" alt="Lingo" />
+      <nav aria-label="Footer navigation">
+        <a href="#features">Documentation</a>
+        <a href="#comparison">FAQ</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#top">Contact</a>
+      </nav>
+      <p>© 2026 Lingo. Built to travel.</p>
+    </footer>
   </body>
 </html>
