@@ -27,7 +27,7 @@ export default {
   },
 
   notice: {
-    free: 'Gratuit pour toujours pour une langue supplémentaire',
+    free: 'Langues illimitées sur toutes les formules, gratuite comprise',
     promo: 'Durée limitée : 10 % de remise sur Pro',
     migrate: 'Migrer depuis WPML',
     viewPricing: 'Voir tous les tarifs'
@@ -50,7 +50,7 @@ export default {
       proof: ['Un seul article canonique', 'Aucun article dupliqué', 'URL propres &amp; hreflang', 'Migration depuis WPML'],
       ctaPrimary: 'Commencer avec Lingo',
       ctaSecondary: 'Comment ça marche',
-      micro: 'Gratuit pour une langue supplémentaire <span>/</span> WPML non requis'
+      micro: 'Langues illimitées dans la version gratuite <span>/</span> WPML non requis'
     },
 
     how: {
@@ -155,40 +155,84 @@ export default {
     pricing: {
       kicker: 'Tarifs',
       title: 'Commencez petit. Allez partout',
-      intro: 'Toutes les formules partagent le même cœur. Choisissez l’échelle qui correspond à votre travail.',
+      intro: 'Langues illimitées sur toutes les formules, Free comprise. Vous ne payez que pour le nombre de sites que vous gérez — jamais pour le nombre de langues que vous publiez.',
       popular: 'Le plus choisi',
       perYear: '/ an',
       plans: [
         {
           name: 'Free',
           price: '0 €',
-          summary: 'Une langue secondaire',
-          points: ['Tous les outils de traduction', 'URL propres + hreflang', 'Aperçu de migration + annulation'],
+          summary: 'Langues illimitées, un site',
+          points: ['Langues illimitées', 'Traduction champ par champ', 'URL propres + hreflang', 'Aperçu de migration + annulation'],
           cta: 'Obtenir la version gratuite'
         },
         {
+          name: 'Single',
+          price: '65 €',
+          period: true,
+          summary: 'Un site. Langues illimitées',
+          points: ['<strong>Tout ce qu’il y a dans Free</strong>', 'Migrations appliquées', 'Traduction WooCommerce', 'Traduction automatique'],
+          cta: 'Choisir Single'
+        },
+        {
           name: 'Business',
-          price: '119 €',
+          price: '139 €',
           period: true,
           featured: true,
           summary: 'Cinq sites. Langues illimitées',
-          points: ['<strong>Tout ce qu’il y a dans Free</strong>', 'Migration en une commande', 'Traduction WooCommerce', 'Support prioritaire + mises à jour'],
+          points: ['<strong>Tout ce qu’il y a dans Single</strong>', 'Flux éditorial', 'Support prioritaire + mises à jour', 'Plus de traduction automatique'],
           cta: 'Choisir Business'
         },
         {
           name: 'Agency',
-          price: '189 €',
+          price: '259 €',
           period: true,
           summary: 'Sites illimités pour vos clients',
-          points: ['<strong>Tout ce qu’il y a dans Business</strong>', 'Activations de sites illimitées', 'Pensé pour la livraison client'],
+          points: ['<strong>Tout ce qu’il y a dans Business</strong>', 'Activations de sites illimitées', 'Compatible WP Multisite', 'Pensé pour la livraison client'],
           cta: 'Choisir Agency'
         }
       ],
-      trust: ['Garantie 7 jours satisfait ou remboursé', 'Vos données restent les vôtres', 'WPML non requis'],
+
+      compare: {
+        show: 'Comparer les formules',
+        hide: 'Masquer le comparatif',
+        label: 'Comparatif des fonctionnalités par formule',
+        note: 'Toutes les formules incluent des langues illimitées. Elles diffèrent par le nombre de sites et les fonctions Pro ci-dessus.',
+        rows: [
+          { label: 'Prix', strong: true, cells: ['<strong>0 €</strong>', '<strong>65 €</strong><small>/an</small>', '<strong>139 €</strong><small>/an</small>', '<strong>259 €</strong><small>/an</small>'] },
+          { label: 'Sites', strong: true, cells: ['1', '1', '5', 'Illimités'] },
+          { label: 'Langues', cells: ['Illimitées', 'Illimitées', 'Illimitées', 'Illimitées'] },
+          { label: 'Traduction champ par champ', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Aucun article dupliqué', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'URL propres + hreflang', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Sélecteur de langue', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'ACF + page builders', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'API REST + WP-CLI', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Aperçu de migration + annulation', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Migrations appliquées', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Traduction WooCommerce', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Traduction automatique', cells: ['no', '50k mots/an', '250k mots/an', '1M + recharges'] },
+          { label: 'Flux éditorial', cells: ['no', 'no', 'yes', 'yes'] },
+          { label: 'WP Multisite', cells: ['no', 'no', 'no', 'yes'] },
+          { label: 'Support', cells: ['Forum', 'E-mail', 'Prioritaire', 'Prioritaire + livraison'] }
+        ]
+      },
+
+      lifetime: {
+        badge: 'Offre de lancement — limitée',
+        title: 'À vie — cinq sites, un seul paiement',
+        copy: 'Une offre de lancement plafonnée : toutes les fonctions Pro sur cinq sites, les mises à jour à vie et 12 mois de support prioritaire. Une fois les places parties, elles ne reviennent pas.',
+        price: '419 €',
+        once: 'une fois',
+        cta: 'Prendre l’offre à vie',
+        seats: '100 places sur 100 restantes'
+      },
+
+      trust: ['Garantie 14 jours satisfait ou remboursé', 'Langues illimitées sur toutes les formules', 'WPML non requis'],
       cta: {
         kicker: 'Encore hésitant ?',
         title: 'Essayez sur une langue.<br />Décidez avec votre propre site.',
-        copy: 'La version gratuite couvre une langue supplémentaire — traduisez une page et regardez <em>/fr/</em> passer en ligne avant de dépenser quoi que ce soit. Des questions d’abord ? Écrivez à <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
+        copy: 'La version gratuite gère des langues illimitées sur un site — traduisez une page et regardez <em>/fr/</em> passer en ligne avant de dépenser quoi que ce soit. Des questions d’abord ? Écrivez à <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
         primary: 'Lire la FAQ',
         secondary: 'Documentation'
       }
@@ -222,7 +266,7 @@ export default {
           { q: 'Lingo va-t-il dupliquer mes articles ?', a: ['Non. C’est tout l’intérêt. Un seul article canonique garde son ID ; les traductions vivent à côté. Vos listes d’articles, vos permaliens et votre admin restent exactement aussi longs qu’aujourd’hui, que vous ayez deux langues ou huit.'] },
           { q: 'Lingo traduit-il mon contenu automatiquement ?', a: ['Non — Lingo est une <em>couche</em> de traduction, pas un moteur de traduction. Vous ou votre traducteur écrivez chaque langue ; Lingo la stocke, la route et la sert. <em>Copier depuis la langue par défaut</em> place votre texte source dans la langue cible comme point de départ, pour ne jamais faire face à un champ vide.'] },
           { q: 'Est-ce que tout cela passe par un service tiers ?', a: ['Non. Lingo est auto-hébergé. Vos traductions sont dans votre propre base de données et aucun service externe ne se place sur le chemin des requêtes. Si vous partez un jour, les données restent les vôtres.'] },
-          { q: 'Combien de langues puis-je gérer ?', a: ['La version gratuite couvre une langue supplémentaire, avec le moteur de traduction complet derrière — rien n’est bridé. Les formules payantes lèvent la limite.'] }
+          { q: 'Combien de langues puis-je gérer ?', a: ['Autant que vous voulez, sur toutes les formules — la gratuite comprise. Les langues ne sont jamais ce que vous payez : les formules diffèrent par le nombre de sites et par les fonctions Pro.'] }
         ]
       },
       {
@@ -289,10 +333,10 @@ export default {
         title: 'Acheter &amp; se faire aider',
         lede: 'Ce que couvre chaque formule, comment arrivent les mises à jour, et où se trouve la surface développeur.',
         items: [
-          { q: 'Que contient la version gratuite ?', a: ['Une langue supplémentaire et le cœur complet : traduction champ par champ, URL propres, hreflang automatique, le sélecteur, et l’aperçu de migration avec annulation. C’est une vraie porte d’entrée, pas une démo.'] },
-          { q: 'Qu’ajoutent les formules payantes ?', a: ['Des langues illimitées, la migration en une commande (l’appliquer, pas seulement la prévisualiser), la traduction des produits WooCommerce, et un support prioritaire avec mises à jour automatiques.'] },
-          { q: 'De quelle formule ai-je besoin pour des sites clients ?', a: ['Business couvre cinq sites à 119 € par an. Agency est à 189 € par an avec des activations de sites illimitées — celle à prendre si le multilingue fait normalement partie de ce que vous livrez à vos clients.'] },
-          { q: 'Puis-je être remboursé ?', a: ['Oui — il y a une garantie satisfait ou remboursé de 7 jours sur les formules payantes. Et vous pouvez utiliser la version gratuite aussi longtemps que vous voulez avant de décider.'] },
+          { q: 'Que contient la version gratuite ?', a: ['Des langues illimitées sur un site, et le cœur complet : traduction champ par champ, URL propres, hreflang automatique, le sélecteur, et l’aperçu de migration avec annulation. C’est une vraie porte d’entrée, pas une démo.'] },
+          { q: 'Qu’ajoutent les formules payantes ?', a: ['Plus de sites, et les fonctions Pro : appliquer une migration et pas seulement la prévisualiser, la traduction des produits WooCommerce, la traduction automatique, le flux éditorial, WP Multisite, et un support prioritaire avec mises à jour automatiques.'] },
+          { q: 'De quelle formule ai-je besoin pour des sites clients ?', a: ['Business couvre cinq sites à 139 € par an. Agency est à 259 € par an avec des activations de sites illimitées et WP Multisite — celle à prendre si le multilingue fait normalement partie de ce que vous livrez à vos clients.'] },
+          { q: 'Puis-je être remboursé ?', a: ['Oui — il y a une garantie satisfait ou remboursé de 14 jours sur les formules payantes. Et vous pouvez utiliser la version gratuite aussi longtemps que vous voulez avant de décider.'] },
           { q: 'Puis-je changer de formule plus tard ?', a: ['Oui. Vos traductions vivent dans votre propre base de données, passer d’une formule à l’autre est donc un changement de licence — jamais une migration de contenu.'] },
           { q: 'Comment fonctionnent les mises à jour ?', a: ['Par l’écran de mises à jour habituel de WordPress. Les mises à jour payantes sont auto-hébergées et vérifiées, il n’y a donc pas de tableau de bord séparé où se connecter et rien de nouveau à apprendre à un client.'] },
           { q: 'Existe-t-il une API pour les développeurs ?', a: ['Oui : commandes WP-CLI, résolution de langue via l’API REST, et un ensemble documenté de hooks et de filtres. Automatisez les parties ennuyeuses et laissez le reste aux rédacteurs.'] }

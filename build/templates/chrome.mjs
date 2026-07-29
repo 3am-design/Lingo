@@ -8,6 +8,17 @@ import { LOCALES, absoluteHref, localeRoot, otherLocaleHref, pageHref } from '..
 // the template literals as HTML.
 export const html = (strings, ...values) => String.raw({ raw: strings }, ...values)
 
+// Both heroes break their headline into fixed lines. A full-width CJK stop
+// carries its glyph in the left half of a 1em box, so a centred line ending in
+// 。or 、 reads about a quarter-em left of true centre against the eyebrow and
+// the paragraph under it. Flagging those lines lets CSS give the half-em back
+// without touching locales whose punctuation is proportional.
+const HANGING_PUNCTUATION = /[。、，．！？：；]$/
+
+export const heroLines = (lines) => lines
+  .map((line) => `<span class="hero-line${HANGING_PUNCTUATION.test(line) ? ' punct-end' : ''}"><span>${line}</span></span>`)
+  .join('')
+
 export const head = ({ locale, page, t, assets }) => html`
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -13,7 +13,7 @@
 :lang(ko){--lang-face:var(--kr)}
 :lang(ja),:lang(ko){font-family:Inter,var(--lang-face),Arial,sans-serif}
 :lang(ja) h1,:lang(ja) h2,:lang(ja) h3,:lang(ja) .price,:lang(ja) .faq-lede,:lang(ja) .architecture-card h3,
-:lang(ko) h1,:lang(ko) h2,:lang(ko) h3,:lang(ko) .price,:lang(ko) .faq-lede,:lang(ko) .architecture-card h3{font-family:Brown,var(--lang-face),Arial,sans-serif}
+:lang(ko) h1,:lang(ko) h2,:lang(ko) h3,:lang(ko) .price,:lang(ko) .lifetime-price,:lang(ko) .faq-lede,:lang(ko) .architecture-card h3{font-family:Brown,var(--lang-face),Arial,sans-serif}
 
 :root{--orange:#f17923;--paper:#f5f5f5;--ink:#000;--muted:#5d5d5d;--old-way:#5b6171;--purple:#2c035d;--purple-accent:#873eff}
 
@@ -81,6 +81,10 @@ html.lenis,html.lenis body{height:auto}
 /* Keep the intended line break, but reveal the complete headline as one block.
    Masking each line exposed thin glyph slices during the first frames. */
 .hero h1 .hero-line{display:block}
+/* A line ending in a full-width stop has ~half an em of empty box after the
+   glyph, which drags a centred line off centre. Padding the other side puts
+   half of it back, so the ink sits on the axis instead of the box. */
+.hero h1 .hero-line.punct-end{padding-left:.5em}
 
 /* Check marks land just after their line of text. */
 .hero-content .proof-list li.motion-reveal img{opacity:0;transform:scale(.35);transition:opacity .4s ease calc(var(--reveal-delay,0ms) + 200ms),transform .62s cubic-bezier(.34,1.56,.64,1) calc(var(--reveal-delay,0ms) + 200ms)}
@@ -197,7 +201,8 @@ html.lenis,html.lenis body{height:auto}
 .architecture-label{margin:0;font-weight:500}
 .lingo-way .architecture-label{color:var(--orange)}
 .architecture-card h3{margin:11px 0 0;font:400 40px/48px Brown,Arial,sans-serif}
-.architecture-foot{position:absolute;left:26px;bottom:25px;margin:0;font-weight:500}
+.architecture-foot{position:absolute;left:26px;bottom:25px;margin:0;display:flex;align-items:center;gap:11px;font-weight:500}
+.architecture-foot img{flex:none;width:19px;height:19px}
 .post-cloud{position:absolute;inset:212px 0 0}
 .post{--post-opacity:1;position:absolute;width:290px;height:81px;padding:19px 22px;border:1px solid #fff;display:grid;grid-template-columns:auto 1fr;column-gap:6px;align-content:start;font-weight:500;opacity:var(--post-opacity)}
 .post span{width:27px;height:16px;background:rgba(217,217,217,.3);font-size:13px;text-align:center;line-height:16px}
@@ -348,22 +353,92 @@ td img,thead img{display:block;width:19px;height:19px;margin:0 auto}thead img{wi
 
 .pricing{min-height:836px;padding:77px var(--grid-edge) 60px;background:#000;color:#fff;text-align:center}
 .pricing .section-kicker{color:#fff}.pricing>.section-intro{color:#fff}
-.price-grid{width:100%;margin:56px auto 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--grid-gap);text-align:left}
-.price-card{grid-column:span 2;position:relative;min-width:0;height:363px;padding:23px 36px;border:1px solid #fff;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:28px}.price-card.featured{background:#fff;color:#000}
-.price-card h3{grid-column:1;margin:0;font-size:15px;font-weight:600}/* The price and its period are one phrase and must stay on one line, but the
+.price-grid{width:100%;margin:56px auto 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--grid-gap);text-align:left}
+.price-card{position:relative;min-width:0;min-height:390px;padding:23px 28px;border:1px solid #fff;color:#fff;display:flex;flex-direction:column}.price-card.featured{background:#fff;color:#000}
+.price-card h3{margin:0;font-size:15px;font-weight:600}/* The price and its period are one phrase and must stay on one line, but the
    phrase is a different width in every currency — ¥19,800 is twice $129, and
    ₩179,000 wider still. Rather than let it wrap, each locale sets its own size;
    a new currency is two variables, not another rule. */
-.price{grid-column:1;margin:22px 0 4px;font-size:var(--price-size,50px);line-height:1.15;white-space:nowrap}
+.price{margin:22px 0 4px;font-size:var(--price-size,50px);line-height:1.15;white-space:nowrap}
 .price small{font-size:var(--price-period-size,20px)}
 :lang(fr),:lang(de),:lang(es){--price-size:44px;--price-period-size:18px}
 :lang(ja){--price-size:42px;--price-period-size:17px}
 :lang(ko){--price-size:36px;--price-period-size:17px}
-.price-card>p:not(.price){grid-column:1;margin:0}.price-card ul{grid-column:2;grid-row:1/-1;align-self:center;min-width:0;margin:0;padding-left:18px;line-height:25px}
-.price-card>a:not(.pill){grid-column:1;align-self:end;font-weight:600;text-decoration:underline;text-underline-offset:3px}
-.popular{position:absolute;right:28px;top:21px;padding:1px 8px;border:1px solid var(--orange);color:var(--orange);font-size:10px;text-transform:uppercase}
-.business-cta{grid-column:1;align-self:end;width:186px;background:var(--orange);color:#000;font-weight:600}.business-cta img{filter:brightness(0)}
+/* The list's bottom margin is the floor under the CTA: `margin-top:auto` alone
+   pins the button to the card edge, and in a locale whose list runs long that
+   leaves the last bullet sitting on top of it. */
+.price-card>p:not(.price){margin:0}.price-card ul{min-width:0;margin:20px 0 28px;padding-left:18px;line-height:25px}
+/* The three plain links sit in the same row as the featured card's pill, so
+   they carry the notice bar's arrow and are lifted by the difference between
+   the pill's centred label and their own line box — the four CTAs read as one
+   line across the grid rather than three links dropped to the card floor. */
+.price-card>a:not(.pill){align-self:start;margin-top:auto;margin-bottom:11px;display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.price-card>a:not(.pill)>span{text-decoration:underline;text-underline-offset:3px}
+.price-card>a:not(.pill) img{width:18px;height:18px;transition:transform .35s cubic-bezier(.22,.72,.24,1)}
+.price-card>a:not(.pill):hover img{transform:rotate(45deg)}
+/* The whole card is the click target. It grows out of the CTA as a transparent
+   overlay rather than wrapping the card in a second <a>, so each plan still
+   exposes exactly one link to a keyboard or a screen reader. */
+.price-card>a::after{content:"";position:absolute;inset:0}
+/* Pointer devices only. On a touch screen :hover latches on the element under
+   a scroll gesture and would light the CTA up mid-drag; a finger also has no
+   hover state to preview, so there is nothing to lose by opting out. */
+@media(hover:hover) and (pointer:fine){
+  /* The card's own edge carries the hover — the arrow is a white glyph, so
+     turning the link orange next to it reads as two different states. */
+  .price-card{transition:border-color .2s ease}
+  .price-card:hover{border-color:var(--orange)}
+  .price-card:hover .business-cta{background:#000;color:#fff}
+  .price-card:hover .business-cta img{filter:brightness(0) invert(1)}
+  .price-card:hover>a img{transform:rotate(45deg)}
+}
+.popular{position:absolute;right:20px;top:21px;padding:1px 8px;border:1px solid var(--orange);color:var(--orange);font-size:10px;text-transform:uppercase}
+.business-cta{background:var(--orange);color:#000;font-weight:600}.business-cta img{filter:brightness(0)}
+/* The featured card is the one plan with a filled CTA, and it reads as a
+   footer to the card rather than a button beside the copy: full width, pinned
+   to the bottom edge, label and arrow spaced like every other pill. */
+.price-card .business-cta{width:100%;margin-top:auto}
 .start-free:hover,.sticky-start:hover,.pill-dark:hover,.pill-light:hover,.pill-white:hover{background:var(--orange);border-color:var(--orange);color:#000}.pill-dark:hover img,.pill-white:hover img{filter:brightness(0)}.business-cta:hover{background:#000;color:#fff}.business-cta:hover img{filter:brightness(0) invert(1)}
+/* The full matrix is the answer to "what exactly do I lose on Free", not the
+   first thing to read — the four cards make the choice, this settles it. Same
+   0fr/1fr row trick the FAQ answers use, so the panel measures itself. */
+.plan-compare{width:100%;margin:0 auto}
+.plan-compare-toggle{width:max-content;min-width:186px;max-width:100%;margin:38px auto 0;border:1px solid #fff;background:transparent;color:#fff;justify-content:center;gap:10px}
+.plan-compare-toggle:hover{background:var(--orange);border-color:var(--orange);color:#000}
+.plan-compare-toggle:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.plan-compare-toggle i{flex:none;width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .34s cubic-bezier(.22,.72,.24,1)}
+.plan-compare-toggle[aria-expanded="true"] i{transform:translateY(2px) rotate(-135deg)}
+.plan-table{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.22,.72,.24,1)}
+.plan-table>div{overflow:hidden;visibility:hidden;transition:visibility 0s linear .42s}
+.plan-table.is-open{grid-template-rows:1fr}
+.plan-table.is-open>div{visibility:visible;transition-delay:0s}
+.plan-table-wrap{width:100%;padding-top:44px;overflow-x:auto}
+.plan-table-wrap table{min-width:760px}
+.plan-table-wrap th,.plan-table-wrap td{height:43px;border-bottom:1px solid #262626;padding:8px 10px;font-size:14px}
+.plan-table-wrap thead th{height:46px;font-weight:600}
+.plan-table-wrap th:first-child{width:26%;text-align:left;color:#9b9b9b;font-weight:400}
+.plan-table-wrap th.is-strong{color:#fff;font-weight:600}
+.plan-table-wrap td small{font-size:12px}
+/* The cross is a white cut-out so it survives the black ground; held back to
+   grey so the row still reads as "not included" rather than as a mark. */
+.plan-table-wrap img.status-no{opacity:.42}
+.plan-table-note{margin:20px 0 0;color:#9b9b9b;font-size:12px}
+
+/* The one block on the page that is sold rather than explained, so it takes
+   the orange as a fill instead of an outline and inverts everything on it. */
+.lifetime-card{width:100%;margin:56px auto 0;padding:26px 34px 30px;background:var(--orange);color:#000;display:flex;align-items:center;justify-content:space-between;gap:40px;text-align:left}
+.lifetime-badge{width:max-content;margin:0;padding:2px 8px;border:1px solid #000;font-size:10px;font-weight:600;letter-spacing:.06em;line-height:1.6;text-transform:uppercase}
+/* Brown ships Regular and Bold only, so "a little bolder" is the Bold face —
+   the same one every other heading on the page uses. */
+.lifetime-card h3{margin:16px 0 0;font:700 28px/1.2 Brown,Arial,sans-serif;letter-spacing:-.01em}
+.lifetime-copy{width:min(560px,100%);margin:10px 0 0;color:rgba(0,0,0,.72);font-size:14px;line-height:23px}
+.lifetime-buy{flex:none;display:grid;grid-template-columns:auto auto;align-items:center;column-gap:26px}
+.lifetime-price{grid-column:1;margin:0;font:400 40px/1.1 Brown,Arial,sans-serif;white-space:nowrap}
+.lifetime-price small{font:400 14px/1 Inter,Arial,sans-serif}
+.lifetime-cta{grid-column:2;grid-row:1/span 2;width:max-content;min-width:186px;background:#000;color:#fff;font-weight:600}
+.lifetime-cta:hover{background:#fff;color:#000}.lifetime-cta:hover img{filter:brightness(0)}
+.lifetime-seats{grid-column:1;margin:6px 0 0;color:rgba(0,0,0,.72);font-size:12px;white-space:nowrap}
+
 .pricing-trust{width:min(var(--span-4),100%);margin:39px auto 0;display:flex;justify-content:center;align-items:center;gap:30px;font-size:12px}.pricing-trust i{width:24px;height:24px;display:grid;place-items:center;font-style:normal}.pricing-trust i::before{content:"✳";color:var(--orange);font:400 21px/1 Arial,sans-serif}
 
 footer{position:relative;height:465px;padding:84px var(--grid-edge);background:#fff;overflow:hidden}
@@ -393,7 +468,6 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
 @media(max-width:1100px){
   .ambient-copy{display:none}.site-header nav{gap:25px;padding:0 38px}
   .architecture-comparison{grid-template-columns:1fr}.architecture-card{grid-column:auto;width:100%}
-  .price-card{column-gap:18px;padding-left:28px;padding-right:28px}
 }
 
 /* The comparison table and the supporting grid need more room than four
@@ -406,18 +480,16 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
 }
 
 @media(max-width:1400px) and (min-width:901px){
-  .price-card{column-gap:14px;padding-left:24px;padding-right:24px}.price-card ul{font-size:13px}
+  .price-card{padding-left:24px;padding-right:24px}.price-card ul{font-size:13px}
 }
 
-/* Two-up inside a two-column card stops working around 320px of card width —
-   the price line and the feature list both overrun. Stack the interior and
-   keep the three plans side by side. */
-@media(max-width:1150px) and (min-width:901px){
-  .price-card{grid-template-columns:minmax(0,1fr);height:auto;min-height:363px;padding-left:22px;padding-right:22px}
-  .price-card ul{grid-column:1;grid-row:auto;align-self:start;margin-top:20px;padding-left:16px;font-size:13px}
-  .price-card>a:not(.pill),.business-cta{margin-top:20px}
-  .business-cta{width:100%}
-  .popular{right:20px}
+/* Four plans across stop working around 270px of card width — the price line
+   is the widest thing on the site per character and every currency writes it
+   differently. Two rows of two before anything has to shrink. */
+@media(max-width:1300px) and (min-width:901px){
+  .price-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .price-card{min-height:340px;padding-left:28px;padding-right:28px}.price-card ul{font-size:14px}
+  .lifetime-card{align-items:flex-start;flex-direction:column;gap:26px}
 }
 
 @media(max-width:900px){
@@ -467,7 +539,7 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
   .notice-bar .notice-sep,.notice-bar .notice-more{display:none}
   .notice-bar img{width:16px;height:16px}
   .how-it-works,.comparison-section{padding:55px 20px 75px}.how-it-works h2,.comparison-section h2,.pricing>h2{font-size:32px;line-height:42px}.section-intro{font-size:14px;line-height:22px}
-  .architecture-comparison{margin-top:38px;gap:16px}.architecture-card{height:410px;padding:24px 20px}.architecture-card h3{font-size:34px;line-height:40px}.architecture-foot{left:20px;bottom:20px;font-size:12px}
+  .architecture-comparison{margin-top:38px;gap:16px}.architecture-card{height:410px;padding:24px 20px}.architecture-card h3{font-size:34px;line-height:40px}.architecture-foot{left:20px;bottom:20px;gap:8px;font-size:12px}.architecture-foot img{width:16px;height:16px}
   .post-cloud{inset:176px 0 0}.post{transform:scale(.7);transform-origin:top left}.post:nth-child(1){left:21px}.post:nth-child(2){left:228px}.post:nth-child(3){left:435px}.post:nth-child(4){left:-83px;top:57px}.post:nth-child(5){left:124px;top:57px}.post:nth-child(6){left:331px;top:57px}
   .canonical-post{top:182px;width:calc(100% - 40px);max-width:none;height:72px;padding:0 17px}.canonical-post>img{width:68px;height:auto}.canonical-post strong,.language-count{font-size:15px}
   /* Every feature card becomes a single flowing column. The desktop
@@ -494,7 +566,23 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
   .comparison-table-wrap th,.comparison-table-wrap td{height:auto;min-height:46px;padding:12px 5px;font-size:12px}
   .comparison-table-wrap th:first-child{width:37%}
   .comparison-table-wrap thead img{width:41px;height:auto}.comparison-table-wrap td img{width:17px;height:17px}
-  .pricing{padding:60px 20px}.price-grid{grid-template-columns:1fr;gap:16px}.price-card{grid-column:1;height:auto;min-height:340px}.price-card ul{font-size:14px}
+  .pricing{padding:60px 20px}.price-grid{grid-template-columns:1fr;gap:16px}.price-card{min-height:0}.price-card ul{font-size:14px}
+  /* Five narrow columns beat a table wider than the screen — same call the
+     WPML comparison makes above, and a sideways scroll here has no affordance. */
+  .plan-compare-toggle{margin-top:28px}
+  .plan-table-wrap{padding-top:30px}
+  .plan-table-wrap table{min-width:0}
+  .plan-table-wrap th,.plan-table-wrap td{height:auto;min-height:42px;padding:10px 5px;font-size:11px}
+  .plan-table-wrap th:first-child{width:30%}
+  .plan-table-wrap td small{font-size:10px}
+  .plan-table-wrap td img{width:17px;height:17px}
+  .plan-table-note{font-size:11px;text-align:left}
+  .lifetime-card{margin-top:34px;padding:22px;align-items:flex-start;flex-direction:column;gap:22px}
+  .lifetime-card h3{margin-top:14px;font-size:24px}
+  .lifetime-buy{width:100%;display:flex;flex-direction:column;align-items:stretch}
+  .lifetime-price{font-size:34px}
+  .lifetime-cta{order:3;width:100%;margin-top:18px}
+  .lifetime-seats{order:2}
   /* Keep the three proofs and both stars on a single line — everything scales
      with the viewport rather than wrapping. */
   .pricing-trust{width:100%;flex-wrap:wrap;gap:clamp(4px,1.6vw,14px);font-size:clamp(8px,2.15vw,12px);white-space:nowrap}
@@ -541,12 +629,15 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
   .seo-card .seo-word{width:92%}.seo-routes{font-size:12px}.seo-routes p{grid-template-columns:minmax(0,132px) 1fr}
   .commerce-copy{font-size:14px;line-height:21px}.product-card{padding-left:18px;padding-right:18px}.product-card>img{max-height:200px}
   .comparison-table-wrap th,.comparison-table-wrap td{padding:11px 4px;font-size:11px}.comparison-table-wrap thead img{width:35px}
-  .price-card{padding:23px 24px;grid-template-columns:1fr}.price-card ul{grid-column:1;grid-row:auto;align-self:start;margin-top:24px;font-size:12px}.price-card>a:not(.pill),.business-cta{margin-top:22px}
+  .price-card{padding:23px 24px}.price-card ul{margin:18px 0 24px;font-size:12px}
+  .plan-table-wrap th,.plan-table-wrap td{padding:9px 5px;font-size:11px}
+  .lifetime-card h3{font-size:22px}.lifetime-copy{font-size:13px}
 }
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}.ambient-copy.typing::after,.cursor{animation:none}.feature-card{transform:none!important;filter:none!important}.motion-reveal{opacity:1;transform:none;transition:none}
   .hero-content .proof-list li.motion-reveal img{opacity:1;transform:none;transition:none}
+  .plan-table,.plan-table>div,.plan-compare-toggle i{transition:none}
 }
 
 @keyframes cursor-blink{50%{opacity:0}}

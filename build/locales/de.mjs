@@ -28,7 +28,7 @@ export default {
   },
 
   notice: {
-    free: 'Dauerhaft gratis für eine zusätzliche Sprache',
+    free: 'Unbegrenzte Sprachen in jedem Tarif, auch im kostenlosen',
     promo: 'Nur kurze Zeit: 10 % Rabatt auf Pro',
     migrate: 'Von WPML migrieren',
     viewPricing: 'Alle Preise ansehen'
@@ -51,7 +51,7 @@ export default {
       proof: ['Ein kanonischer Beitrag', 'Keine duplizierten Beiträge', 'Saubere URLs &amp; hreflang', 'Umstieg von WPML'],
       ctaPrimary: 'Mit Lingo starten',
       ctaSecondary: 'So funktioniert es',
-      micro: 'Gratis für eine zusätzliche Sprache <span>/</span> Kein WPML nötig'
+      micro: 'Unbegrenzte Sprachen in der Gratisversion <span>/</span> Kein WPML nötig'
     },
 
     how: {
@@ -156,40 +156,84 @@ export default {
     pricing: {
       kicker: 'Preise',
       title: 'Klein anfangen. Überall ankommen',
-      intro: 'Jeder Tarif hat denselben sauberen Kern. Wählen Sie die Größe, die zu Ihrer Arbeit passt.',
+      intro: 'Unbegrenzte Sprachen in jedem Tarif, auch in Free. Sie zahlen nur für die Zahl der Websites, die Sie betreiben — nie für die Zahl der Sprachen, die Sie veröffentlichen.',
       popular: 'Am beliebtesten',
       perYear: '/ Jahr',
       plans: [
         {
           name: 'Free',
           price: '0 €',
-          summary: 'Eine zusätzliche Sprache',
-          points: ['Alle zentralen Übersetzungswerkzeuge', 'Saubere URLs + hreflang', 'Migrationsvorschau + Rückgängig'],
+          summary: 'Unbegrenzte Sprachen, eine Website',
+          points: ['Unbegrenzte Sprachen', 'Feldgenaue Übersetzung', 'Saubere URLs + hreflang', 'Migrationsvorschau + Rückgängig'],
           cta: 'Gratisversion holen'
         },
         {
+          name: 'Single',
+          price: '65 €',
+          period: true,
+          summary: 'Eine Website. Sprachen unbegrenzt',
+          points: ['<strong>Alles aus Free</strong>', 'Migrationen ausführen', 'WooCommerce-Übersetzung', 'Maschinelle Übersetzung'],
+          cta: 'Single kaufen'
+        },
+        {
           name: 'Business',
-          price: '119 €',
+          price: '139 €',
           period: true,
           featured: true,
           summary: 'Fünf Websites. Sprachen unbegrenzt',
-          points: ['<strong>Alles aus Free</strong>', 'Migration mit einem Befehl', 'WooCommerce-Übersetzung', 'Priorisierter Support + Updates'],
+          points: ['<strong>Alles aus Single</strong>', 'Redaktions-Workflow', 'Priorisierter Support + Updates', 'Mehr maschinelle Übersetzung'],
           cta: 'Business kaufen'
         },
         {
           name: 'Agency',
-          price: '189 €',
+          price: '259 €',
           period: true,
           summary: 'Unbegrenzte Websites für Kundenprojekte',
-          points: ['<strong>Alles aus Business</strong>', 'Unbegrenzte Website-Aktivierungen', 'Für die Übergabe an Kunden gebaut'],
+          points: ['<strong>Alles aus Business</strong>', 'Unbegrenzte Website-Aktivierungen', 'WP-Multisite-Unterstützung', 'Für die Übergabe an Kunden gebaut'],
           cta: 'Agency kaufen'
         }
       ],
-      trust: ['7 Tage Geld-zurück-Garantie', 'Ihre Daten bleiben Ihre', 'Kein WPML nötig'],
+
+      compare: {
+        show: 'Alle Tarife vergleichen',
+        hide: 'Vergleich ausblenden',
+        label: 'Funktionsvergleich der Tarife',
+        note: 'Jeder Tarif enthält unbegrenzte Sprachen. Die Tarife unterscheiden sich in der Zahl der Websites und den Pro-Funktionen oben.',
+        rows: [
+          { label: 'Preis', strong: true, cells: ['<strong>0 €</strong>', '<strong>65 €</strong><small>/Jahr</small>', '<strong>139 €</strong><small>/Jahr</small>', '<strong>259 €</strong><small>/Jahr</small>'] },
+          { label: 'Websites', strong: true, cells: ['1', '1', '5', 'Unbegrenzt'] },
+          { label: 'Sprachen', cells: ['Unbegrenzt', 'Unbegrenzt', 'Unbegrenzt', 'Unbegrenzt'] },
+          { label: 'Feldgenaue Übersetzung', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Keine doppelten Beiträge', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Saubere URLs + hreflang', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Sprachumschalter', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'ACF + Page Builder', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'REST-API + WP-CLI', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Migrationsvorschau + Rückgängig', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Migrationen ausführen', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'WooCommerce-Übersetzung', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Maschinelle Übersetzung', cells: ['no', '50k Wörter/Jahr', '250k Wörter/Jahr', '1 Mio. + Nachkauf'] },
+          { label: 'Redaktions-Workflow', cells: ['no', 'no', 'yes', 'yes'] },
+          { label: 'WP Multisite', cells: ['no', 'no', 'no', 'yes'] },
+          { label: 'Support', cells: ['Forum', 'E-Mail', 'Priorisiert', 'Priorisiert + Übergabe'] }
+        ]
+      },
+
+      lifetime: {
+        badge: 'Gründerangebot — begrenzt',
+        title: 'Lifetime — fünf Websites, einmal zahlen',
+        copy: 'Ein begrenztes Startangebot: alle Pro-Funktionen auf fünf Websites, Updates für immer und 12 Monate priorisierter Support. Sind die Plätze weg, sind sie weg.',
+        price: '419 €',
+        once: 'einmalig',
+        cta: 'Lifetime kaufen',
+        seats: 'Noch 100 von 100 Plätzen'
+      },
+
+      trust: ['14 Tage Geld-zurück-Garantie', 'Unbegrenzte Sprachen in jedem Tarif', 'Kein WPML nötig'],
       cta: {
         kicker: 'Noch unsicher?',
         title: 'Testen Sie es mit einer Sprache.<br />Entscheiden Sie an Ihrer eigenen Website.',
-        copy: 'Die Gratisversion deckt eine zusätzliche Sprache ab — übersetzen Sie eine Seite und sehen Sie <em>/fr/</em> live gehen, bevor Sie etwas ausgeben. Erst noch Fragen? Schreiben Sie an <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
+        copy: 'Die Gratisversion führt unbegrenzte Sprachen auf einer Website — übersetzen Sie eine Seite und sehen Sie <em>/fr/</em> live gehen, bevor Sie etwas ausgeben. Erst noch Fragen? Schreiben Sie an <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
         primary: 'FAQ lesen',
         secondary: 'Dokumentation'
       }
@@ -223,7 +267,7 @@ export default {
           { q: 'Dupliziert Lingo meine Beiträge?', a: ['Nein. Genau darum geht es. Ein kanonischer Beitrag behält seine ID; die Übersetzungen liegen daneben. Ihre Beitragslisten, Permalinks und das Backend bleiben genauso lang wie heute — ob Sie zwei Sprachen führen oder acht.'] },
           { q: 'Übersetzt Lingo meine Inhalte automatisch?', a: ['Nein — Lingo ist eine Übersetzungs<em>ebene</em>, keine Übersetzungsmaschine. Sie oder Ihr Übersetzer schreiben jede Sprache; Lingo speichert, routet und liefert sie aus. <em>Aus Standardsprache kopieren</em> setzt Ihren Ausgangstext als Startpunkt in die Zielsprache, damit Sie nie vor einem leeren Feld sitzen.'] },
           { q: 'Läuft irgendetwas davon über einen Drittanbieter?', a: ['Nein. Lingo ist selbst gehostet. Ihre Übersetzungen liegen in Ihrer eigenen Datenbank, und kein externer Dienst sitzt im Anfrageweg. Wenn Sie eines Tages gehen, bleiben die Daten Ihre.'] },
-          { q: 'Wie viele Sprachen kann ich betreiben?', a: ['Die Gratisversion deckt eine zusätzliche Sprache ab — mit der vollständigen Übersetzungsmaschine dahinter, nichts ist beschnitten. Die kostenpflichtigen Tarife heben die Grenze auf.'] }
+          { q: 'Wie viele Sprachen kann ich betreiben?', a: ['So viele Sie möchten, in jedem Tarif — auch im kostenlosen. Sprachen sind nie das, wofür Sie zahlen: die Tarife unterscheiden sich in der Zahl der Websites und in den Pro-Funktionen.'] }
         ]
       },
       {
@@ -290,10 +334,10 @@ export default {
         title: 'Kaufen &amp; Hilfe bekommen',
         lede: 'Was jeder Tarif abdeckt, wie Updates ankommen und wo die Entwicklerschnittstelle liegt.',
         items: [
-          { q: 'Was ist in der Gratisversion enthalten?', a: ['Eine zusätzliche Sprache und der vollständige Kern: Übersetzung pro Feld, saubere URLs, automatisches hreflang, der Umschalter und die Migrationsvorschau mit Rückgängig. Ein ehrlicher Einstieg, keine Demo.'] },
-          { q: 'Was bringen die kostenpflichtigen Tarife?', a: ['Unbegrenzte Sprachen, Migration mit einem Befehl (anwenden, nicht nur ansehen), Übersetzung von WooCommerce-Produkten und priorisierten Support mit automatischen Updates.'] },
-          { q: 'Welchen Tarif brauche ich für Kundenwebsites?', a: ['Business deckt fünf Websites für 119 € im Jahr ab. Agency kostet 189 € im Jahr mit unbegrenzten Website-Aktivierungen — der richtige, wenn Mehrsprachigkeit normaler Teil dessen ist, was Sie an Kunden übergeben.'] },
-          { q: 'Bekomme ich mein Geld zurück?', a: ['Ja — auf die kostenpflichtigen Tarife gibt es 7 Tage Geld-zurück-Garantie. Und Sie können die Gratisversion so lange nutzen, wie Sie möchten, bevor Sie entscheiden.'] },
+          { q: 'Was ist in der Gratisversion enthalten?', a: ['Unbegrenzte Sprachen auf einer Website und der vollständige Kern: Übersetzung pro Feld, saubere URLs, automatisches hreflang, der Umschalter und die Migrationsvorschau mit Rückgängig. Ein ehrlicher Einstieg, keine Demo.'] },
+          { q: 'Was bringen die kostenpflichtigen Tarife?', a: ['Mehr Websites und die Pro-Funktionen: eine Migration ausführen statt sie nur anzusehen, Übersetzung von WooCommerce-Produkten, maschinelle Übersetzung, den Redaktions-Workflow, WP Multisite und priorisierten Support mit automatischen Updates.'] },
+          { q: 'Welchen Tarif brauche ich für Kundenwebsites?', a: ['Business deckt fünf Websites für 139 € im Jahr ab. Agency kostet 259 € im Jahr mit unbegrenzten Website-Aktivierungen und WP Multisite — der richtige, wenn Mehrsprachigkeit normaler Teil dessen ist, was Sie an Kunden übergeben.'] },
+          { q: 'Bekomme ich mein Geld zurück?', a: ['Ja — auf die kostenpflichtigen Tarife gibt es 14 Tage Geld-zurück-Garantie. Und Sie können die Gratisversion so lange nutzen, wie Sie möchten, bevor Sie entscheiden.'] },
           { q: 'Kann ich den Tarif später wechseln?', a: ['Ja. Ihre Übersetzungen liegen in Ihrer eigenen Datenbank, ein Tarifwechsel ist also eine Lizenzänderung — nie eine Inhaltsmigration.'] },
           { q: 'Wie funktionieren Updates?', a: ['Über den normalen WordPress-Aktualisierungsbildschirm. Kostenpflichtige Updates sind selbst gehostet und integritätsgeprüft, es gibt also kein separates Dashboard zum Einloggen und nichts Neues, das man einem Kunden beibringen müsste.'] },
           { q: 'Gibt es eine Entwickler-API?', a: ['Ja: WP-CLI-Befehle, Sprachauflösung über die REST-API und ein dokumentierter Satz an Hooks und Filtern. Automatisieren Sie die langweiligen Teile und überlassen Sie den Rest den Redakteuren.'] }

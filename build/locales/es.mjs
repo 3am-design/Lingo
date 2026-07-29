@@ -26,7 +26,7 @@ export default {
   },
 
   notice: {
-    free: 'Gratis para siempre con un idioma adicional',
+    free: 'Idiomas ilimitados en todos los planes, gratis incluido',
     promo: 'Tiempo limitado: 10 % de descuento en Pro',
     migrate: 'Migrar desde WPML',
     viewPricing: 'Ver todos los precios'
@@ -49,7 +49,7 @@ export default {
       proof: ['Una entrada canónica', 'Sin entradas duplicadas', 'URL limpias y hreflang', 'Migración desde WPML'],
       ctaPrimary: 'Empezar con Lingo',
       ctaSecondary: 'Cómo funciona',
-      micro: 'Gratis con un idioma adicional <span>/</span> No necesitas WPML'
+      micro: 'Idiomas ilimitados en la versión gratuita <span>/</span> No necesitas WPML'
     },
 
     how: {
@@ -154,40 +154,84 @@ export default {
     pricing: {
       kicker: 'Precios',
       title: 'Empieza pequeño. Llega a todas partes',
-      intro: 'Todos los planes comparten el mismo núcleo limpio. Elige la escala que encaja con tu trabajo.',
+      intro: 'Idiomas ilimitados en todos los planes, Free incluido. Solo pagas por el número de sitios que gestionas — nunca por el número de idiomas que publicas.',
       popular: 'El más elegido',
       perYear: '/ año',
       plans: [
         {
           name: 'Free',
           price: '0 €',
-          summary: 'Un idioma secundario',
-          points: ['Todas las herramientas de traducción', 'URL limpias + hreflang', 'Vista previa de migración + deshacer'],
+          summary: 'Idiomas ilimitados, un sitio',
+          points: ['Idiomas ilimitados', 'Traducción campo a campo', 'URL limpias + hreflang', 'Vista previa de migración + deshacer'],
           cta: 'Conseguir la versión gratuita'
         },
         {
+          name: 'Single',
+          price: '65 €',
+          period: true,
+          summary: 'Un sitio. Idiomas ilimitados',
+          points: ['<strong>Todo lo de Free</strong>', 'Aplicar migraciones', 'Traducción de WooCommerce', 'Traducción automática'],
+          cta: 'Comprar Single'
+        },
+        {
           name: 'Business',
-          price: '119 €',
+          price: '139 €',
           period: true,
           featured: true,
           summary: 'Cinco sitios. Idiomas ilimitados',
-          points: ['<strong>Todo lo de Free</strong>', 'Migración con un comando', 'Traducción de WooCommerce', 'Soporte prioritario + actualizaciones'],
+          points: ['<strong>Todo lo de Single</strong>', 'Flujo editorial', 'Soporte prioritario + actualizaciones', 'Más traducción automática'],
           cta: 'Comprar Business'
         },
         {
           name: 'Agency',
-          price: '189 €',
+          price: '259 €',
           period: true,
           summary: 'Sitios ilimitados para trabajo de cliente',
-          points: ['<strong>Todo lo de Business</strong>', 'Activaciones de sitio ilimitadas', 'Pensado para entregar a clientes'],
+          points: ['<strong>Todo lo de Business</strong>', 'Activaciones de sitio ilimitadas', 'Compatible con WP Multisitio', 'Pensado para entregar a clientes'],
           cta: 'Comprar Agency'
         }
       ],
-      trust: ['Garantía de devolución de 7 días', 'Tus datos siguen siendo tuyos', 'No necesitas WPML'],
+
+      compare: {
+        show: 'Comparar todos los planes',
+        hide: 'Ocultar la comparativa',
+        label: 'Comparativa de funciones por plan',
+        note: 'Todos los planes incluyen idiomas ilimitados. Los planes se diferencian por el número de sitios y las funciones Pro de arriba.',
+        rows: [
+          { label: 'Precio', strong: true, cells: ['<strong>0 €</strong>', '<strong>65 €</strong><small>/año</small>', '<strong>139 €</strong><small>/año</small>', '<strong>259 €</strong><small>/año</small>'] },
+          { label: 'Sitios', strong: true, cells: ['1', '1', '5', 'Ilimitados'] },
+          { label: 'Idiomas', cells: ['Ilimitados', 'Ilimitados', 'Ilimitados', 'Ilimitados'] },
+          { label: 'Traducción campo a campo', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Sin entradas duplicadas', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'URL limpias + hreflang', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Selector de idioma', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'ACF + maquetadores', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'API REST + WP-CLI', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Vista previa de migración + deshacer', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Aplicar migraciones', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Traducción de WooCommerce', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Traducción automática', cells: ['no', '50k palabras/año', '250k palabras/año', '1M + recargas'] },
+          { label: 'Flujo editorial', cells: ['no', 'no', 'yes', 'yes'] },
+          { label: 'WP Multisitio', cells: ['no', 'no', 'no', 'yes'] },
+          { label: 'Soporte', cells: ['Foro', 'Correo', 'Prioritario', 'Prioritario + entrega'] }
+        ]
+      },
+
+      lifetime: {
+        badge: 'Oferta fundadora — limitada',
+        title: 'De por vida — cinco sitios, un solo pago',
+        copy: 'Una oferta de lanzamiento limitada: todas las funciones Pro en cinco sitios, actualizaciones de por vida y 12 meses de soporte prioritario. Cuando se acaben las plazas, se acabaron.',
+        price: '419 €',
+        once: 'un solo pago',
+        cta: 'Comprar De por vida',
+        seats: 'Quedan 100 de 100 plazas'
+      },
+
+      trust: ['Garantía de devolución de 14 días', 'Idiomas ilimitados en todos los planes', 'No necesitas WPML'],
       cta: {
         kicker: '¿Todavía lo dudas?',
         title: 'Pruébalo con un idioma.<br />Decide con tu propio sitio.',
-        copy: 'La versión gratuita cubre un idioma adicional — traduce una página y mira cómo <em>/fr/</em> se publica antes de gastar nada. ¿Prefieres preguntar primero? Escribe a <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
+        copy: 'La versión gratuita lleva idiomas ilimitados en un sitio — traduce una página y mira cómo <em>/fr/</em> se publica antes de gastar nada. ¿Prefieres preguntar primero? Escribe a <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
         primary: 'Leer las FAQ',
         secondary: 'Documentación'
       }
@@ -221,7 +265,7 @@ export default {
           { q: '¿Lingo va a duplicar mis entradas?', a: ['No. Ese es justamente el punto. Una entrada canónica conserva su ID; las traducciones viven a su lado. Tus listados de entradas, enlaces permanentes y escritorio siguen siendo igual de largos que hoy, tanto con dos idiomas como con ocho.'] },
           { q: '¿Lingo traduce mi contenido automáticamente?', a: ['No — Lingo es una <em>capa</em> de traducción, no un motor de traducción. Tú o tu traductor escribís cada idioma; Lingo lo guarda, lo enruta y lo sirve. <em>Copiar del idioma predeterminado</em> lleva tu texto de origen al idioma destino como punto de partida, para que nunca te enfrentes a un campo vacío.'] },
           { q: '¿Algo de esto pasa por un servicio de terceros?', a: ['No. Lingo es autoalojado. Tus traducciones están en tu propia base de datos y ningún servicio externo se sitúa en la ruta de la petición. Si algún día te vas, los datos siguen siendo tuyos.'] },
-          { q: '¿Cuántos idiomas puedo tener?', a: ['La versión gratuita cubre un idioma adicional, con el motor de traducción completo detrás — no hay nada recortado. Los planes de pago quitan el límite.'] }
+          { q: '¿Cuántos idiomas puedo tener?', a: ['Los que quieras, en todos los planes — el gratuito incluido. Los idiomas nunca son lo que pagas: los planes se diferencian por el número de sitios y por las funciones Pro.'] }
         ]
       },
       {
@@ -288,10 +332,10 @@ export default {
         title: 'Comprar y pedir ayuda',
         lede: 'Qué cubre cada plan, cómo llegan las actualizaciones y dónde está la superficie para desarrolladores.',
         items: [
-          { q: '¿Qué incluye la versión gratuita?', a: ['Un idioma adicional y el núcleo completo: traducción campo a campo, URL limpias, hreflang automático, el selector y la vista previa de migración con deshacer. Es una entrada honesta, no una demo.'] },
-          { q: '¿Qué añaden los planes de pago?', a: ['Idiomas ilimitados, migración con un comando (aplicarla, no solo previsualizarla), traducción de productos de WooCommerce y soporte prioritario con actualizaciones automáticas.'] },
-          { q: '¿Qué plan necesito para sitios de clientes?', a: ['Business cubre cinco sitios por 119 € al año. Agency cuesta 189 € al año con activaciones de sitio ilimitadas — el que hay que coger si lo multilingüe es parte habitual de lo que entregas a tus clientes.'] },
-          { q: '¿Puedo pedir un reembolso?', a: ['Sí — hay garantía de devolución de 7 días en los planes de pago. Y puedes usar la versión gratuita todo el tiempo que quieras antes de decidir.'] },
+          { q: '¿Qué incluye la versión gratuita?', a: ['Idiomas ilimitados en un sitio y el núcleo completo: traducción campo a campo, URL limpias, hreflang automático, el selector y la vista previa de migración con deshacer. Es una entrada honesta, no una demo.'] },
+          { q: '¿Qué añaden los planes de pago?', a: ['Más sitios y las funciones Pro: aplicar una migración y no solo previsualizarla, traducción de productos de WooCommerce, traducción automática, el flujo editorial, WP Multisitio y soporte prioritario con actualizaciones automáticas.'] },
+          { q: '¿Qué plan necesito para sitios de clientes?', a: ['Business cubre cinco sitios por 139 € al año. Agency cuesta 259 € al año con activaciones de sitio ilimitadas y WP Multisitio — el que hay que coger si lo multilingüe es parte habitual de lo que entregas a tus clientes.'] },
+          { q: '¿Puedo pedir un reembolso?', a: ['Sí — hay garantía de devolución de 14 días en los planes de pago. Y puedes usar la versión gratuita todo el tiempo que quieras antes de decidir.'] },
           { q: '¿Puedo cambiar de plan más adelante?', a: ['Sí. Tus traducciones viven en tu propia base de datos, así que moverte entre planes es un cambio de licencia — nunca una migración de contenido.'] },
           { q: '¿Cómo funcionan las actualizaciones?', a: ['Por la pantalla de actualizaciones normal de WordPress. Las actualizaciones de pago son autoalojadas y verificadas, así que no hay otro panel donde entrar ni nada nuevo que enseñarle a un cliente.'] },
           { q: '¿Hay una API para desarrolladores?', a: ['Sí: comandos WP-CLI, resolución de idioma sobre la API REST y un conjunto documentado de hooks y filtros. Automatiza las partes aburridas y deja el resto a los editores.'] }

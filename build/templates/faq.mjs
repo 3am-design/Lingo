@@ -1,4 +1,4 @@
-import { html, noticeBar } from './chrome.mjs'
+import { heroLines, html, noticeBar } from './chrome.mjs'
 import { pageHref } from '../config.mjs'
 
 // Question ids are derived from position rather than written out, which is what
@@ -32,7 +32,7 @@ export default ({ t, assets }) => {
       <section class="hero page-hero" aria-labelledby="faq-title">
         <div class="hero-content">
           <p class="eyebrow">${f.hero.eyebrow}</p>
-          <h1 id="faq-title">${f.hero.lines.map((line) => `<span class="hero-line"><span>${line}</span></span>`).join('')}</h1>
+          <h1 id="faq-title">${heroLines(f.hero.lines)}</h1>
           <p class="hero-copy">${f.hero.copy}</p>
 
           <div class="hero-actions faq-chips">

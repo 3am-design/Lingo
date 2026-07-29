@@ -105,7 +105,7 @@ if (siteHeader && heroContent && !reducedMotion) {
 
 staggeredReveal(document.querySelector('.supporting-features'), ':scope > article, :scope > .make-sense', { delay: 140 })
 staggeredReveal(document.querySelector('.comparison-section'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .comparison-table-wrap', { delay: 140 })
-staggeredReveal(document.querySelector('.pricing'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .price-grid > .price-card, :scope > .pricing-trust, :scope > .cta-card', { delay: 90 })
+staggeredReveal(document.querySelector('.pricing'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .price-grid > .price-card, :scope > .plan-compare, :scope > .lifetime-card, :scope > .pricing-trust, :scope > .cta-card', { delay: 90 })
 staggeredReveal(document.querySelector('footer'), ':scope > img, :scope > nav, :scope > p', { delay: 140 })
 
 document.querySelectorAll('.feature-card').forEach((card) => {
@@ -278,6 +278,22 @@ if (langGroups.length) {
     if (!open) return
     setOpen(open, false)
     open.toggle.focus()
+  })
+}
+
+// The full plan matrix opens under the cards. The panel animates from its own
+// height (0fr → 1fr), so nothing here measures anything: the button only flips
+// the state and swaps its label, which the template carries in both languages.
+const planCompareToggle = document.querySelector('[data-plan-compare]')
+const planTable = document.querySelector('.plan-table')
+
+if (planCompareToggle && planTable) {
+  const label = planCompareToggle.querySelector('span')
+  planCompareToggle.addEventListener('click', () => {
+    const open = planCompareToggle.getAttribute('aria-expanded') !== 'true'
+    planCompareToggle.setAttribute('aria-expanded', String(open))
+    planTable.classList.toggle('is-open', open)
+    label.textContent = open ? planCompareToggle.dataset.labelHide : planCompareToggle.dataset.labelShow
   })
 }
 

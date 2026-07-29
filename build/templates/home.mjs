@@ -1,4 +1,4 @@
-import { html, noticeBar } from './chrome.mjs'
+import { heroLines, html, noticeBar } from './chrome.mjs'
 
 // The editor picker and the juice card are the product demo, not page copy —
 // they cycle through real languages on purpose, so they stay hard-coded here
@@ -19,11 +19,14 @@ const OLD_POSTS = [
 
 const SEO_ROUTES = [['example.com/fr/', 'Français'], ['example.com/de/', 'Deutsch'], ['example.com/zh-hant/', '繁體中文']]
 
-const statusCell = (value, t, assets) => {
-  const icons = { yes: ['status-yes', t.comparison.yes], no: ['status-no', t.comparison.no], partial: ['status-partial', t.comparison.partial] }
+// `onDark` swaps in the pair drawn for a black ground: the default marks are
+// cut-outs that show the page through them, so on black the tick disappears
+// and the cross reads as a solid blob. These two carry their own fills.
+const statusCell = (value, t, assets, onDark = false) => {
+  const icons = { yes: [onDark ? 'status-yes-light' : 'status-yes', t.comparison.yes], no: [onDark ? 'status-no-light' : 'status-no', t.comparison.no], partial: ['status-partial', t.comparison.partial] }
   const icon = icons[value]
   return icon
-    ? `<td><img src="${assets}assets/figma/${icon[0]}.svg" alt="${icon[1]}" /></td>`
+    ? `<td><img class="status-${value}" src="${assets}assets/figma/${icon[0]}.svg" alt="${icon[1]}" /></td>`
     : `<td>${value}</td>`
 }
 
@@ -37,7 +40,7 @@ export default ({ t, assets }) => {
 
         <div class="hero-content">
           <p class="eyebrow">${h.hero.eyebrow}</p>
-          <h1 id="hero-title">${h.hero.lines.map((line) => `<span class="hero-line"><span>${line}</span></span>`).join('')}</h1>
+          <h1 id="hero-title">${heroLines(h.hero.lines)}</h1>
           <p class="hero-copy">${h.hero.copy}</p>
 
           <ul class="proof-list" aria-label="${h.hero.proofLabel}">
@@ -66,7 +69,7 @@ ${h.hero.proof.map((item) => `            <li><img src="${assets}assets/figma/ch
             <div class="post-cloud" aria-hidden="true">
 ${OLD_POSTS.map(([cls, id, code, text]) => `              <div class="post ${cls}"><b>${id}</b><span>${code}</span><small>${text}</small></div>`).join('\n')}
             </div>
-            <p class="architecture-foot">${h.how.oldFoot}</p>
+            <p class="architecture-foot"><img src="${assets}assets/figma/status-no-light.svg" alt="" />${h.how.oldFoot}</p>
           </article>
 
           <article class="architecture-card lingo-way">
@@ -81,7 +84,7 @@ ${OLD_POSTS.map(([cls, id, code, text]) => `              <div class="post ${cls
               <strong>post-078</strong>
               <span class="language-count"><b data-language-count>8</b> ${h.how.languages}</span>
             </div>
-            <p class="architecture-foot">${h.how.newFoot}</p>
+            <p class="architecture-foot"><img src="${assets}assets/figma/check.svg" alt="" />${h.how.newFoot}</p>
           </article>
         </div>
       </section>
@@ -229,6 +232,29 @@ ${h.comparison.rows.map((row) => `              <tr><th>${row.label}</th>${row.c
         <div class="price-grid">
 ${h.pricing.plans.map((plan) => priceCard(plan, h, assets)).join('\n')}
         </div>
+
+        <div class="plan-compare">
+          <button class="pill plan-compare-toggle" type="button" data-plan-compare aria-expanded="false" aria-controls="plan-table" data-label-show="${h.pricing.compare.show}" data-label-hide="${h.pricing.compare.hide}"><span>${h.pricing.compare.show}</span><i aria-hidden="true"></i></button>
+          <div class="plan-table" id="plan-table">
+            <div>
+${planTable(h, assets)}
+            </div>
+          </div>
+        </div>
+
+        <article class="lifetime-card">
+          <div>
+            <p class="lifetime-badge">${h.pricing.lifetime.badge}</p>
+            <h3>${h.pricing.lifetime.title}</h3>
+            <p class="lifetime-copy">${h.pricing.lifetime.copy}</p>
+          </div>
+          <div class="lifetime-buy">
+            <p class="lifetime-price">${h.pricing.lifetime.price} <small>${h.pricing.lifetime.once}</small></p>
+            <a class="pill lifetime-cta" href="#top">${h.pricing.lifetime.cta} <img src="${assets}assets/figma/arrow-cta.svg" alt="" /></a>
+            <p class="lifetime-seats">${h.pricing.lifetime.seats}</p>
+          </div>
+        </article>
+
         <div class="pricing-trust">${h.pricing.trust.map((item) => `<span>${item}</span>`).join('<i></i>')}</div>
 
         <div class="cta-card is-light">
@@ -246,11 +272,28 @@ ${h.pricing.plans.map((plan) => priceCard(plan, h, assets)).join('\n')}
     </main>`
 }
 
+// The column heads are the plan names themselves, so a renamed tier can never
+// drift between the cards and the table below them.
+const planTable = (h, assets) => {
+  const c = h.pricing.compare
+  return html`              <div class="plan-table-wrap">
+                <table aria-label="${c.label}">
+                  <thead>
+                    <tr><th></th>${h.pricing.plans.map((plan) => `<th>${plan.name}</th>`).join('')}</tr>
+                  </thead>
+                  <tbody>
+${c.rows.map((row) => `                    <tr><th${row.strong ? ' class="is-strong"' : ''}>${row.label}</th>${row.cells.map((cell) => statusCell(cell, h, assets, true)).join('')}</tr>`).join('\n')}
+                  </tbody>
+                </table>
+                <p class="plan-table-note">${c.note}</p>
+              </div>`
+}
+
 const priceCard = (plan, h, assets) => {
   const price = plan.period ? `${plan.price} <small>${h.pricing.perYear}</small>` : plan.price
   const cta = plan.featured
     ? `<a class="pill business-cta" href="#top">${plan.cta} <img src="${assets}assets/figma/arrow-cta.svg" alt="" /></a>`
-    : `<a href="#top">${plan.cta}</a>`
+    : `<a href="#top"><span>${plan.cta}</span> <img src="${assets}assets/figma/arrow-cta.svg" alt="" /></a>`
   return html`          <article class="price-card${plan.featured ? ' featured' : ''}">
 ${plan.featured ? `            <div class="popular">${h.pricing.popular}</div>\n` : ''}            <h3>${plan.name}</h3>
             <p class="price">${price}</p>

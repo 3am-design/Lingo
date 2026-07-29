@@ -27,7 +27,7 @@ export default {
   },
 
   notice: {
-    free: 'Free forever for one additional language',
+    free: 'Unlimited languages on every plan, free included',
     promo: 'Limited time Save 10% on Pro',
     migrate: 'Migrate from WPML',
     viewPricing: 'View all pricing'
@@ -50,7 +50,7 @@ export default {
       proof: ['One canonical post', 'No duplicated posts', 'Clean URLs &amp; hreflang', 'Migrate from WPML'],
       ctaPrimary: 'Start with Lingo',
       ctaSecondary: 'How it works',
-      micro: 'Free for one additional language <span>/</span> No WPML required'
+      micro: 'Unlimited languages on the free version <span>/</span> No WPML required'
     },
 
     how: {
@@ -155,40 +155,85 @@ export default {
     pricing: {
       kicker: 'Pricing',
       title: 'Start small. Go everywhere',
-      intro: 'Every plan has the same clean core. Choose the scale that fits your work.',
+      intro: 'Unlimited languages on every plan, including Free. You only pay for the number of sites you run — never for the number of languages you publish.',
       popular: 'Most Popular',
       perYear: '/ year',
       plans: [
         {
           name: 'Free',
           price: '$0',
-          summary: 'One secondary language',
-          points: ['All core translation tools', 'Clean URLs + hreflang', 'Migration preview + undo'],
+          summary: 'Unlimited languages, one site',
+          points: ['Unlimited languages', 'Per-field translation', 'Clean URLs + hreflang', 'Migration preview + undo'],
           cta: 'Get the free version'
         },
         {
+          name: 'Single',
+          price: '$69',
+          period: true,
+          summary: 'One site. Unlimited languages',
+          points: ['<strong>Everything in Free</strong>', 'Apply migrations', 'WooCommerce translation', 'Machine translation'],
+          cta: 'Get Single'
+        },
+        {
           name: 'Business',
-          price: '$129',
+          price: '$149',
           period: true,
           featured: true,
           summary: 'Five sites. Unlimited languages',
-          points: ['<strong>Everything in Free</strong>', 'One-command migration', 'WooCommerce translation', 'Priority support + updates'],
+          points: ['<strong>Everything in Single</strong>', 'Editorial workflow', 'Priority support + updates', 'More MT included'],
           cta: 'Get Business'
         },
         {
           name: 'Agency',
-          price: '$199',
+          price: '$279',
           period: true,
           summary: 'Unlimited sites for client work',
-          points: ['<strong>Everything in Business</strong>', 'Unlimited site activations', 'Built for client handoffs'],
+          points: ['<strong>Everything in Business</strong>', 'Unlimited site activations', 'WP Multisite support', 'Built for client handoffs'],
           cta: 'Get Agency'
         }
       ],
-      trust: ['7-day money-back guarantee', 'Your data stays yours', 'No WPML required'],
+
+      // Cells named yes/no become icons; anything else prints as written.
+      compare: {
+        show: 'Compare all plans',
+        hide: 'Hide comparison',
+        label: 'Feature comparison across plans',
+        note: 'Every plan includes unlimited languages. Plans differ by the number of sites and the Pro features above.',
+        rows: [
+          { label: 'Price', strong: true, cells: ['<strong>$0</strong>', '<strong>$69</strong><small>/yr</small>', '<strong>$149</strong><small>/yr</small>', '<strong>$279</strong><small>/yr</small>'] },
+          { label: 'Sites', strong: true, cells: ['1', '1', '5', 'Unlimited'] },
+          { label: 'Languages', cells: ['Unlimited', 'Unlimited', 'Unlimited', 'Unlimited'] },
+          { label: 'Per-field translation', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'No duplicated posts', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Clean URLs + hreflang', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Language switcher', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'ACF + page builders', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'REST API + WP-CLI', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Migration preview + undo', cells: ['yes', 'yes', 'yes', 'yes'] },
+          { label: 'Apply migrations', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'WooCommerce translation', cells: ['no', 'yes', 'yes', 'yes'] },
+          { label: 'Machine translation', cells: ['no', '50k words/yr', '250k words/yr', '1M + top-ups'] },
+          { label: 'Editorial workflow', cells: ['no', 'no', 'yes', 'yes'] },
+          { label: 'WP Multisite', cells: ['no', 'no', 'no', 'yes'] },
+          { label: 'Support', cells: ['Forum', 'Email', 'Priority', 'Priority + handoff'] }
+        ]
+      },
+
+      lifetime: {
+        badge: 'Founder’s offer — limited',
+        title: 'Lifetime — five sites, pay once',
+        copy: 'A capped launch offer: every Pro feature on five sites, updates for life, plus 12 months of priority support. When the seats are gone, they’re gone.',
+        price: '$449',
+        once: 'once',
+        cta: 'Get Lifetime',
+        seats: '100 of 100 seats left'
+      },
+
+      trust: ['14-day money-back guarantee', 'Unlimited languages on every plan', 'No WPML required'],
       cta: {
         kicker: 'Not sure yet?',
         title: 'Try it on one language.<br />Decide with your own site.',
-        copy: 'The free version covers one additional language — translate a page and watch <em>/fr/</em> go live before you spend anything. Questions first? Write to <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
+        copy: 'The free version runs unlimited languages on one site — translate a page and watch <em>/fr/</em> go live before you spend anything. Questions first? Write to <a href="mailto:hello@lingo.com">hello@lingo.com</a>.',
         primary: 'Read the FAQ',
         secondary: 'Documentation'
       }
@@ -222,7 +267,7 @@ export default {
           { q: 'Will Lingo duplicate my posts?', a: ['No. That is the whole point. One canonical post keeps its ID; the translations live beside it. Your post lists, permalinks and admin stay exactly as long as they are today, whether you run two languages or eight.'] },
           { q: 'Does Lingo translate my content automatically?', a: ['No — Lingo is a translation <em>layer</em>, not a translation engine. You or your translator write each language; Lingo stores it, routes it and serves it. <em>Copy from default</em> drops your source text into the target language as a starting point so you are never staring at an empty field.'] },
           { q: 'Is any of this running through a third-party service?', a: ['No. Lingo is self-hosted. Your translations sit in your own database and no external service sits in the request path. If you ever leave, the data is still yours to take.'] },
-          { q: 'How many languages can I run?', a: ['The free version covers one additional language, with the complete translation engine behind it — nothing is crippled. Paid plans lift the cap to unlimited languages.'] }
+          { q: 'How many languages can I run?', a: ['As many as you like, on every plan — the free version included. Languages are never the thing you pay for: the plans differ by how many sites you run and by the Pro features on top.'] }
         ]
       },
       {
@@ -289,10 +334,10 @@ export default {
         title: 'Buying &amp; getting help',
         lede: 'What each plan covers, how updates arrive, and where the developer surface is.',
         items: [
-          { q: 'What is included in the free version?', a: ['One additional language and the complete core: per-field translation, clean URLs, automatic hreflang, the switcher, and the migration preview with undo. It is the honest on-ramp, not a demo.'] },
-          { q: 'What do the paid plans add?', a: ['Unlimited languages, one-command migration (applying it, not just previewing it), WooCommerce product translation, and priority support with automatic updates.'] },
-          { q: 'Which plan do I need for client sites?', a: ['Business covers five sites at $129 a year. Agency is $199 a year with unlimited site activations — the one to take if multilingual is a normal part of what you hand over to clients.'] },
-          { q: 'Can I get a refund?', a: ['Yes — there is a 7-day money-back guarantee on the paid plans. And you can run the free version for as long as you like before you decide.'] },
+          { q: 'What is included in the free version?', a: ['Unlimited languages on one site, and the complete core: per-field translation, clean URLs, automatic hreflang, the switcher, and the migration preview with undo. It is the honest on-ramp, not a demo.'] },
+          { q: 'What do the paid plans add?', a: ['More sites, and the Pro features: applying a migration rather than only previewing it, WooCommerce product translation, machine translation, the editorial workflow, WP Multisite, and priority support with automatic updates.'] },
+          { q: 'Which plan do I need for client sites?', a: ['Business covers five sites at $149 a year. Agency is $279 a year with unlimited site activations and WP Multisite — the one to take if multilingual is a normal part of what you hand over to clients.'] },
+          { q: 'Can I get a refund?', a: ['Yes — there is a 14-day money-back guarantee on the paid plans. And you can run the free version for as long as you like before you decide.'] },
           { q: 'Can I change plan later?', a: ['Yes. Your translations live in your own database, so moving between plans is a licence change — never a content migration.'] },
           { q: 'How do updates work?', a: ['Through the normal WordPress updates screen. Paid updates are self-hosted and integrity-checked, so there is no separate dashboard to log into and nothing new to teach a client.'] },
           { q: 'Is there a developer API?', a: ['Yes: WP-CLI commands, language resolution over the REST API, and a documented set of hooks and filters. Automate the boring parts and leave the rest to the editors.'] }
