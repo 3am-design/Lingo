@@ -2,6 +2,19 @@
 @font-face{font-family:Brown;src:url("../assets/fonts/Brown-Bold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:Inter;src:url("../assets/fonts/Inter-Variable.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
 
+/* Brown and Inter carry no CJK glyphs. Without this those pages fall through
+   to the platform serif, which reads nothing like the Latin pages — so both
+   stacks get a gothic tail that keeps the same voice. --lang-face is the only
+   thing that changes per locale, so the rules below stay single declarations
+   however many CJK locales ship. */
+:root{--jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo}
+:root{--kr:"Apple SD Gothic Neo",Pretendard,"Noto Sans KR","Malgun Gothic","Nanum Gothic"}
+:lang(ja){--lang-face:var(--jp)}
+:lang(ko){--lang-face:var(--kr)}
+:lang(ja),:lang(ko){font-family:Inter,var(--lang-face),Arial,sans-serif}
+:lang(ja) h1,:lang(ja) h2,:lang(ja) h3,:lang(ja) .price,:lang(ja) .faq-lede,:lang(ja) .architecture-card h3,
+:lang(ko) h1,:lang(ko) h2,:lang(ko) h3,:lang(ko) .price,:lang(ko) .faq-lede,:lang(ko) .architecture-card h3{font-family:Brown,var(--lang-face),Arial,sans-serif}
+
 :root{--orange:#f17923;--paper:#f5f5f5;--ink:#000;--muted:#5d5d5d;--old-way:#5b6171;--purple:#2c035d;--purple-accent:#873eff}
 
 /* Layout grid — a 1920px canvas with 6 columns, 100px margins and a 30px
@@ -77,7 +90,11 @@ html.lenis,html.lenis body{height:auto}
 .brand{width:112px;height:39px;display:block}
 .brand img{display:block;width:112px;height:39px}
 .site-header nav{height:54px;padding:0 54px;border-radius:100px;background:#fff;display:flex;align-items:center;gap:42px;font-size:16px}
-.site-header nav a{transition:opacity .2s ease}.site-header nav a:hover{opacity:.65}
+/* Direct children throughout: these rules describe the nav's own links, and
+   as descendant selectors they also outrank .lang-menu a — which is how the
+   dropdown ended up with line-height:1 and its labels stuck to the top of
+   their 34px rows. */
+.site-header nav>a{transition:opacity .2s ease}.site-header nav>a:hover{opacity:.65}
 /* Language switch: an icon in a text row, so it is sized to the cap height of
    the labels beside it rather than to its own 17px artwork. */
 .lang{position:relative;display:grid;place-items:center}
@@ -93,35 +110,43 @@ html.lenis,html.lenis body{height:auto}
    centred, and only this variable changes. */
 .lang-menu{--lang-x:-50%;position:absolute;z-index:5;top:calc(100% + 31px);left:50%;width:84px;margin:0;padding:9px 0;list-style:none;border-radius:16px;background:#fff;box-shadow:0 14px 34px rgba(0,0,0,.09);display:grid;text-align:center;opacity:0;visibility:hidden;transform:translate(var(--lang-x),-6px);transition:opacity .18s ease,transform .26s cubic-bezier(.22,.72,.24,1),visibility 0s linear .18s}
 .lang-menu.is-open{opacity:1;visibility:visible;transform:translate(var(--lang-x),0);transition:opacity .18s ease,transform .26s cubic-bezier(.22,.72,.24,1),visibility 0s}
-.lang-menu button{width:100%;height:34px;padding:0;border:0;background:none;font:inherit;font-size:15px;line-height:34px;color:#000;cursor:pointer;transition:opacity .2s ease,color .2s ease}
-.lang-menu button:hover{opacity:.5}
-.lang-menu button[aria-current="true"]{color:var(--orange)}
+/* Languages that exist are real links so they work without JS and can be
+   crawled; the ones not built yet stay buttons and are dimmed rather than
+   pretending to lead somewhere. */
+.lang-menu a,.lang-menu button{display:block;width:100%;height:34px;padding:0;border:0;background:none;font:inherit;font-size:15px;line-height:34px;color:#000;cursor:pointer;transition:opacity .2s ease,color .2s ease}
+.lang-menu a:hover,.lang-menu button:hover{opacity:.5}
+.lang-menu button{opacity:.38;cursor:default}
+.lang-menu button:hover{opacity:.38}
+.lang-menu a[aria-current="true"]{color:var(--orange)}
 /* Active section marker: a dot under the label rather than a colour change, so
    the menu keeps one voice and the state reads as a position, not a link type.
    line-height:1 tightens the anchor box so the dot has room inside the pill. */
-.site-header nav a,.sticky-header nav a{position:relative;line-height:1}
+.site-header nav>a,.sticky-header nav>a{position:relative;line-height:1}
 /* 8px, not 10: the nav pill is 54px tall and a 10px drop puts the dot on its
    bottom edge. */
-.site-header nav a::after,.sticky-header nav a::after{content:"";position:absolute;left:50%;top:calc(100% + 8px);width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--orange);opacity:0;transform:scale(.3);transition:opacity .22s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
-.site-header nav a.is-active::after,.site-header nav a[aria-current="page"]::after,
-.sticky-header nav a.is-active::after,.sticky-header nav a[aria-current="page"]::after{opacity:1;transform:scale(1)}
-.start-free{justify-self:end;width:141px;height:54px;border-radius:100px;background:#000;color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;transition:background .2s ease,color .2s ease}
+.site-header nav>a::after,.sticky-header nav>a::after{content:"";position:absolute;left:50%;top:calc(100% + 8px);width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--orange);opacity:0;transform:scale(.3);transition:opacity .22s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.site-header nav>a.is-active::after,.site-header nav>a[aria-current="page"]::after,
+.sticky-header nav>a.is-active::after,.sticky-header nav>a[aria-current="page"]::after{opacity:1;transform:scale(1)}
+.start-free{justify-self:end;width:auto;min-width:141px;height:54px;padding:0 20px;border-radius:100px;background:#000;color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;white-space:nowrap;transition:background .2s ease,color .2s ease}
 .start-free.motion-reveal{transition:background .2s ease,color .2s ease,opacity var(--reveal-fade,.5s) ease-out var(--reveal-delay,0ms),transform var(--reveal-duration,.92s) cubic-bezier(.22,.72,.24,1) var(--reveal-delay,0ms)}
-.sticky-header{position:fixed;z-index:120;top:16px;left:50%;width:min(700px,calc(100% - 40px));height:54px;padding:0 6px 0 36px;border-radius:100px;background:#fff;display:grid;grid-template-columns:118px 1fr 117px;align-items:center;opacity:0;pointer-events:none;transform:translate(-50%,-18px);transition:opacity .2s ease,transform .2s ease;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.sticky-header{position:fixed;z-index:120;top:16px;left:50%;width:min(700px,calc(100% - 40px));height:54px;padding:0 6px 0 36px;border-radius:100px;background:#fff;display:grid;grid-template-columns:118px 1fr max-content;align-items:center;opacity:0;pointer-events:none;transform:translate(-50%,-18px);transition:opacity .2s ease,transform .2s ease;box-shadow:0 10px 30px rgba(0,0,0,.06)}
 .sticky-header.is-visible{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
 .sticky-brand{grid-column:1;display:block;width:76px;height:27px}.sticky-brand img{display:block;width:76px;height:27px}
 .sticky-header nav{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:36px;font-size:15px;white-space:nowrap}
-.sticky-start{grid-column:3;justify-self:end;width:117px;height:45px;border-radius:100px;background:#000;color:#fff;display:grid;place-items:center;font-size:15px;font-weight:700;transition:background .2s ease,color .2s ease}
+.sticky-start{grid-column:3;justify-self:end;width:auto;min-width:117px;height:45px;padding:0 16px;border-radius:100px;background:#000;color:#fff;display:grid;place-items:center;font-size:15px;font-weight:700;white-space:nowrap;transition:background .2s ease,color .2s ease}
 
 .hero{position:relative;min-height:759px;overflow:hidden}
 .hero-content{position:relative;z-index:2;width:min(100%,900px);margin:0 auto;padding:196px 24px 104px;text-align:center}
 .eyebrow{margin-bottom:14px;color:var(--orange);font-weight:600;line-height:1.2}
 .hero h1{margin:0;font:700 clamp(72px,5vw,95px)/.9 Brown,Arial,sans-serif;letter-spacing:-.01em}
+/* CJK glyphs carry more visual mass than Latin capitals. A slight extra lead
+   keeps two-line Japanese and Korean headlines from looking like they touch. */
+:lang(ja) .hero h1,:lang(ko) .hero h1{line-height:.98}
 .hero-copy{width:min(565px,100%);margin:36px auto 0;color:var(--muted);line-height:25px}
-.proof-list{margin:30px 0 0;padding:0;list-style:none;display:flex;justify-content:center;gap:28px}
+.proof-list{margin:30px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px}
 .proof-list li{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .proof-list img{width:19px;height:19px}
-.hero-actions{display:flex;justify-content:center;gap:15px;margin-top:32px}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-top:32px}
 /* Label flush to the left padding, arrow flush to the right one: with equal
    padding on both sides the arrows line up down a stacked group instead of
    drifting with the length of each label. */
@@ -136,8 +161,9 @@ html.lenis,html.lenis body{height:auto}
    the real thing (hover, arrow, cursor) until the docs URL exists. */
 .pill:not([href]){cursor:pointer}
 .pill img{width:18px;height:18px}
-.pill-dark{width:186px;background:#000;color:#fff}
-.pill-light{width:186px;border:1px solid #000;background:transparent}
+.pill-dark,.pill-light{width:auto;min-width:186px;max-width:100%}
+.pill-dark{background:#000;color:#fff}
+.pill-light{border:1px solid #000;background:transparent}
 .micro-proof{margin:18px 0 0;font-size:12px;line-height:25px}
 .micro-proof i{display:inline-block;width:8px;height:8px;margin-right:7px;background:#46c997;transform:rotate(45deg)}
 .micro-proof span{margin:0 5px}
@@ -257,9 +283,9 @@ html.lenis,html.lenis body{height:auto}
 .feature-lede p{margin:12px 0 0;line-height:25px}
 .migration-card{background:#000;color:#fff}
 .migration-steps{position:relative;z-index:2;align-self:end}
-.migration-steps>div{display:grid;grid-template-columns:clamp(32px,3.28cqw,42px) clamp(76px,7.42cqw,95px) 1fr;column-gap:10px;margin-bottom:clamp(15px,1.64cqw,21px)}
+.migration-steps>div{display:grid;grid-template-columns:clamp(32px,3.28cqw,42px) minmax(96px,max-content) minmax(0,1fr);column-gap:10px;margin-bottom:clamp(15px,1.64cqw,21px)}
 .migration-steps b,.migration-steps h3{font-size:20px;line-height:1.2}.migration-steps b{opacity:.3}.migration-steps h3{margin:0;font-weight:600}.migration-steps p{grid-column:2/-1;margin:3px 0 0;line-height:22px}
-.pill-white{width:186px;margin-top:25px;background:#fff;color:#000}.pill-white img{filter:brightness(0)}
+.pill-white{width:max-content;min-width:186px;max-width:100%;margin-top:25px;background:#fff;color:#000}.pill-white img{filter:brightness(0)}
 .terminal{position:relative;z-index:2;align-self:end;height:clamp(250px,25.23cqw,323px);margin-left:clamp(10px,1.17cqw,15px);padding:0 clamp(18px,2.27cqw,29px);border:1px solid rgba(255,255,255,.3)}
 .terminal-head{height:clamp(48px,4.92cqw,63px);border-bottom:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:space-between}
 .terminal-head span{display:flex;gap:8px}.terminal-head i{width:8px;height:8px;border-radius:50%;background:#fff;opacity:.7}.terminal-head b{font-weight:400}
@@ -324,7 +350,15 @@ td img,thead img{display:block;width:19px;height:19px;margin:0 auto}thead img{wi
 .pricing .section-kicker{color:#fff}.pricing>.section-intro{color:#fff}
 .price-grid{width:100%;margin:56px auto 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--grid-gap);text-align:left}
 .price-card{grid-column:span 2;position:relative;min-width:0;height:363px;padding:23px 36px;border:1px solid #fff;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:28px}.price-card.featured{background:#fff;color:#000}
-.price-card h3{grid-column:1;margin:0;font-size:15px;font-weight:600}.price{grid-column:1;margin:22px 0 4px;font-size:50px;line-height:1.15}.price small{font-size:20px}
+.price-card h3{grid-column:1;margin:0;font-size:15px;font-weight:600}/* The price and its period are one phrase and must stay on one line, but the
+   phrase is a different width in every currency — ¥19,800 is twice $129, and
+   ₩179,000 wider still. Rather than let it wrap, each locale sets its own size;
+   a new currency is two variables, not another rule. */
+.price{grid-column:1;margin:22px 0 4px;font-size:var(--price-size,50px);line-height:1.15;white-space:nowrap}
+.price small{font-size:var(--price-period-size,20px)}
+:lang(fr),:lang(de),:lang(es){--price-size:44px;--price-period-size:18px}
+:lang(ja){--price-size:42px;--price-period-size:17px}
+:lang(ko){--price-size:36px;--price-period-size:17px}
 .price-card>p:not(.price){grid-column:1;margin:0}.price-card ul{grid-column:2;grid-row:1/-1;align-self:center;min-width:0;margin:0;padding-left:18px;line-height:25px}
 .price-card>a:not(.pill){grid-column:1;align-self:end;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .popular{position:absolute;right:28px;top:21px;padding:1px 8px;border:1px solid var(--orange);color:var(--orange);font-size:10px;text-transform:uppercase}
@@ -393,9 +427,20 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
      capsule around two items reads as a second button competing with the
      real one. */
   .site-header{top:18px;width:calc(100% - 40px);height:46px;grid-template-columns:1fr auto auto;column-gap:16px}
-  .site-header nav{height:auto;padding:0;border-radius:0;background:transparent;gap:14px;font-size:14px;font-weight:500}
-  .site-header nav a:not([href$="faq.html"]){display:none}
-  .start-free{width:110px;height:46px;font-size:14px}
+  /* nowrap because the JA label (よくある質問) is five characters where EN has
+     three, and wrapping it buckles the whole header row. */
+  .site-header nav{height:auto;padding:0;border-radius:0;background:transparent;gap:14px;font-size:14px;font-weight:500;white-space:nowrap}
+  /* CJK headlines set at the English size split mid-word here — Japanese has
+     no spaces to break on at all. Strict line breaking also keeps 。 and small
+     kana from starting a line. */
+  :lang(ja) .hero h1,:lang(ko) .hero h1{font-size:clamp(34px,9.4vw,58px);line-break:strict}
+  /* Direct children only: the language menu is made of <a> too, and a bare
+     descendant selector swallowed every option that had a locale. */
+  .site-header nav>a:not([href$="faq.html"]){display:none}
+  /* Auto width, not a fixed 110px: "Empezar gratis" and "Gratis starten" are
+     twice the length of "Start Free" and burst straight out of the pill.
+     The min-width keeps the short labels from shrinking the button. */
+  .start-free{width:auto;min-width:110px;max-width:46vw;padding:0 16px;height:46px;font-size:14px;white-space:nowrap}
   /* The sticky bar carries the full menu instead: it is the only navigation
      on screen once the top header has scrolled away. Type and gaps scale with
      the viewport so four labels still fit next to the logo and the button. */
@@ -473,6 +518,14 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
    shrinking. Navigation wins here — Start Free is still in the top header, the
    notice bars and the pricing section. */
 @media(max-width:390px){
+  /* The top bar runs out of room too once a locale spells its nav item out
+     (よくある質問) or its CTA (Empezar gratis). The wordmark and the gaps give
+     way first; the CTA may shrink below its usual minimum rather than push the
+     row past the viewport. */
+  .site-header{column-gap:10px}
+  .brand,.brand img{width:76px;height:auto}
+  .site-header nav{gap:10px;font-size:13px}
+  .start-free{min-width:0;max-width:none;padding:0 12px;font-size:13px}
   .sticky-header{grid-template-columns:auto minmax(0,1fr);padding:0 12px}
   .sticky-start{display:none}
   .sticky-brand,.sticky-brand img{width:50px;height:auto}
@@ -482,7 +535,7 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
 }
 
 @media(max-width:520px){
-  .hero h1{font-size:50px}.proof-list{grid-template-columns:1fr;max-width:220px}.hero-actions{gap:8px}.pill-dark,.pill-light{width:160px;padding-left:16px;gap:10px;font-size:13px}.micro-proof{font-size:10px}
+  .hero h1{font-size:50px}.proof-list{grid-template-columns:repeat(2,max-content);justify-content:center;max-width:100%;gap:10px 12px;font-size:11px}.hero-actions{align-items:stretch;flex-direction:column;gap:8px;max-width:320px;margin-left:auto;margin-right:auto}.pill-dark,.pill-light{width:100%;min-width:0;padding-left:16px;gap:10px;font-size:13px}.micro-proof{font-size:10px}
   .architecture-card{height:390px}.canonical-post{width:calc(100% - 30px)}
   .migration-steps>div{margin-bottom:17px}.editor-points ul{font-size:12px}.editor-demo{height:280px}.editor-demo-workspace{grid-template-columns:28px minmax(0,1fr) 118px}.editor-languages header em,.editor-copy-button{display:none}.editor-languages{padding-inline:6px}.editor-canvas{padding-inline:11px}.editor-canvas h3{font-size:17px}.editor-art{height:94px}
   .seo-card .seo-word{width:92%}.seo-routes{font-size:12px}.seo-routes p{grid-template-columns:minmax(0,132px) 1fr}
@@ -595,8 +648,8 @@ footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
 .faq-page .site-header .lang-menu{box-shadow:0 16px 36px rgba(0,0,0,.6)}
 /* Same specificity as the base current-language rule, so the orange marker has
    to be restated here or the blanket white wins on source order. */
-.faq-page .site-header .lang-menu button{color:#fff}
-.faq-page .site-header .lang-menu button[aria-current="true"]{color:var(--orange)}
+.faq-page .site-header .lang-menu a,.faq-page .site-header .lang-menu button{color:#fff}
+.faq-page .site-header .lang-menu a[aria-current="true"]{color:var(--orange)}
 .faq-page .start-free{background:#fff;color:#000}
 /* The globe is single-colour artwork, so a filter is enough. The wordmark is
    not — inverting it turns the orange dot blue — so the top header points at

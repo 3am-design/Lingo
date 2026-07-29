@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "pages": "node build/render.mjs",
+    "pages:watch": "node --watch build/render.mjs",
+    "dev": "node build/render.mjs && vite --host 0.0.0.0",
+    "build": "node build/render.mjs && vite build",
     "preview": "vite preview --host 0.0.0.0"
   },
   "devDependencies": {

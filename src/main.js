@@ -238,14 +238,14 @@ if (stickyHeader) {
 }
 
 // The top bar and the sticky bar carry the same language control, so the two
-// menus are driven as one: opening either closes the other, and a choice made
-// in one reads back in both. Nothing is translated yet — picking a language
-// only moves the marker until real locales are wired up.
+// menus are driven as one: opening either closes the other. The options that
+// have a locale are plain links and navigate on their own — this only handles
+// opening, closing and focus.
 const langGroups = [...document.querySelectorAll('.lang')].map((root) => ({
   root,
   toggle: root.querySelector('.lang-switch'),
   menu: root.querySelector('.lang-menu'),
-  options: [...root.querySelectorAll('.lang-menu button')]
+  options: [...root.querySelectorAll('.lang-menu a')]
 }))
 
 if (langGroups.length) {
@@ -255,13 +255,6 @@ if (langGroups.length) {
   }
   const closeAll = (except) => langGroups.forEach((group) => { if (group !== except) setOpen(group, false) })
 
-  const selectLanguage = (code) => {
-    langGroups.forEach((group) => group.options.forEach((option) => {
-      if (option.dataset.lang === code) option.setAttribute('aria-current', 'true')
-      else option.removeAttribute('aria-current')
-    }))
-  }
-
   langGroups.forEach((group) => {
     group.toggle.addEventListener('click', () => {
       const willOpen = group.toggle.getAttribute('aria-expanded') !== 'true'
@@ -269,13 +262,9 @@ if (langGroups.length) {
       setOpen(group, willOpen)
     })
 
-    group.options.forEach((option) => {
-      option.addEventListener('click', () => {
-        selectLanguage(option.dataset.lang)
-        setOpen(group, false)
-        group.toggle.focus()
-      })
-    })
+    // Closing on the way out matters for the current language, where the link
+    // resolves to this same page and nothing would otherwise dismiss the menu.
+    group.options.forEach((option) => option.addEventListener('click', () => setOpen(group, false)))
   })
 
   // pointerdown rather than click: closing on the press keeps the menu from
@@ -296,7 +285,7 @@ if (langGroups.length) {
 // point at another page (./faq.html) simply never match, so the FAQ page keeps
 // its static aria-current dot and this loop stays a no-op there.
 const NAV_SPY_LINE = 0.32
-const navLinks = [...document.querySelectorAll('.site-header nav a,.sticky-header nav a')]
+const navLinks = [...document.querySelectorAll('.site-header nav>a,.sticky-header nav>a')]
 const spySections = [...new Set(navLinks.map((link) => link.getAttribute('href')).filter((href) => href?.startsWith('#')))]
   .map((hash) => ({ hash, element: document.querySelector(hash) }))
   .filter((entry) => entry.element)
