@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Answers about Lingo — how the one-post architecture works, migrating off WPML, SEO, WooCommerce, plans and support." />
+    <title>Lingo — Frequently asked questions</title>
+    <script>
+      document.documentElement.classList.add('motion-booting')
+      window.setTimeout(() => document.documentElement.classList.remove('motion-booting'), 2500)
+    </script>
+    <link rel="stylesheet" href="./src/style.css" />
+    <script type="module" src="./src/faq.js"></script>
+  </head>
+  <body class="faq-page">
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="Lingo home">
+        <img src="./assets/figma/logo-light.svg" alt="Lingo" />
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="./index.html#features">Features</a>
+        <a href="./index.html#comparison">Compare</a>
+        <a href="./index.html#pricing">Pricing</a>
+        <a href="./faq.html" aria-current="page">FAQ</a>
+        <div class="lang">
+          <button class="lang-switch" type="button" id="lang-toggle-faq-top" aria-label="Change language" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu-faq-top"><img src="./assets/figma/icon-globe.svg" alt="" /></button>
+          <ul class="lang-menu" id="lang-menu-faq-top" role="menu" aria-labelledby="lang-toggle-faq-top">
+          <li role="none"><button role="menuitem" type="button" data-lang="en" lang="en" aria-label="English" aria-current="true">EN</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="fr" lang="fr" aria-label="Français">FR</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="de" lang="de" aria-label="Deutsch">DE</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="es" lang="es" aria-label="Español">ES</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ja" lang="ja" aria-label="日本語">JA</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ko" lang="ko" aria-label="한국어">KO</button></li>
+          </ul>
+        </div>
+      </nav>
+      <a class="start-free" href="./index.html#pricing">Start Free</a>
+    </header>
+    <header class="sticky-header" aria-label="Sticky navigation">
+      <a class="sticky-brand" href="./index.html" aria-label="Lingo home"><img src="./assets/figma/logo.svg" alt="Lingo" /></a>
+      <nav aria-label="Primary navigation">
+        <a href="./index.html#features">Features</a>
+        <a href="./index.html#comparison">Compare</a>
+        <a href="./index.html#pricing">Pricing</a>
+        <a href="./faq.html" aria-current="page">FAQ</a>
+        <div class="lang">
+          <button class="lang-switch" type="button" id="lang-toggle-faq-sticky" aria-label="Change language" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu-faq-sticky"><img src="./assets/figma/icon-globe.svg" alt="" /></button>
+          <ul class="lang-menu" id="lang-menu-faq-sticky" role="menu" aria-labelledby="lang-toggle-faq-sticky">
+          <li role="none"><button role="menuitem" type="button" data-lang="en" lang="en" aria-label="English" aria-current="true">EN</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="fr" lang="fr" aria-label="Français">FR</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="de" lang="de" aria-label="Deutsch">DE</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="es" lang="es" aria-label="Español">ES</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ja" lang="ja" aria-label="日本語">JA</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ko" lang="ko" aria-label="한국어">KO</button></li>
+          </ul>
+        </div>
+      </nav>
+      <a class="sticky-start" href="./index.html#pricing">Start Free</a>
+    </header>
+
+    <main id="top">
+      <section class="hero page-hero" aria-labelledby="faq-title">
+        <div class="hero-content">
+          <p class="eyebrow">Help centre</p>
+          <h1 id="faq-title"><span class="hero-line"><span>Questions,</span></span><span class="hero-line"><span>answered.</span></span></h1>
+          <p class="hero-copy">Everything about the one-post architecture, moving off WPML, SEO, WooCommerce and the plans — in plain language.</p>
+
+          <div class="hero-actions faq-chips">
+            <a class="pill faq-chip" href="#general">General</a>
+            <a class="pill faq-chip" href="#migration">Migration</a>
+            <a class="pill faq-chip" href="#seo">SEO &amp; URLs</a>
+            <a class="pill faq-chip" href="#editing">Editing</a>
+            <a class="pill faq-chip" href="#woocommerce">WooCommerce</a>
+            <a class="pill faq-chip" href="#plans">Plans &amp; support</a>
+          </div>
+          <p class="micro-proof"><i></i>Free for one additional language <span>/</span> No WPML required</p>
+        </div>
+
+        <div class="notice-bar">
+          <p>Free forever for one additional language <span class="notice-sep">|</span> <span class="notice-more">Limited time Save 10% on Pro</span></p>
+          <a href="./index.html#pricing">View all pricing <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+        </div>
+      </section>
+
+      <div class="faq-sections">
+        <section class="faq-group" id="general" aria-labelledby="general-title">
+          <div class="faq-group-head">
+            <p class="faq-index">01 / General</p>
+            <h2 id="general-title">The basics</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">What Lingo is, what it does to your database, and what it deliberately does not do.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-1" aria-expanded="false" aria-controls="a-1-1">What exactly is Lingo?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-1" role="region" aria-labelledby="q-1-1"><div>
+                <p>A multilingual layer for WordPress. Lingo keeps one canonical post and stores every language in a compact side table, keyed by field and language code. You get per-field translation, clean <code>/{code}/</code> URLs and automatic hreflang — without a translation-management suite sitting on top of your site.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-2" aria-expanded="false" aria-controls="a-1-2">Do I need WPML or Polylang installed?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-2" role="region" aria-labelledby="q-1-2"><div>
+                <p>No. Lingo is standalone, with its own storage and its own APIs. It can <em>import</em> from WPML, Polylang, qTranslate-XT and TranslatePress, but it never depends on any of them at runtime.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-3" aria-expanded="false" aria-controls="a-1-3">Will Lingo duplicate my posts?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-3" role="region" aria-labelledby="q-1-3"><div>
+                <p>No. That is the whole point. One canonical post keeps its ID; the translations live beside it. Your post lists, permalinks and admin stay exactly as long as they are today, whether you run two languages or eight.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-4" aria-expanded="false" aria-controls="a-1-4">Does Lingo translate my content automatically?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-4" role="region" aria-labelledby="q-1-4"><div>
+                <p>No — Lingo is a translation <em>layer</em>, not a translation engine. You or your translator write each language; Lingo stores it, routes it and serves it. <em>Copy from default</em> drops your source text into the target language as a starting point so you are never staring at an empty field.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-5" aria-expanded="false" aria-controls="a-1-5">Is any of this running through a third-party service?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-5" role="region" aria-labelledby="q-1-5"><div>
+                <p>No. Lingo is self-hosted. Your translations sit in your own database and no external service sits in the request path. If you ever leave, the data is still yours to take.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-1-6" aria-expanded="false" aria-controls="a-1-6">How many languages can I run?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-1-6" role="region" aria-labelledby="q-1-6"><div>
+                <p>The free version covers one additional language, with the complete translation engine behind it — nothing is crippled. Paid plans lift the cap to unlimited languages.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-group" id="migration" aria-labelledby="migration-title">
+          <div class="faq-group-head">
+            <p class="faq-index">02 / Migration</p>
+            <h2 id="migration-title">Moving in</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">Preview it, apply it, undo it. Nothing about switching should feel like a leap.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-1" aria-expanded="false" aria-controls="a-2-1">Which plugins can I migrate from?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-1" role="region" aria-labelledby="q-2-1"><div>
+                <p>WPML, Polylang, qTranslate-XT and TranslatePress. Each has its own importer, so the mapping follows how that plugin actually stored your translations.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-2" aria-expanded="false" aria-controls="a-2-2">How risky is switching?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-2" role="region" aria-labelledby="q-2-2"><div>
+                <p>Low, by design. Run the dry-run first — it is free and writes nothing. Apply when the numbers look right. Undo whenever you want. Your original content is never destroyed at any step.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-3" aria-expanded="false" aria-controls="a-2-3">What does the dry-run actually show me?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-3" role="region" aria-labelledby="q-2-3"><div>
+                <p>Every post and every language Lingo would bring across, before a single row is written:</p>
+                <p><code>wp lingo wpml-dryrun</code> → then <code>wp lingo wpml-migrate</code> when you are ready.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-4" aria-expanded="false" aria-controls="a-2-4">What gets imported?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-4" role="region" aria-labelledby="q-2-4"><div>
+                <p>Your translated titles, content and excerpts, custom fields, taxonomy terms and descriptions, and media text — mapped onto the canonical post they belong to, with their language assignments intact.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-5" aria-expanded="false" aria-controls="a-2-5">Can I really undo it?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-5" role="region" aria-labelledby="q-2-5"><div>
+                <p>Yes. The undo reverses what the migration wrote into Lingo. Whatever your old plugin stored is left where it was, so you can go back, adjust and run it again.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-2-6" aria-expanded="false" aria-controls="a-2-6">Do I have to keep the old plugin installed?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-2-6" role="region" aria-labelledby="q-2-6"><div>
+                <p>Only while you are checking the result. Once the front end looks right in every language, the old plugin can be deactivated — Lingo does not read from it after the import.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-group" id="seo" aria-labelledby="seo-title">
+          <div class="faq-group-head">
+            <p class="faq-index">03 / SEO &amp; URLs</p>
+            <h2 id="seo-title">Search, kept safe</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">Clean routes and correct alternates, ready before your first translation ships.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-3-1" aria-expanded="false" aria-controls="a-3-1">What do my URLs look like?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-3-1" role="region" aria-labelledby="q-3-1"><div>
+                <p>Your default language stays at the root — <code>example.com/about/</code> — and every other language sits under its code: <code>example.com/fr/about/</code>. No query strings, no subdomains to set up.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-3-2" aria-expanded="false" aria-controls="a-3-2">Is hreflang automatic?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-3-2" role="region" aria-labelledby="q-3-2"><div>
+                <p>Yes — hreflang alternates plus <code>x-default</code> are emitted for you. There is no annotation step and nothing to maintain by hand when you add a language.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-3-3" aria-expanded="false" aria-controls="a-3-3">Won't this create duplicate content?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-3-3" role="region" aria-labelledby="q-3-3"><div>
+                <p>No. Each language has its own URL and the alternates are declared, which is exactly the signal search engines look for. One canonical structure, several language versions.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-3-4" aria-expanded="false" aria-controls="a-3-4">Does it work with Yoast, RankMath or SEOPress?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-3-4" role="region" aria-labelledby="q-3-4"><div>
+                <p>Yes. Titles and meta resolve per language, so the SEO plugin you already use keeps working instead of being replaced.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-3-5" aria-expanded="false" aria-controls="a-3-5">Can I translate slugs?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-3-5" role="region" aria-labelledby="q-3-5"><div>
+                <p>Yes — slugs are translatable per language, so a French reader gets a French URL rather than an English one wearing a <code>/fr/</code> prefix.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-group" id="editing" aria-labelledby="editing-title">
+          <div class="faq-group-head">
+            <p class="faq-index">04 / Editing</p>
+            <h2 id="editing-title">Writing &amp; translating</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">Lingo lives inside the block editor. There is no second workspace to learn.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-1" aria-expanded="false" aria-controls="a-4-1">Where do I actually translate?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-1" role="region" aria-labelledby="q-4-1"><div>
+                <p>In the post you are already editing. A <em>Language (Lingo)</em> panel switches the editing language, and the editor keeps behaving like the editor — same blocks, same shortcuts, same preview.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-2" aria-expanded="false" aria-controls="a-4-2">Which fields can be translated?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-2" role="region" aria-labelledby="q-4-2"><div>
+                <p>Titles, content and excerpts; custom fields, including ACF and plain meta; taxonomy terms and their descriptions; and media alt text and captions. Translate what needs translating and leave the rest alone.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-3" aria-expanded="false" aria-controls="a-4-3">Can I overwrite my source language by mistake?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-3" role="region" aria-labelledby="q-4-3"><div>
+                <p>Your source-language content is never overwritten by a translation. <em>Copy from default</em> only ever copies <em>into</em> the language you are working on.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-4" aria-expanded="false" aria-controls="a-4-4">What about Gutenberg blocks?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-4" role="region" aria-labelledby="q-4-4"><div>
+                <p>Core blocks translate as ordinary <code>post_content</code> and render through WordPress's own block pipeline — no parallel renderer, no block-by-block mapping table.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-5" aria-expanded="false" aria-controls="a-4-5">How do I translate theme and plugin interface text?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-5" role="region" aria-labelledby="q-4-5"><div>
+                <p>Through a simple string registry. A <code>pll__</code> / <code>icl_</code> compatibility shim keeps themes that were built for Polylang or WPML working after you migrate, so you are not rewriting template code on day one.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-4-6" aria-expanded="false" aria-controls="a-4-6">Where can I put the language switcher?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-4-6" role="region" aria-labelledby="q-4-6"><div>
+                <p>Wherever your theme has room: the <code>[lingo_switcher]</code> shortcode, a widget, a Language Switcher block, language items in <em>Appearance → Menus</em>, or the <code>lingo_language_switcher()</code> template tag. List, inline or dropdown styles.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-group" id="woocommerce" aria-labelledby="woocommerce-title">
+          <div class="faq-group-head">
+            <p class="faq-index">05 / WooCommerce</p>
+            <h2 id="woocommerce-title">Selling in every language</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">Built in, not bolted on — no separate commerce add-on to license.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-5-1" aria-expanded="false" aria-controls="a-5-1">Do I need an extra add-on for WooCommerce?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-5-1" role="region" aria-labelledby="q-5-1"><div>
+                <p>No. WooCommerce translation is part of the paid plans rather than a separate purchase.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-5-2" aria-expanded="false" aria-controls="a-5-2">What can I translate in a store?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-5-2" role="region" aria-labelledby="q-5-2"><div>
+                <p>Product titles and descriptions, product categories, and variation attribute values — the copy a customer actually reads before deciding.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-5-3" aria-expanded="false" aria-controls="a-5-3">Do cart, checkout and account pages follow the language?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-5-3" role="region" aria-labelledby="q-5-3"><div>
+                <p>Yes — the whole journey stays under the same language prefix, from <code>/fr/shop</code> through cart and checkout to the customer account.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-5-4" aria-expanded="false" aria-controls="a-5-4">Does Lingo handle multiple currencies?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-5-4" role="region" aria-labelledby="q-5-4"><div>
+                <p>No, and it does not pretend to. Lingo translates content and routes URLs; pricing and currency stay with WooCommerce and whichever currency extension you already run.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-group" id="plans" aria-labelledby="plans-title">
+          <div class="faq-group-head">
+            <p class="faq-index">06 / Plans &amp; support</p>
+            <h2 id="plans-title">Buying &amp; getting help</h2>
+          </div>
+          <div class="faq-list">
+            <p class="faq-lede">What each plan covers, how updates arrive, and where the developer surface is.</p>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-1" aria-expanded="false" aria-controls="a-6-1">What is included in the free version?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-1" role="region" aria-labelledby="q-6-1"><div>
+                <p>One additional language and the complete core: per-field translation, clean URLs, automatic hreflang, the switcher, and the migration preview with undo. It is the honest on-ramp, not a demo.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-2" aria-expanded="false" aria-controls="a-6-2">What do the paid plans add?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-2" role="region" aria-labelledby="q-6-2"><div>
+                <p>Unlimited languages, one-command migration (applying it, not just previewing it), WooCommerce product translation, and priority support with automatic updates.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-3" aria-expanded="false" aria-controls="a-6-3">Which plan do I need for client sites?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-3" role="region" aria-labelledby="q-6-3"><div>
+                <p>Business covers five sites at $129 a year. Agency is $199 a year with unlimited site activations — the one to take if multilingual is a normal part of what you hand over to clients.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-4" aria-expanded="false" aria-controls="a-6-4">Can I get a refund?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-4" role="region" aria-labelledby="q-6-4"><div>
+                <p>Yes — there is a 7-day money-back guarantee on the paid plans. And you can run the free version for as long as you like before you decide.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-5" aria-expanded="false" aria-controls="a-6-5">Can I change plan later?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-5" role="region" aria-labelledby="q-6-5"><div>
+                <p>Yes. Your translations live in your own database, so moving between plans is a licence change — never a content migration.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-6" aria-expanded="false" aria-controls="a-6-6">How do updates work?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-6" role="region" aria-labelledby="q-6-6"><div>
+                <p>Through the normal WordPress updates screen. Paid updates are self-hosted and integrity-checked, so there is no separate dashboard to log into and nothing new to teach a client.</p>
+              </div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" type="button" id="q-6-7" aria-expanded="false" aria-controls="a-6-7">Is there a developer API?<i class="faq-mark" aria-hidden="true"></i></button>
+              <div class="faq-a" id="a-6-7" role="region" aria-labelledby="q-6-7"><div>
+                <p>Yes: WP-CLI commands, language resolution over the REST API, and a documented set of hooks and filters. Automate the boring parts and leave the rest to the editors.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cta-section" aria-labelledby="faq-cta-title">
+          <div class="cta-card">
+            <div>
+              <p class="cta-kicker">Still stuck?</p>
+              <h2 id="faq-cta-title">Ask us anything.<br />We answer like developers.</h2>
+              <p class="cta-copy">If your question is not here, it is probably a good one. Send it to <a href="mailto:hello@lingo.com">hello@lingo.com</a> and you will get a straight answer.</p>
+            </div>
+            <div class="cta-actions">
+              <a class="pill pill-white" href="./index.html#pricing"><span>See pricing</span> <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+              <a class="pill pill-ghost" aria-disabled="true"><span>Documentation</span> <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+            </div>
+          </div>
+        </section>
+
+        <div class="notice-bar faq-notice">
+          <p>Free forever for one additional language <span class="notice-sep">|</span> <span class="notice-more">Limited time Save 10% on Pro</span></p>
+          <a href="./index.html#pricing">View all pricing <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer">
+      <img src="./assets/figma/logo.svg" alt="Lingo" />
+      <nav aria-label="Footer navigation">
+        <a href="./index.html#features">Documentation</a>
+        <a href="./faq.html">FAQ</a>
+        <a href="./index.html#pricing">Pricing</a>
+        <a href="mailto:hello@lingo.com">Contact</a>
+      </nav>
+      <p>© 2026 Lingo. Built to travel.</p>
+    </footer>
+  </body>
+</html>

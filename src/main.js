@@ -2,6 +2,15 @@
 // when the page is opened through a plain local server instead of Vite.
 import Lenis from '../node_modules/lenis/dist/lenis.mjs'
 
+// The layout grid is driven by --vw rather than 100vw: 100vw includes the
+// classic scrollbar, which pushes every grid margin ~7px off the overlay (and
+// off the 1920 canvas) on platforms that reserve gutter space for it.
+const syncViewportWidth = () => {
+  document.documentElement.style.setProperty('--vw', `${document.documentElement.clientWidth}px`)
+}
+syncViewportWidth()
+window.addEventListener('resize', syncViewportWidth)
+
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 if (!reducedMotion) {
@@ -17,7 +26,7 @@ if (!reducedMotion) {
 
 // Give every content group the same quiet, staggered entrance. Keeping this
 // data-driven means new cards can join the rhythm without bespoke keyframes.
-const staggeredReveal = (container, selector, options = {}) => {
+export const staggeredReveal = (container, selector, options = {}) => {
   if (!container || reducedMotion) return
 
   const items = [...container.querySelectorAll(selector)]
@@ -29,32 +38,85 @@ const staggeredReveal = (container, selector, options = {}) => {
     item.style.setProperty('--reveal-delay', `${index * delay}ms`)
   })
 
-  const reveal = () => container.classList.add('motion-reveal-ready')
-  if (options.immediate) {
-    // Start only after the webfonts have settled. This prevents the hero copy
-    // from shifting halfway through its entrance on a cold page load.
-    const begin = () => window.requestAnimationFrame(() => window.requestAnimationFrame(reveal))
-    if (document.fonts?.ready) document.fonts.ready.then(begin)
-    else begin()
-    return
-  }
-
   new IntersectionObserver((entries, observer) => {
     if (!entries.some((entry) => entry.isIntersecting)) return
-    reveal()
+    container.classList.add('motion-reveal-ready')
     observer.disconnect()
-  }, { threshold: options.threshold ?? 0.16, rootMargin: '0px 0px -7% 0px' }).observe(container)
+  }, {
+    threshold: options.threshold ?? 0.16,
+    rootMargin: options.rootMargin ?? '0px 0px -7% 0px'
+  }).observe(container)
 }
 
-staggeredReveal(document.querySelector('.site-header'), '.brand, nav, .start-free', { immediate: true, delay: 120 })
-staggeredReveal(document.querySelector('.hero-content'), ':scope > *', { immediate: true, delay: 140 })
+// The landing entrance is a written timeline rather than one flat stagger.
+// A uniform 140ms step against a ~1s transition made every element overlap
+// almost completely, so the hero read as a single simultaneous fade; these
+// cues are spaced far enough apart to be heard as separate beats.
+const HERO_CUES = [
+  ['header', ':scope > .brand', 0],
+  ['header', ':scope > nav', 140],
+  ['header', ':scope > .start-free', 260],
+  ['hero', ':scope > .eyebrow', 440, 0, { '--reveal-y': '60px' }],
+  ['hero', ':scope > h1', 620, 0, { '--reveal-y': '110px', '--reveal-duration': '1.35s', '--reveal-fade': '.65s' }],
+  ['hero', ':scope > .hero-copy', 1080, 0, { '--reveal-duration': '1.3s' }],
+  ['hero', '.proof-list li', 1260, 105, { '--reveal-y': '64px', '--reveal-duration': '1.05s' }],
+  ['hero', '.hero-actions .pill', 1680, 130, { '--reveal-y': '76px', '--reveal-duration': '1.15s' }],
+  ['hero', ':scope > .micro-proof', 1960, 0, { '--reveal-y': '56px', '--reveal-duration': '1.05s' }]
+]
+const HERO_NOTICE_CUE = 2180
+const FOLLOWING_SECTIONS_CUE = 3000
+let releaseFollowingSections
+const followingSectionsReady = new Promise((resolve) => {
+  releaseFollowingSections = resolve
+})
+
+const siteHeader = document.querySelector('.site-header')
+const heroContent = document.querySelector('.hero-content')
+if (siteHeader && heroContent && !reducedMotion) {
+  siteHeader.classList.add('landing-motion-priming')
+  heroContent.classList.add('landing-motion-priming')
+  const roots = { header: siteHeader, hero: heroContent }
+  HERO_CUES.forEach(([root, selector, start, step = 0, vars]) => {
+    ;[...roots[root].querySelectorAll(selector)].forEach((item, index) => {
+      item.classList.add('motion-reveal')
+      item.style.setProperty('--reveal-delay', `${start + index * step}ms`)
+      if (vars) for (const [name, value] of Object.entries(vars)) item.style.setProperty(name, value)
+    })
+  })
+
+  // Commit every hidden child before the ready class is allowed onto the page.
+  // Without this layout read, the module can add both states before the first
+  // paint and nested cues (proofs/buttons) simply appear.
+  siteHeader.getBoundingClientRect()
+  heroContent.getBoundingClientRect()
+
+  // Hold until the webfonts settle, otherwise the headline reflows halfway
+  // through its own reveal on a cold load.
+  const begin = () => window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+    siteHeader.classList.remove('landing-motion-priming')
+    heroContent.classList.remove('landing-motion-priming')
+    siteHeader.classList.add('motion-reveal-ready')
+    heroContent.classList.add('motion-reveal-ready')
+    window.setTimeout(releaseFollowingSections, FOLLOWING_SECTIONS_CUE)
+  }))
+  if (document.fonts?.ready) document.fonts.ready.then(begin)
+  else begin()
+} else releaseFollowingSections()
+
 staggeredReveal(document.querySelector('.supporting-features'), ':scope > article, :scope > .make-sense', { delay: 140 })
 staggeredReveal(document.querySelector('.comparison-section'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .comparison-table-wrap', { delay: 140 })
-staggeredReveal(document.querySelector('.pricing'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .price-grid, :scope > .pricing-trust', { delay: 140 })
+staggeredReveal(document.querySelector('.pricing'), ':scope > .section-kicker, :scope > h2, :scope > .section-intro, :scope > .price-grid > .price-card, :scope > .pricing-trust, :scope > .cta-card', { delay: 90 })
 staggeredReveal(document.querySelector('footer'), ':scope > img, :scope > nav, :scope > p', { delay: 140 })
 
 document.querySelectorAll('.feature-card').forEach((card) => {
-  staggeredReveal(card, ':scope > h2, :scope > .feature-lede, :scope > .migration-steps, :scope > .terminal, :scope > .editor-points, :scope > .editor-demo, :scope > .seo-routes, :scope > .seo-word, :scope > .commerce-copy, :scope > .product-card', { delay: 150, threshold: 0.1 })
+  staggeredReveal(card, ':scope > h2, :scope > .feature-lede, :scope > .migration-steps, :scope > .terminal, :scope > .editor-points, :scope > .editor-demo, :scope > .seo-routes, :scope > .seo-word, :scope > .commerce-copy, :scope > .product-card', {
+    delay: 150,
+    threshold: 0.12,
+    // A sticky card can expose a thin strip at the bottom of the viewport long
+    // before it becomes the active card. Wait until it reaches the viewport's
+    // middle band so cards 2–4 do not finish animating off-screen.
+    rootMargin: '0px 0px -45% 0px'
+  })
 })
 
 const heroNotice = document.querySelector('.hero > .notice-bar')
@@ -63,7 +125,9 @@ if (heroNotice && !reducedMotion) {
   heroNotice.getBoundingClientRect()
   window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
     heroNotice.classList.remove('notice-motion-priming')
-    heroNotice.classList.add('is-visible')
+    // Last beat of the landing sequence: the bar wipes in once the hero copy
+    // has finished arriving, instead of racing it.
+    window.setTimeout(() => heroNotice.classList.add('is-visible'), HERO_NOTICE_CUE)
   }))
 }
 
@@ -71,6 +135,8 @@ const howSection = document.querySelector('.how-it-works')
 const architectureComparison = document.querySelector('.architecture-comparison')
 if (howSection && architectureComparison) {
   const languageCount = architectureComparison.querySelector('[data-language-count]')
+  const ARCHITECTURE_DETAIL_CUE = 1450
+  const ARCHITECTURE_COUNT_CUE = 2800
 
   if (reducedMotion) {
     howSection.classList.add('how-is-visible')
@@ -91,7 +157,14 @@ if (howSection && architectureComparison) {
     const playArchitecture = () => {
       if (architecturePlayed) return
       architecturePlayed = true
-      architectureComparison.classList.add('is-visible')
+      howSection.classList.add('architecture-cards-visible')
+      // The card surfaces and their copy are one entrance beat. Only the
+      // inner post/frame choreography waits for that shared rise to settle.
+      howSection.classList.add('architecture-text-visible')
+
+      window.setTimeout(() => {
+        architectureComparison.classList.add('is-visible')
+      }, ARCHITECTURE_DETAIL_CUE)
 
       window.setTimeout(() => {
         architectureComparison.classList.add('is-counting')
@@ -104,20 +177,20 @@ if (howSection && architectureComparison) {
           languageCount.textContent = String(value)
           if (value === 8) window.clearInterval(counter)
         }, 125)
-      }, 1900)
+      }, ARCHITECTURE_COUNT_CUE)
     }
 
     const howObserver = new IntersectionObserver((entries, observer) => {
       if (!entries.some((entry) => entry.isIntersecting)) return
-      playHow()
+      followingSectionsReady.then(playHow)
       observer.disconnect()
     }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' })
 
     const architectureObserver = new IntersectionObserver((entries, observer) => {
       if (!entries.some((entry) => entry.isIntersecting)) return
-      window.setTimeout(playArchitecture, 720)
+      followingSectionsReady.then(() => window.setTimeout(playArchitecture, 320))
       observer.disconnect()
-    }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' })
+    }, { threshold: 0.12, rootMargin: '0px 0px -22% 0px' })
 
     // Commit the hidden start state without transition first; otherwise a fast
     // module load can briefly animate the rows and frame backwards.
@@ -162,6 +235,97 @@ if (stickyHeader) {
     window.requestAnimationFrame(updateStickyHeader)
   }, { passive: true })
   updateStickyHeader()
+}
+
+// The top bar and the sticky bar carry the same language control, so the two
+// menus are driven as one: opening either closes the other, and a choice made
+// in one reads back in both. Nothing is translated yet — picking a language
+// only moves the marker until real locales are wired up.
+const langGroups = [...document.querySelectorAll('.lang')].map((root) => ({
+  root,
+  toggle: root.querySelector('.lang-switch'),
+  menu: root.querySelector('.lang-menu'),
+  options: [...root.querySelectorAll('.lang-menu button')]
+}))
+
+if (langGroups.length) {
+  const setOpen = (group, open) => {
+    group.menu.classList.toggle('is-open', open)
+    group.toggle.setAttribute('aria-expanded', String(open))
+  }
+  const closeAll = (except) => langGroups.forEach((group) => { if (group !== except) setOpen(group, false) })
+
+  const selectLanguage = (code) => {
+    langGroups.forEach((group) => group.options.forEach((option) => {
+      if (option.dataset.lang === code) option.setAttribute('aria-current', 'true')
+      else option.removeAttribute('aria-current')
+    }))
+  }
+
+  langGroups.forEach((group) => {
+    group.toggle.addEventListener('click', () => {
+      const willOpen = group.toggle.getAttribute('aria-expanded') !== 'true'
+      closeAll(group)
+      setOpen(group, willOpen)
+    })
+
+    group.options.forEach((option) => {
+      option.addEventListener('click', () => {
+        selectLanguage(option.dataset.lang)
+        setOpen(group, false)
+        group.toggle.focus()
+      })
+    })
+  })
+
+  // pointerdown rather than click: closing on the press keeps the menu from
+  // sitting open over whatever the next tap lands on.
+  document.addEventListener('pointerdown', (event) => {
+    if (!event.target.closest('.lang')) closeAll()
+  })
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return
+    const open = langGroups.find((group) => group.menu.classList.contains('is-open'))
+    if (!open) return
+    setOpen(open, false)
+    open.toggle.focus()
+  })
+}
+
+// Light the menu dot for the section you are actually reading. Links that
+// point at another page (./faq.html) simply never match, so the FAQ page keeps
+// its static aria-current dot and this loop stays a no-op there.
+const NAV_SPY_LINE = 0.32
+const navLinks = [...document.querySelectorAll('.site-header nav a,.sticky-header nav a')]
+const spySections = [...new Set(navLinks.map((link) => link.getAttribute('href')).filter((href) => href?.startsWith('#')))]
+  .map((hash) => ({ hash, element: document.querySelector(hash) }))
+  .filter((entry) => entry.element)
+
+if (spySections.length) {
+  let navSpyPending = false
+  const updateNavSpy = () => {
+    navSpyPending = false
+    const line = window.scrollY + window.innerHeight * NAV_SPY_LINE
+    const measured = spySections
+      .map((entry) => ({ hash: entry.hash, top: entry.element.getBoundingClientRect().top + window.scrollY }))
+      .sort((a, b) => a.top - b.top)
+
+    let activeHash = ''
+    for (const entry of measured) if (entry.top <= line) activeHash = entry.hash
+    // The last section is usually shorter than the fold, so it would never
+    // reach the line on its own.
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) activeHash = measured[measured.length - 1].hash
+
+    navLinks.forEach((link) => link.classList.toggle('is-active', link.getAttribute('href') === activeHash))
+  }
+  const queueNavSpy = () => {
+    if (navSpyPending) return
+    navSpyPending = true
+    window.requestAnimationFrame(updateNavSpy)
+  }
+  window.addEventListener('scroll', queueNavSpy, { passive: true })
+  window.addEventListener('resize', queueNavSpy)
+  updateNavSpy()
 }
 
 const translations = [
@@ -218,7 +382,9 @@ const moveAmbientCopy = (element, group) => {
 const runAmbientCopy = async (element, group, initialIndex) => {
   let previous = initialIndex
   moveAmbientCopy(element, group)
-  await wait({ a: 450, b: 1150, c: 1850 }[group])
+  // Start typing only after the hero has landed — three cursors moving during
+  // the entrance is what made the first second feel like everything at once.
+  await wait({ a: 2600, b: 3200, c: 3800 }[group])
 
   while (document.body.contains(element)) {
     let index = Math.floor(Math.random() * translations.length)
@@ -305,37 +471,58 @@ if (terminal) {
   }
 }
 
+// One highlighted span per line, each starting its wipe a beat after the one
+// above it, so the marker reads as travelling down the block.
+const MARKER_STAGGER = 55
+const markerLines = (html, className, startIndex = 0) =>
+  html
+    .split(/<br\s*\/?>/i)
+    .map((line, index) => `<span class="${className}" style="--swap-delay:${(startIndex + index) * MARKER_STAGGER}ms">${line}</span>`)
+    .join('<br />')
+
 const editorDemo = document.querySelector('.editor-demo')
 if (editorDemo) {
   const editorLanguages = [
-    { code: 'EN', name: 'English', title: 'The city is a language<br />we learn to read.', location: 'LONDON, 2026' },
-    { code: 'FR', name: 'Français', title: 'La ville est une langue<br />que nous apprenons à lire.', location: 'PARIS, 2026' },
-    { code: '繁', name: '繁體中文', title: '城市是一種我們<br />學會閱讀的語言。', location: '香港，2026' },
-    { code: 'DE', name: 'Deutsch', title: 'Die Stadt ist eine Sprache,<br />die wir lesen lernen.', location: 'BERLIN, 2026' }
+    { code: 'EN', name: 'English', title: 'The city is a language<br />we learn to read.', caption: 'Greening is an art' },
+    { code: 'FR', name: 'Français', title: 'La ville est une langue<br />que nous apprenons à lire.', caption: 'Végétaliser est un art' },
+    { code: 'JA', name: '日本語', title: '都市は私たちが<br />読むことを学ぶ言語です。', caption: '緑化はひとつの芸術' },
+    { code: 'KO', name: '한국어', title: '도시는 우리가<br />읽는 법을 배우는 언어입니다.', caption: '녹화는 하나의 예술' },
+    { code: '繁', name: '繁體中文', title: '城市是一種我們<br />學會閱讀的語言。', caption: '綠化是一種藝術' },
+    { code: 'DE', name: 'Deutsch', title: 'Die Stadt ist eine Sprache,<br />die wir lesen lernen.', caption: 'Begrünung ist eine Kunst' },
+    { code: 'ES', name: 'Español', title: 'La ciudad es un idioma<br />que aprendemos a leer.', caption: 'Reverdecer es un arte' }
   ]
   const editorButtons = [...editorDemo.querySelectorAll('[data-editor-language]')]
   const editorTitle = editorDemo.querySelector('[data-editor-title]')
-  const editorLocation = editorDemo.querySelector('[data-editor-location]')
-  const editorCode = editorDemo.querySelector('[data-editor-code]')
-  const editorName = editorDemo.querySelector('[data-editor-name]')
+  const editorCaption = editorDemo.querySelector('[data-editor-caption]')
   let editorIndex = 0
   let editorTimer
   let editorSwitchTimer
+
+  // The picker answers the click immediately, the article catches up half a
+  // second later — so the cause (right) visibly precedes the effect (left)
+  // instead of both landing on the same frame.
+  const EDITOR_SWAP_DELAY = 500
 
   const applyEditorLanguage = (index, immediate = false) => {
     editorIndex = index
     const language = editorLanguages[index]
     window.clearTimeout(editorSwitchTimer)
-    if (!immediate) editorDemo.classList.add('is-switching')
+    editorButtons.forEach((button, buttonIndex) => button.setAttribute('aria-pressed', String(buttonIndex === index)))
 
-    editorSwitchTimer = window.setTimeout(() => {
-      editorTitle.innerHTML = language.title
-      editorLocation.textContent = language.location
-      editorCode.textContent = language.code
-      editorName.textContent = language.name
-      editorButtons.forEach((button, buttonIndex) => button.setAttribute('aria-pressed', String(buttonIndex === index)))
+    const swap = () => {
+      editorTitle.innerHTML = markerLines(language.title, 'editor-title-text')
+      editorCaption.textContent = language.caption
       editorDemo.classList.remove('is-switching')
-    }, immediate ? 0 : 210)
+    }
+
+    if (immediate) {
+      swap()
+      return
+    }
+
+    // The orange marker holds across the gap, then clears as the copy lands.
+    editorDemo.classList.add('is-switching')
+    editorSwitchTimer = window.setTimeout(swap, EDITOR_SWAP_DELAY)
   }
 
   const startEditorCycle = () => {
@@ -376,17 +563,23 @@ if (productCard) {
   let productIndex = 0
   let productTimer
 
+  // Matches the editor mock: the orange marker holds across the gap, then
+  // clears as the translated copy lands.
+  const PRODUCT_SWAP_DELAY = 500
+  let productSwitchTimer
+
   const applyProduct = (index) => {
     productIndex = index
     const product = products[index]
+    window.clearTimeout(productSwitchTimer)
     productCard.classList.add('is-switching')
-    window.setTimeout(() => {
+    productSwitchTimer = window.setTimeout(() => {
       productLanguage.textContent = product.language
-      productTitle.textContent = product.title
-      productDescription.innerHTML = product.description
-      productPrice.textContent = product.price
+      productTitle.innerHTML = markerLines(product.title, 'product-swap')
+      productDescription.innerHTML = markerLines(product.description, 'product-swap', 1)
+      productPrice.innerHTML = markerLines(product.price, 'product-swap', 3)
       productCard.classList.remove('is-switching')
-    }, 240)
+    }, PRODUCT_SWAP_DELAY)
   }
   const startProductCycle = () => {
     if (reducedMotion || productTimer) return

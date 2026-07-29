@@ -21,7 +21,18 @@
         <a href="#features">Features</a>
         <a href="#comparison">Compare</a>
         <a href="#pricing">Pricing</a>
-        <a href="#footer">FAQ</a>
+        <a href="./faq.html">FAQ</a>
+        <div class="lang">
+          <button class="lang-switch" type="button" id="lang-toggle-home-top" aria-label="Change language" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu-home-top"><img src="./assets/figma/icon-globe.svg" alt="" /></button>
+          <ul class="lang-menu" id="lang-menu-home-top" role="menu" aria-labelledby="lang-toggle-home-top">
+          <li role="none"><button role="menuitem" type="button" data-lang="en" lang="en" aria-label="English" aria-current="true">EN</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="fr" lang="fr" aria-label="Français">FR</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="de" lang="de" aria-label="Deutsch">DE</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="es" lang="es" aria-label="Español">ES</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ja" lang="ja" aria-label="日本語">JA</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ko" lang="ko" aria-label="한국어">KO</button></li>
+          </ul>
+        </div>
       </nav>
       <a class="start-free" href="#pricing">Start Free</a>
     </header>
@@ -31,7 +42,18 @@
         <a href="#features">Features</a>
         <a href="#comparison">Compare</a>
         <a href="#pricing">Pricing</a>
-        <a href="#footer">FAQ</a>
+        <a href="./faq.html">FAQ</a>
+        <div class="lang">
+          <button class="lang-switch" type="button" id="lang-toggle-home-sticky" aria-label="Change language" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu-home-sticky"><img src="./assets/figma/icon-globe.svg" alt="" /></button>
+          <ul class="lang-menu" id="lang-menu-home-sticky" role="menu" aria-labelledby="lang-toggle-home-sticky">
+          <li role="none"><button role="menuitem" type="button" data-lang="en" lang="en" aria-label="English" aria-current="true">EN</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="fr" lang="fr" aria-label="Français">FR</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="de" lang="de" aria-label="Deutsch">DE</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="es" lang="es" aria-label="Español">ES</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ja" lang="ja" aria-label="日本語">JA</button></li>
+          <li role="none"><button role="menuitem" type="button" data-lang="ko" lang="ko" aria-label="한국어">KO</button></li>
+          </ul>
+        </div>
       </nav>
       <a class="sticky-start" href="#pricing">Start Free</a>
     </header>
@@ -44,7 +66,7 @@
 
         <div class="hero-content">
           <p class="eyebrow">The multilingual layer for WordPress</p>
-          <h1 id="hero-title">One post.<br />Every language.</h1>
+          <h1 id="hero-title"><span class="hero-line"><span>One post.</span></span><span class="hero-line"><span>Every language.</span></span></h1>
           <p class="hero-copy">Translate WordPress without duplicating your content. One canonical post. Clean URLs. Automatic hreflang. Built to stay fast.</p>
 
           <ul class="proof-list" aria-label="Core benefits">
@@ -62,7 +84,7 @@
         </div>
 
         <div class="notice-bar">
-          <p>Free forever for one additional language <span>|</span> Limited time Save 10% on Pro</p>
+          <p>Free forever for one additional language <span class="notice-sep">|</span> <span class="notice-more">Limited time Save 10% on Pro</span></p>
           <a href="#features">Migrate from WPML <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
         </div>
       </section>
@@ -158,27 +180,27 @@
                 <aside class="editor-rail" aria-hidden="true"><b>W</b><i></i><i></i><i></i><i></i></aside>
                 <div class="editor-canvas">
                   <small>POST / LINGO DEMO</small>
-                  <h3 data-editor-title>The city is a language<br />we learn to read.</h3>
+                  <h3 data-editor-title><span class="editor-title-text" style="--swap-delay:0ms">The city is a language</span><br /><span class="editor-title-text" style="--swap-delay:55ms">we learn to read.</span></h3>
                   <span class="editor-line editor-line-long"></span>
                   <span class="editor-line editor-line-mid"></span>
                   <span class="editor-line editor-line-short"></span>
                   <div class="editor-art">
-                    <span data-editor-location>LONDON, 2026</span>
-                    <i class="editor-sun"></i>
-                    <i class="editor-hill editor-hill-left"></i>
-                    <i class="editor-hill editor-hill-right"></i>
+                    <img src="./assets/figma/city-collage.jpg" alt="" />
+                    <span data-editor-caption>Greening is an art</span>
                   </div>
                 </div>
                 <aside class="editor-languages">
-                  <header><strong>Language</strong><em>LINGO</em></header>
-                  <div class="editor-current"><span data-editor-code>EN</span><b data-editor-name>English</b><i>⌄</i></div>
+                  <header><img src="./assets/figma/logo-small.svg" alt="Lingo" /></header>
                   <div class="editor-language-list" role="group" aria-label="Preview language">
-                    <button type="button" data-editor-language="0" aria-pressed="true"><span>EN</span>English</button>
-                    <button type="button" data-editor-language="1" aria-pressed="false"><span>FR</span>Français</button>
-                    <button type="button" data-editor-language="2" aria-pressed="false"><span>繁</span>繁體中文</button>
-                    <button type="button" data-editor-language="3" aria-pressed="false"><span>DE</span>Deutsch</button>
+                    <button type="button" data-editor-language="0" aria-pressed="true"><span>EN</span><b>English</b></button>
+                    <button type="button" data-editor-language="1" aria-pressed="false"><span>FR</span><b>Français</b></button>
+                    <button type="button" data-editor-language="2" aria-pressed="false"><span>JA</span><b>日本語</b></button>
+                    <button type="button" data-editor-language="3" aria-pressed="false"><span>KO</span><b>한국어</b></button>
+                    <button type="button" data-editor-language="4" aria-pressed="false"><span>繁</span><b>繁體中文</b></button>
+                    <button type="button" data-editor-language="5" aria-pressed="false"><span>DE</span><b>Deutsch</b></button>
+                    <button type="button" data-editor-language="6" aria-pressed="false"><span>ES</span><b>Español</b></button>
                   </div>
-                  <button class="editor-copy-button" type="button">Copy from English <span>→</span></button>
+                  <button class="editor-copy-button" type="button">Build <span>→</span></button>
                 </aside>
               </div>
             </div>
@@ -215,9 +237,9 @@
               <img src="./assets/figma/juice.png" alt="Orange, grape and pear juice product" />
               <div class="product-card-copy" aria-live="polite">
                 <span class="product-language" data-product-language>EN</span>
-                <h3 data-product-title>Orange Grape Pear</h3>
-                <p data-product-description>Freshly squeezed.<br />100% Natural.</p>
-                <strong data-product-price>$9.80</strong>
+                <h3 data-product-title><span class="product-swap" style="--swap-delay:0ms">Orange Grape Pear</span></h3>
+                <p data-product-description><span class="product-swap" style="--swap-delay:55ms">Freshly squeezed.</span><br /><span class="product-swap" style="--swap-delay:110ms">100% Natural.</span></p>
+                <strong data-product-price><span class="product-swap" style="--swap-delay:165ms">$9.80</span></strong>
               </div>
             </div>
           </article>
@@ -238,7 +260,7 @@
         </div>
 
         <div class="notice-bar feature-notice">
-          <p>Free forever for one additional language <span>|</span> Limited time Save 10% on Pro</p>
+          <p>Free forever for one additional language <span class="notice-sep">|</span> <span class="notice-more">Limited time Save 10% on Pro</span></p>
           <a href="#pricing">View all pricing <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
         </div>
       </section>
@@ -297,6 +319,18 @@
           </article>
         </div>
         <div class="pricing-trust"><span>7-day money-back guarantee</span><i></i><span>Your data stays yours</span><i></i><span>No WPML required</span></div>
+
+        <div class="cta-card is-light">
+          <div>
+            <p class="cta-kicker">Not sure yet?</p>
+            <h2>Try it on one language.<br />Decide with your own site.</h2>
+            <p class="cta-copy">The free version covers one additional language — translate a page and watch <em>/fr/</em> go live before you spend anything. Questions first? Write to <a href="mailto:hello@lingo.com">hello@lingo.com</a>.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="pill pill-dark" href="./faq.html"><span>Read the FAQ</span> <img src="./assets/figma/arrow-cta.svg" alt="" /></a>
+            <a class="pill pill-light" aria-disabled="true"><span>Documentation</span> <img src="./assets/figma/arrow-down.svg" alt="" /></a>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -304,9 +338,9 @@
       <img src="./assets/figma/logo.svg" alt="Lingo" />
       <nav aria-label="Footer navigation">
         <a href="#features">Documentation</a>
-        <a href="#comparison">FAQ</a>
+        <a href="./faq.html">FAQ</a>
         <a href="#pricing">Pricing</a>
-        <a href="#top">Contact</a>
+        <a href="mailto:hello@lingo.com">Contact</a>
       </nav>
       <p>© 2026 Lingo. Built to travel.</p>
     </footer>

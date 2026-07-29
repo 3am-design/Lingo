@@ -2,7 +2,28 @@
 @font-face{font-family:Brown;src:url("../assets/fonts/Brown-Bold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:Inter;src:url("../assets/fonts/Inter-Variable.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
 
-:root{--orange:#f17923;--paper:#f5f5f5;--ink:#000;--muted:#5d5d5d;--old-way:#5b6171;--purple:#2c035d;--purple-accent:#873eff;--grid-gutter:clamp(20px,5.208333vw,100px);--grid-edge:max(var(--grid-gutter),calc((100vw - 1920px) / 2 + var(--grid-gutter)));--grid-gap:clamp(16px,1.5625vw,30px);--content:1280px;--wide:min(1720px,calc(100% - (2 * var(--grid-gutter))))}
+:root{--orange:#f17923;--paper:#f5f5f5;--ink:#000;--muted:#5d5d5d;--old-way:#5b6171;--purple:#2c035d;--purple-accent:#873eff}
+
+/* Layout grid — a 1920px canvas with 6 columns, 100px margins and a 30px
+   gutter, frozen (and centred) once the viewport grows past 1920px.
+   --vw is the scrollbar-free viewport width, kept in sync by main.js: 100vw
+   includes the classic scrollbar, so vw-based margins drift ~7px away from the
+   overlay (which measures 100% of the same box the sections live in). Every
+   grid-aligned width is derived from --grid-col so blocks land on real column
+   lines instead of hardcoded pixel widths. */
+:root{
+  --vw:100vw;
+  --grid-canvas:1920px;
+  --grid-cols:6;
+  --grid-gutter:clamp(20px,calc(var(--vw) * .0520833),100px);
+  --grid-gap:clamp(16px,calc(var(--vw) * .015625),30px);
+  --grid-edge:max(var(--grid-gutter),calc((var(--vw) - var(--grid-canvas)) / 2 + var(--grid-gutter)));
+  --grid-w:calc(min(var(--vw),var(--grid-canvas)) - 2 * var(--grid-gutter));
+  --grid-col:calc((var(--grid-w) - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols));
+  --span-3:calc(var(--grid-col) * 3 + var(--grid-gap) * 2);
+  --span-4:calc(var(--grid-col) * 4 + var(--grid-gap) * 3);
+  --wide:var(--grid-w)
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:88px}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.65 Inter,Arial,sans-serif}
@@ -24,17 +45,68 @@ html.lenis,html.lenis body{height:auto}
 .motion-booting .site-header>.brand,.motion-booting .site-header>nav,.motion-booting .site-header>.start-free,.motion-booting .hero-content>*,.motion-booting .how-it-works>.section-kicker,.motion-booting .how-it-works>h2,.motion-booting .how-it-works>.section-intro,.motion-booting .architecture-card{opacity:0}
 .motion-booting .hero>.notice-bar{transform:translateX(-50%) scaleX(0)}
 .motion-booting .hero>.notice-bar>*{opacity:0}
-.motion-reveal{opacity:0;transform:translate3d(0,var(--reveal-y,30px),0) var(--reveal-rest,translateZ(0));transition:opacity var(--reveal-duration,.92s) cubic-bezier(.16,1,.3,1) var(--reveal-delay,0ms),transform var(--reveal-duration,.92s) cubic-bezier(.16,1,.3,1) var(--reveal-delay,0ms);will-change:opacity,transform}
-.motion-reveal-ready>.motion-reveal{opacity:1;transform:translate3d(0,0,0) var(--reveal-rest,translateZ(0))}
-.site-header>.motion-reveal{--reveal-y:18px;--reveal-duration:.95s}
-.hero-content>.motion-reveal{--reveal-y:38px;--reveal-duration:1.08s}
+/* NB: this list cannot be hoisted into a shared custom property — var() inside
+   a custom property is substituted where that property is *declared*, so the
+   --reveal-duration/--reveal-delay fallbacks would be baked in at :root and no
+   element would ever get its own cue. Any element that also carries a hover
+   transition has to repeat the list (see .start-free / .pill below). */
+/* The fade is deliberately shorter than the travel: if opacity and transform
+   share a duration the element is still fading in while it covers most of its
+   distance, so it reads as a flash rather than as something moving up. Fading
+   in early means you watch it travel. The easing is a plain ease-out, not an
+   expo — an expo curve spends ~60% of the distance in the first 15% of the
+   time, which also reads as a pop. */
+.motion-reveal{opacity:0;transform:translate3d(0,var(--reveal-y,48px),0) var(--reveal-rest,translateZ(0));transition:opacity var(--reveal-fade,.5s) ease-out var(--reveal-delay,0ms),transform var(--reveal-duration,.92s) cubic-bezier(.22,.72,.24,1) var(--reveal-delay,0ms);will-change:opacity,transform}
+/* Descendant, not child: the hero cues individual list items and buttons, not
+   just the top-level blocks, so the entrance reads as a sequence. */
+.motion-reveal-ready .motion-reveal{opacity:1;transform:translate3d(0,0,0) var(--reveal-rest,translateZ(0))}
+.landing-motion-priming .motion-reveal,
+.landing-motion-priming .proof-list img{transition:none!important}
+.site-header .motion-reveal{--reveal-y:34px;--reveal-duration:1.05s;--reveal-fade:.45s}
+.hero-content .motion-reveal{--reveal-y:90px;--reveal-duration:1.25s;--reveal-fade:.55s}
+
+/* Keep the intended line break, but reveal the complete headline as one block.
+   Masking each line exposed thin glyph slices during the first frames. */
+.hero h1 .hero-line{display:block}
+
+/* Check marks land just after their line of text. */
+.hero-content .proof-list li.motion-reveal img{opacity:0;transform:scale(.35);transition:opacity .4s ease calc(var(--reveal-delay,0ms) + 200ms),transform .62s cubic-bezier(.34,1.56,.64,1) calc(var(--reveal-delay,0ms) + 200ms)}
+.hero-content.motion-reveal-ready .proof-list li.motion-reveal img{opacity:1;transform:none}
 
 .site-header{position:absolute;z-index:20;top:25px;left:50%;width:var(--wide);height:54px;transform:translateX(-50%);display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
 .brand{width:112px;height:39px;display:block}
 .brand img{display:block;width:112px;height:39px}
 .site-header nav{height:54px;padding:0 54px;border-radius:100px;background:#fff;display:flex;align-items:center;gap:42px;font-size:16px}
 .site-header nav a{transition:opacity .2s ease}.site-header nav a:hover{opacity:.65}
+/* Language switch: an icon in a text row, so it is sized to the cap height of
+   the labels beside it rather than to its own 17px artwork. */
+.lang{position:relative;display:grid;place-items:center}
+.lang-switch{position:relative;display:grid;place-items:center;width:17px;height:17px;padding:0;border:0;background:none;color:inherit;cursor:pointer;transition:opacity .2s ease}
+.lang-switch:hover{opacity:.65}
+.lang-switch img{display:block;width:100%;height:100%}
+/* The open menu borrows the nav's active-dot marker, so the globe reads as
+   "you are here" in the same vocabulary as the section links. */
+.lang-switch::after{content:"";position:absolute;left:50%;top:calc(100% + 4px);width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--orange);opacity:0;transform:scale(.3);transition:opacity .22s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.lang-switch[aria-expanded="true"]::after{opacity:1;transform:scale(1)}
+/* --lang-x carries the horizontal anchor so the open/closed states can share
+   one transform: at narrow widths the menu flips to right-aligned rather than
+   centred, and only this variable changes. */
+.lang-menu{--lang-x:-50%;position:absolute;z-index:5;top:calc(100% + 31px);left:50%;width:84px;margin:0;padding:9px 0;list-style:none;border-radius:16px;background:#fff;box-shadow:0 14px 34px rgba(0,0,0,.09);display:grid;text-align:center;opacity:0;visibility:hidden;transform:translate(var(--lang-x),-6px);transition:opacity .18s ease,transform .26s cubic-bezier(.22,.72,.24,1),visibility 0s linear .18s}
+.lang-menu.is-open{opacity:1;visibility:visible;transform:translate(var(--lang-x),0);transition:opacity .18s ease,transform .26s cubic-bezier(.22,.72,.24,1),visibility 0s}
+.lang-menu button{width:100%;height:34px;padding:0;border:0;background:none;font:inherit;font-size:15px;line-height:34px;color:#000;cursor:pointer;transition:opacity .2s ease,color .2s ease}
+.lang-menu button:hover{opacity:.5}
+.lang-menu button[aria-current="true"]{color:var(--orange)}
+/* Active section marker: a dot under the label rather than a colour change, so
+   the menu keeps one voice and the state reads as a position, not a link type.
+   line-height:1 tightens the anchor box so the dot has room inside the pill. */
+.site-header nav a,.sticky-header nav a{position:relative;line-height:1}
+/* 8px, not 10: the nav pill is 54px tall and a 10px drop puts the dot on its
+   bottom edge. */
+.site-header nav a::after,.sticky-header nav a::after{content:"";position:absolute;left:50%;top:calc(100% + 8px);width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--orange);opacity:0;transform:scale(.3);transition:opacity .22s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.site-header nav a.is-active::after,.site-header nav a[aria-current="page"]::after,
+.sticky-header nav a.is-active::after,.sticky-header nav a[aria-current="page"]::after{opacity:1;transform:scale(1)}
 .start-free{justify-self:end;width:141px;height:54px;border-radius:100px;background:#000;color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;transition:background .2s ease,color .2s ease}
+.start-free.motion-reveal{transition:background .2s ease,color .2s ease,opacity var(--reveal-fade,.5s) ease-out var(--reveal-delay,0ms),transform var(--reveal-duration,.92s) cubic-bezier(.22,.72,.24,1) var(--reveal-delay,0ms)}
 .sticky-header{position:fixed;z-index:120;top:16px;left:50%;width:min(700px,calc(100% - 40px));height:54px;padding:0 6px 0 36px;border-radius:100px;background:#fff;display:grid;grid-template-columns:118px 1fr 117px;align-items:center;opacity:0;pointer-events:none;transform:translate(-50%,-18px);transition:opacity .2s ease,transform .2s ease;box-shadow:0 10px 30px rgba(0,0,0,.06)}
 .sticky-header.is-visible{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
 .sticky-brand{grid-column:1;display:block;width:76px;height:27px}.sticky-brand img{display:block;width:76px;height:27px}
@@ -50,8 +122,19 @@ html.lenis,html.lenis body{height:auto}
 .proof-list li{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .proof-list img{width:19px;height:19px}
 .hero-actions{display:flex;justify-content:center;gap:15px;margin-top:32px}
-.pill{height:46px;border-radius:100px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:18px;font-size:15px;line-height:1.2;text-align:center;white-space:nowrap;transition:background .2s ease,color .2s ease,border-color .2s ease}.pill img{transition:filter .2s ease}
-.pill>span{display:block;min-width:0;text-align:center}
+/* Label flush to the left padding, arrow flush to the right one: with equal
+   padding on both sides the arrows line up down a stacked group instead of
+   drifting with the length of each label. */
+.pill{height:46px;border-radius:100px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px;line-height:1.2;text-align:left;white-space:nowrap;transition:background .2s ease,color .2s ease,border-color .2s ease}
+/* The ↗ swings down to a level → on hover — the same arrow, pointing at what
+   you are about to do. */
+.pill img{transition:filter .2s ease,transform .35s cubic-bezier(.22,.72,.24,1)}
+.pill:hover img{transform:rotate(45deg)}
+.pill.motion-reveal{transition:background .2s ease,color .2s ease,border-color .2s ease,opacity var(--reveal-fade,.5s) ease-out var(--reveal-delay,0ms),transform var(--reveal-duration,.92s) cubic-bezier(.22,.72,.24,1) var(--reveal-delay,0ms)}
+.pill>span{display:block;min-width:0;text-align:left}
+/* Placeholder button: no destination yet, but it still reads and behaves like
+   the real thing (hover, arrow, cursor) until the docs URL exists. */
+.pill:not([href]){cursor:pointer}
 .pill img{width:18px;height:18px}
 .pill-dark{width:186px;background:#000;color:#fff}
 .pill-light{width:186px;border:1px solid #000;background:transparent}
@@ -65,9 +148,11 @@ html.lenis,html.lenis body{height:auto}
 .ambient-copy.typing::after{content:"";display:inline-block;width:1px;height:1em;margin-left:2px;background:currentColor;vertical-align:-.12em;animation:cursor-blink .75s steps(1) infinite}
 
 .notice-bar{position:absolute;left:50%;bottom:0;width:var(--wide);height:32px;transform:translateX(-50%);padding:0 30px;background:var(--orange);display:flex;align-items:center;justify-content:space-between;font-weight:500;line-height:25px}
-.notice-bar p{margin:0}.notice-bar p span{margin:0 8px}
+.notice-bar p{margin:0}.notice-bar .notice-sep{margin:0 8px}
 .notice-bar a{display:flex;align-items:center;text-decoration:underline;text-underline-offset:2px}
-.notice-bar img{width:24px;height:24px;margin-left:2px;filter:brightness(0)}
+.notice-bar img{width:24px;height:24px;margin-left:2px;filter:brightness(0);transition:transform .35s cubic-bezier(.22,.72,.24,1)}
+/* Same tell as the pills: the ↗ levels out to a → on hover. */
+.notice-bar a:hover img{transform:rotate(45deg)}
 .hero>.notice-bar.notice-motion-ready{transform:translateX(-50%) scaleX(0);transform-origin:left center}
 .hero>.notice-bar.notice-motion-ready>*{opacity:0;transform:translateY(6px)}
 .hero>.notice-bar.notice-motion-priming,.hero>.notice-bar.notice-motion-priming>*{transition:none!important}
@@ -102,18 +187,28 @@ html.lenis,html.lenis body{height:auto}
   .how-it-works.how-motion-priming *{transition:none!important}
   .how-it-works.how-motion-ready>.section-kicker,
   .how-it-works.how-motion-ready>h2,
-  .how-it-works.how-motion-ready>.section-intro{opacity:0;transform:translate3d(0,26px,0);will-change:opacity,transform}
-  .how-it-works.how-motion-ready>.section-kicker{transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-  .how-it-works.how-motion-ready>h2{transition:opacity .78s cubic-bezier(.16,1,.3,1) .14s,transform .96s cubic-bezier(.16,1,.3,1) .14s}
-  .how-it-works.how-motion-ready>.section-intro{transition:opacity .78s cubic-bezier(.16,1,.3,1) .28s,transform .96s cubic-bezier(.16,1,.3,1) .28s}
+  .how-it-works.how-motion-ready>.section-intro{opacity:0;transform:translate3d(0,72px,0);will-change:opacity,transform}
+  .how-it-works.how-motion-ready>.section-kicker{transition:opacity .45s ease-out,transform 1.05s cubic-bezier(.22,.72,.24,1)}
+  .how-it-works.how-motion-ready>h2{transition:opacity .5s ease-out .14s,transform 1.15s cubic-bezier(.22,.72,.24,1) .14s}
+  .how-it-works.how-motion-ready>.section-intro{transition:opacity .5s ease-out .28s,transform 1.15s cubic-bezier(.22,.72,.24,1) .28s}
   .how-it-works.how-is-visible>.section-kicker,
   .how-it-works.how-is-visible>h2,
   .how-it-works.how-is-visible>.section-intro{opacity:1;transform:none}
 
-  .how-it-works.how-motion-ready .architecture-card{opacity:0;transform:translate3d(0,22px,0);will-change:opacity,transform}
-  .how-it-works.how-motion-ready .architecture-card:first-child{transition:opacity .78s ease .48s,transform 1s cubic-bezier(.16,1,.3,1) .48s}
-  .how-it-works.how-motion-ready .architecture-card:last-child{transition:opacity .78s ease .62s,transform 1s cubic-bezier(.16,1,.3,1) .62s}
-  .how-it-works.how-is-visible .architecture-card{opacity:1;transform:none}
+  .how-it-works.how-motion-ready .architecture-card{opacity:0;transform:translate3d(0,80px,0);will-change:opacity,transform}
+  .how-it-works.how-motion-ready .architecture-card:first-child{transition:opacity .4s ease-out,transform .9s cubic-bezier(.22,.72,.24,1)}
+  .how-it-works.how-motion-ready .architecture-card:last-child{transition:opacity .4s ease-out .1s,transform .9s cubic-bezier(.22,.72,.24,1) .1s}
+  .how-it-works.architecture-cards-visible .architecture-card{opacity:1;transform:none}
+
+  .how-it-works.how-motion-ready .architecture-card>.architecture-label,
+  .how-it-works.how-motion-ready .architecture-card>h3,
+  .how-it-works.how-motion-ready .architecture-card>.architecture-foot{opacity:0;transform:translate3d(0,80px,0);will-change:opacity,transform}
+  .how-it-works.how-motion-ready .architecture-card>.architecture-label{transition:opacity .4s ease-out,transform .9s cubic-bezier(.22,.72,.24,1)}
+  .how-it-works.how-motion-ready .architecture-card>h3{transition:opacity .4s ease-out .1s,transform .9s cubic-bezier(.22,.72,.24,1) .1s}
+  .how-it-works.how-motion-ready .architecture-card>.architecture-foot{transition:opacity .4s ease-out .2s,transform .9s cubic-bezier(.22,.72,.24,1) .2s}
+  .how-it-works.architecture-text-visible .architecture-card>.architecture-label,
+  .how-it-works.architecture-text-visible .architecture-card>h3,
+  .how-it-works.architecture-text-visible .architecture-card>.architecture-foot{opacity:1;transform:none}
 
   .architecture-comparison.architecture-priming *{transition:none!important}
   .architecture-comparison.architecture-motion-ready .post{opacity:0;will-change:transform,opacity}
@@ -128,9 +223,9 @@ html.lenis,html.lenis body{height:auto}
   .architecture-comparison.architecture-motion-ready.is-visible .post{opacity:var(--post-opacity);transform:translate3d(0,0,0)}
 
   .architecture-comparison.architecture-motion-ready .canonical-post>img,
-  .architecture-comparison.architecture-motion-ready .canonical-post>strong{position:relative;z-index:1;opacity:0;transform:translateY(10px)}
-  .architecture-comparison.architecture-motion-ready .canonical-post>img{transition:opacity .42s ease .4s,transform .64s cubic-bezier(.16,1,.3,1) .4s}
-  .architecture-comparison.architecture-motion-ready .canonical-post>strong{transition:opacity .42s ease .54s,transform .64s cubic-bezier(.16,1,.3,1) .54s}
+  .architecture-comparison.architecture-motion-ready .canonical-post>strong{position:relative;z-index:1;opacity:0;transform:translateY(26px)}
+  .architecture-comparison.architecture-motion-ready .canonical-post>img{transition:opacity .32s ease-out .4s,transform .8s cubic-bezier(.22,.72,.24,1) .4s}
+  .architecture-comparison.architecture-motion-ready .canonical-post>strong{transition:opacity .32s ease-out .54s,transform .8s cubic-bezier(.22,.72,.24,1) .54s}
   .architecture-comparison.is-visible .canonical-post>img,
   .architecture-comparison.is-visible .canonical-post>strong{opacity:1;transform:none}
 
@@ -143,62 +238,87 @@ html.lenis,html.lenis body{height:auto}
   .architecture-comparison.is-visible .frame-bottom,
   .architecture-comparison.is-visible .frame-left{transform:scale(1)}
 
-  .architecture-comparison.architecture-motion-ready .language-count{position:relative;z-index:1;opacity:0;transform:translateY(9px);transition:opacity .38s ease,transform .52s cubic-bezier(.16,1,.3,1)}
+  .architecture-comparison.architecture-motion-ready .language-count{position:relative;z-index:1;opacity:0;transform:translateY(24px);transition:opacity .3s ease-out,transform .72s cubic-bezier(.22,.72,.24,1)}
   .architecture-comparison.is-counting .language-count{opacity:1;transform:none}
 }
 
 .features{padding:0 var(--grid-edge)}.feature-stage{position:relative}.feature-stage>.section-kicker{text-align:center;margin-bottom:36px}
-.feature-stack{position:relative;width:min(var(--content),100%);margin:0 auto}
-.feature-card{position:relative;height:620px;margin-bottom:38px;padding:63px 72px;border-radius:60px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr}
-.feature-card.stack-active{will-change:transform}
-.feature-card h2{position:relative;z-index:2;margin:0;font:700 40px/50px Brown,Arial,sans-serif}
+/* The stack spans four of the six columns and is the size container for every
+   card interior: the composition was drawn on a 1280px card, so each interior
+   measure is expressed as its share of that width (px / 1280 * 100 = cqw) and
+   scales as one piece instead of overflowing when the card narrows. Type keeps
+   a readable floor via clamp(). */
+.feature-stack{position:relative;container-type:inline-size;width:min(var(--span-4),100%);margin:0 auto}
+.feature-card{position:relative;height:auto;min-height:clamp(560px,48.44cqw,620px);margin-bottom:38px;padding:clamp(40px,4.92cqw,63px) clamp(30px,5.625cqw,72px);border-radius:clamp(38px,4.69cqw,60px);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr}
+.feature-card h2{position:relative;z-index:2;margin:0;font:700 clamp(30px,3.125cqw,40px)/1.25 Brown,Arial,sans-serif}
 .feature-card h2 em{color:var(--orange);font-style:normal}
-.feature-lede{position:relative;z-index:2;padding:8px 0 0 15px;width:353px;max-width:100%}
+.feature-lede{position:relative;z-index:2;padding:8px 0 0 clamp(10px,1.17cqw,15px);width:32cqw;min-width:210px;max-width:100%}
 .feature-lede strong{display:block;font-weight:600;line-height:1.2}
 .feature-lede p{margin:12px 0 0;line-height:25px}
 .migration-card{background:#000;color:#fff}
 .migration-steps{position:relative;z-index:2;align-self:end}
-.migration-steps>div{display:grid;grid-template-columns:42px 95px 1fr;column-gap:10px;margin-bottom:21px}
+.migration-steps>div{display:grid;grid-template-columns:clamp(32px,3.28cqw,42px) clamp(76px,7.42cqw,95px) 1fr;column-gap:10px;margin-bottom:clamp(15px,1.64cqw,21px)}
 .migration-steps b,.migration-steps h3{font-size:20px;line-height:1.2}.migration-steps b{opacity:.3}.migration-steps h3{margin:0;font-weight:600}.migration-steps p{grid-column:2/-1;margin:3px 0 0;line-height:22px}
 .pill-white{width:186px;margin-top:25px;background:#fff;color:#000}.pill-white img{filter:brightness(0)}
-.terminal{position:relative;z-index:2;align-self:end;height:323px;margin-left:15px;padding:0 29px;border:1px solid rgba(255,255,255,.3)}
-.terminal-head{height:63px;border-bottom:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:space-between}
+.terminal{position:relative;z-index:2;align-self:end;height:clamp(250px,25.23cqw,323px);margin-left:clamp(10px,1.17cqw,15px);padding:0 clamp(18px,2.27cqw,29px);border:1px solid rgba(255,255,255,.3)}
+.terminal-head{height:clamp(48px,4.92cqw,63px);border-bottom:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:space-between}
 .terminal-head span{display:flex;gap:8px}.terminal-head i{width:8px;height:8px;border-radius:50%;background:#fff;opacity:.7}.terminal-head b{font-weight:400}
 .terminal-body{padding-top:1px}.terminal-body>p{min-height:25px;margin:14px 0 0;line-height:25px;opacity:0;transform:translateY(4px);transition:opacity .3s ease,transform .3s ease}.terminal-body>p.is-visible,.terminal.is-complete .terminal-prompt-final{opacity:1;transform:translateY(0)}.terminal-accent{color:var(--orange)}.terminal-prompt-final{transition-delay:.12s}.cursor{display:inline-block;width:8px;height:15px;background:var(--orange);vertical-align:-2px;animation:cursor-blink .78s steps(1) infinite}
 .editor-card{background:#fff}.editor-card .feature-lede{color:var(--muted)}
 .editor-points{position:relative;z-index:2;align-self:end;padding-bottom:5px;color:var(--muted)}
 .editor-points>strong{color:var(--orange);font-size:20px;line-height:30px}.editor-points ul{margin:16px 0 0;padding-left:19px;line-height:25px}
-.editor-demo{--reveal-rest:rotate(-2deg);position:absolute;z-index:1;right:76px;bottom:48px;width:640px;height:376px;background:#f8f8f6;border:1px solid #cfcfca;box-shadow:0 28px 55px rgba(0,0,0,.13);overflow:hidden;transform-origin:50% 50%}
-.editor-demo-bar{height:45px;padding:0 14px;background:#161815;color:#d8d8d3;display:flex;align-items:center;gap:14px;font-size:11px}.editor-demo-bar>b{margin-left:auto;color:#8bdd70;font-size:10px}.editor-demo-bar>b>i{display:inline-block;width:5px;height:5px;margin-right:4px;border-radius:50%;background:#8bdd70}.editor-dots{display:flex;gap:6px}.editor-dots i{width:8px;height:8px;border-radius:50%;background:#777}.editor-dots i:first-child{background:#f16861}.editor-dots i:nth-child(2){background:#e9be4b}
-.editor-demo-workspace{height:calc(100% - 45px);display:grid;grid-template-columns:42px minmax(0,1fr) 180px}
-.editor-rail{padding-top:16px;border-right:1px solid #dddeda;text-align:center;color:#2871b9}.editor-rail b{font:700 18px Georgia,serif}.editor-rail i{display:block;width:17px;height:2px;margin:27px auto 0;background:#a9aaa6}.editor-rail i+i{margin-top:21px}
-.editor-canvas{min-width:0;padding:31px 27px 22px;background:#fff}.editor-canvas>small{color:#85857f;font-size:9px}.editor-canvas h3{min-height:58px;margin:17px 0 19px;font:700 26px/1.02 Brown,Arial,sans-serif;letter-spacing:-.02em;transition:opacity .24s ease,transform .24s ease}.editor-line{display:block;height:5px;margin-top:8px;background:#dedfda}.editor-line-long{width:92%}.editor-line-mid{width:80%}.editor-line-short{width:55%}
-.editor-art{position:relative;height:112px;margin-top:24px;padding:13px 14px;background:#ffdca9;overflow:hidden}.editor-art>span{position:relative;z-index:3;font-size:9px;font-weight:600;transition:opacity .24s ease}.editor-sun{position:absolute;z-index:1;right:31px;top:16px;width:34px;height:34px;border-radius:50%;background:var(--orange)}.editor-hill{position:absolute;z-index:2;bottom:-38px;background:#182019}.editor-hill-left{left:-18px;width:160px;height:82px;border-radius:60% 60% 0 0}.editor-hill-right{right:-22px;width:145px;height:100px;border-radius:60% 60% 0 0;background:#51653d}
-.editor-languages{padding:24px 14px 14px;border-left:1px solid #dddeda;background:#fbfbfa}.editor-languages header{display:flex;align-items:center;gap:8px}.editor-languages header strong{font-size:12px}.editor-languages header em{color:var(--orange);font-size:8px;font-style:normal}.editor-current{height:42px;margin-top:14px;padding:0 9px;border:1px solid #d8d8d3;display:flex;align-items:center;gap:8px}.editor-current>span,.editor-language-list button>span{width:25px;padding:2px 0;background:#eeeeeb;text-align:center;font-size:9px}.editor-current>b{font-size:11px}.editor-current>i{margin-left:auto;font-style:normal}.editor-language-list{margin-top:12px}.editor-language-list button{width:100%;height:31px;padding:0 7px;border:0;background:transparent;color:#222;display:flex;align-items:center;gap:8px;text-align:left;font:500 10px/1 Inter;cursor:pointer;transition:background .25s ease,color .25s ease}.editor-language-list button[aria-pressed="true"]{background:#dfff9b}.editor-language-list button:hover{background:#edf7da}.editor-copy-button{width:100%;height:35px;margin-top:11px;padding:0 10px;border:0;background:#121311;color:#fff;display:flex;align-items:center;justify-content:space-between;font:600 9px/1 Inter;cursor:pointer}
-.editor-demo.is-switching .editor-canvas h3,.editor-demo.is-switching .editor-art>span,.editor-demo.is-switching .editor-current{opacity:0;transform:translateY(6px)}
-.seo-card{color:#fff;background:#03122b}.seo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:60px}
-.seo-routes{position:relative;z-index:2;align-self:end;width:440px}.seo-routes p{display:grid;grid-template-columns:220px 1fr;margin:0;line-height:25px}.seo-routes b{font-weight:400}
-.seo-word{position:absolute;z-index:1;right:31px;bottom:72px;width:594px;height:auto}
+/* The mock is its own inline-size container: everything inside is a share of
+   the 640px width it was drawn at (px / 640 * 100 = cqw), so the whole window
+   scales like an image instead of the canvas column collapsing first. */
+.editor-demo{--reveal-rest:rotate(-2deg);container-type:inline-size;position:absolute;z-index:1;left:calc(50cqw + clamp(10px,1.17cqw,15px));bottom:calc(clamp(40px,4.92cqw,63px) + .873cqw);width:40cqw;height:23.5cqw;background:#f8f8f6;border:1px solid #cfcfca;overflow:hidden;transform-origin:50% 50%}
+.editor-demo-bar{height:5.15cqw;padding:0 2.19cqw;background:#161815;color:#d8d8d3;display:flex;align-items:center;gap:2.19cqw;font-size:max(8px,1.72cqw)}.editor-demo-bar>b{margin-left:auto;color:#8bdd70;font-size:max(7px,1.56cqw)}.editor-demo-bar>b>i{display:inline-block;width:.78cqw;height:.78cqw;margin-right:.63cqw;border-radius:50%;background:#8bdd70}.editor-dots{display:flex;gap:.94cqw}.editor-dots i{width:1.25cqw;height:1.25cqw;border-radius:50%;background:#777}.editor-dots i:first-child{background:#f16861}.editor-dots i:nth-child(2){background:#e9be4b}
+.editor-demo-workspace{height:calc(100% - 5.15cqw);display:grid;grid-template-columns:6.56cqw minmax(0,1fr) 28.125cqw}
+.editor-rail{padding-top:2.5cqw;border-right:1px solid #dddeda;text-align:center;color:#2871b9}.editor-rail b{font:700 2.81cqw Georgia,serif}.editor-rail i{display:block;width:2.66cqw;height:2px;margin:4.22cqw auto 0;background:#a9aaa6}.editor-rail i+i{margin-top:3.28cqw}
+.editor-canvas{min-width:0;padding:2.15cqw 4.22cqw 3.44cqw;background:#fff}.editor-canvas>small{color:#85857f;font-size:max(7px,1.41cqw)}.editor-canvas h3{min-height:9.06cqw;margin:2.66cqw 0 2.97cqw;font:400 max(15px,4.06cqw)/1.05 Brown,Arial,sans-serif;letter-spacing:-.01em;transition:opacity .24s ease,transform .24s ease}.editor-line{display:block;height:.78cqw;margin-top:1.25cqw;background:#dedfda}.editor-line-long{width:92%}.editor-line-mid{width:80%}.editor-line-short{width:55%}
+.editor-art{position:relative;height:21cqw;margin-top:2.8cqw;padding:2.03cqw 2.19cqw;overflow:hidden;background:#e8e9e4}.editor-art>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%}.editor-art>span{position:relative;z-index:3;display:inline-block;padding:.35em .6em;background:#fff;color:#14202c;font-size:max(7px,1.41cqw);font-weight:600;letter-spacing:.09em;transition:opacity .24s ease,background-size .3s ease var(--swap-delay,0ms)}
+.editor-languages{padding:3.75cqw 2.19cqw 2.19cqw;border-left:1px solid #dddeda;background:#fbfbfa}.editor-languages header{display:flex;align-items:center;gap:1.25cqw}.editor-languages header strong{font-size:max(9px,1.88cqw)}.editor-languages header img{width:7.52cqw;min-width:30px;height:auto;display:block}.editor-language-list button>span{width:3.91cqw;padding:.31cqw 0;background:#eeeeeb;text-align:center;font-size:max(7px,1.41cqw)}.editor-language-list{margin-top:1.88cqw}.editor-language-list button{width:100%;height:4.84cqw;padding:0 1.09cqw;border:0;background:transparent;color:#222;display:flex;align-items:center;gap:1.25cqw;text-align:left;font:500 max(8px,1.56cqw)/1 Inter;cursor:pointer;transition:background .25s ease,color .25s ease}.editor-language-list button>b{font-weight:inherit}.editor-language-list button[aria-pressed="true"]{background:transparent;color:#14202c}.editor-language-list button[aria-pressed="true"]>span{background:#ff9f4d;color:#14202c}.editor-language-list button[aria-pressed="true"]>b{background:#ff9f4d;padding:.18em .42em;margin:-.18em -.42em}.editor-language-list button:hover{background:#fff4e9}.editor-copy-button{width:100%;height:5.47cqw;margin-top:1.72cqw;padding:0 1.56cqw;border:0;background:#121311;color:#fff;display:flex;align-items:center;justify-content:space-between;font:600 max(7px,1.41cqw)/1 Inter;cursor:pointer}
+/* Marker highlight. The orange is a background-image wiped from 0 to full
+   width, so it is drawn left to right instead of flicking on; `--swap-delay`
+   staggers the lines top to bottom. Resting position is `right` so the wipe
+   retracts to the right on the way out — one continuous stroke, not a blink. */
+.editor-title-text,.editor-art>span,.product-swap,.product-language{background-image:linear-gradient(#ff9f4d,#ff9f4d);background-repeat:no-repeat;background-size:0% 100%;background-position:right center}
+.editor-title-text{-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:.04em .14em;margin:-.04em -.14em;transition:background-size .3s ease var(--swap-delay,0ms)}
+.editor-art>span{--swap-delay:110ms}
+.editor-demo.is-switching .editor-title-text,.editor-demo.is-switching .editor-art>span{background-size:100% 100%;background-position:left center}
+.seo-card{color:#fff;background:#03122b}.seo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:clamp(38px,4.69cqw,60px)}
+.seo-routes{position:relative;z-index:2;align-self:end;width:34.375cqw;min-width:290px}.seo-routes p{display:grid;grid-template-columns:minmax(0,17.19cqw) 1fr;margin:0;line-height:25px}.seo-routes b{font-weight:400}
+.seo-word{position:absolute;z-index:1;right:2.42cqw;bottom:5.625cqw;width:46.41cqw;height:auto}
 .commerce-card{background:var(--purple);color:#fff}.commerce-card .feature-lede p{color:#fff}
-.commerce-copy{position:relative;z-index:2;align-self:end;width:338px;color:var(--purple-accent);font-size:20px;font-weight:600;line-height:30px}.commerce-copy img{width:91px;height:24px;display:block;margin-bottom:16px}.commerce-copy p{margin:0}
-.product-card{position:absolute;z-index:2;left:655px;bottom:0;width:357px;height:408px;padding:40px 38px 25px;background:#fff;color:#21004c}
-.product-card>img{display:block;width:210px;height:226px;margin:0 auto;object-fit:contain}.product-card-copy{position:relative;border-top:1px solid #21004c;padding-top:11px;transition:opacity .3s ease,transform .3s cubic-bezier(.16,1,.3,1)}.product-card h3{max-width:235px;margin:0;font-size:20px;line-height:1.2}.product-card p{margin:3px 0 0;line-height:22px}.product-card strong{display:block;margin-top:2px;font-size:20px}.product-language{position:absolute;right:0;top:11px;padding:2px 6px;border:1px solid currentColor;font-size:9px;font-weight:700;letter-spacing:.08em}.product-card.is-switching .product-card-copy{opacity:0;transform:translateY(8px)}
+.commerce-copy{position:relative;z-index:2;align-self:end;width:32cqw;min-width:220px;color:var(--purple-accent);font-size:clamp(17px,1.56cqw,20px);font-weight:600;line-height:1.5}.commerce-copy img{width:7.11cqw;min-width:78px;height:auto;display:block;margin-bottom:16px}.commerce-copy p{margin:0}
+/* Second-level container: the card scales with the feature card, its contents
+   scale with the card (design width 357px). */
+.product-card{container-type:inline-size;position:absolute;z-index:2;right:20.94cqw;bottom:0;width:27.89cqw;min-width:250px;height:31.875cqw;min-height:355px;padding:3.13cqw 2.97cqw 1.95cqw;background:#fff;color:#21004c;display:flex;flex-direction:column}
+/* The bottle shot absorbs whatever height the copy does not use, so the card
+   never ends up with a pocket of dead space under the price. */
+.product-card>img{display:block;flex:1 1 auto;width:100%;min-height:0;height:auto;margin:0 auto;object-fit:contain}.product-card-copy{position:relative;border-top:1px solid #21004c;padding-top:3.08cqw}.product-card h3{max-width:65.8cqw;margin:0;font-size:clamp(15px,5.6cqw,20px);line-height:1.2}.product-card p{margin:3px 0 0;font-size:clamp(12px,4.2cqw,15px);line-height:1.47}.product-card strong{display:block;margin-top:2px;font-size:clamp(15px,5.6cqw,20px)}.product-language{position:absolute;right:0;top:3.08cqw;padding:2px 6px;border:1px solid currentColor;font-size:max(8px,2.52cqw);font-weight:700;letter-spacing:.08em;transition:background-size .3s ease var(--swap-delay,0ms)}
+/* Same marker-pen swap as the editor mock: the orange is drawn across the copy,
+   holds over the gap, then clears as the new copy lands. */
+.product-swap{-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:.04em .14em;margin:-.04em -.14em;transition:background-size .3s ease var(--swap-delay,0ms)}
+.product-card.is-switching .product-swap,.product-card.is-switching .product-language{background-size:100% 100%;background-position:left center}
 
-.supporting-features{position:relative;width:min(calc(((var(--wide) - var(--grid-gap)) * 2) / 3),100%);min-height:480px;margin:90px auto 0;padding-bottom:110px;display:grid;grid-template-columns:1fr 1fr;gap:50px var(--grid-gap)}
+/* Columns 2–5, which leaves .make-sense sitting exactly on column 6. */
+.supporting-features{position:relative;width:min(var(--span-4),100%);min-height:480px;margin:90px auto 0;padding-bottom:110px;display:grid;grid-template-columns:1fr 1fr;gap:50px var(--grid-gap)}
 .supporting-features article{position:relative;padding-left:1px}.supporting-features article>img{width:27px;height:27px;object-fit:contain;display:block;margin-bottom:12px}
 .supporting-features h3{margin:0;font-size:20px;line-height:1.25}.supporting-features p{margin:3px 0 0;color:var(--muted);line-height:22px}
-.make-sense{position:absolute;left:calc(100% + var(--grid-gap));right:auto;bottom:0;width:188px;height:188px;color:#fff}
-.make-sense img{position:absolute;inset:0;width:188px;height:188px}
-.make-sense span{position:absolute;left:44px;top:50%;width:126px;padding:0;transform:translateY(-50%);text-align:left;font:400 20px/25px Brown,Arial,sans-serif;letter-spacing:-.01em}
+.make-sense{container-type:inline-size;position:absolute;left:calc(100% + var(--grid-gap));right:auto;bottom:0;width:min(188px,var(--grid-col));aspect-ratio:1;color:#fff}
+.make-sense img{position:absolute;inset:0;width:100%;height:100%}
+.make-sense span{position:absolute;left:23.4cqw;top:50%;width:67cqw;padding:0;transform:translateY(-50%);text-align:left;font:400 10.64cqw/1.25 Brown,Arial,sans-serif;letter-spacing:-.01em}
 .make-sense em{color:var(--orange);font-style:normal}
-.feature-notice{position:relative;left:50%;bottom:auto;width:100vw;max-width:none;margin-top:14px;padding-inline:max(var(--grid-gutter),calc((100vw - 1920px) / 2 + var(--grid-gutter)))}
+/* Full-bleed by cancelling the section's own grid margin, so it can never
+   overshoot the document the way a 100vw box does next to a scrollbar. */
+.feature-notice{position:static;width:auto;max-width:none;margin:14px calc(-1 * var(--grid-edge)) 0;padding-inline:var(--grid-edge);transform:none}
 
 .comparison-section{background:#fff;padding-top:62px;padding-bottom:108px}
-.comparison-table-wrap{width:min(calc(((var(--wide) - var(--grid-gap)) * 2) / 3),100%);margin:38px auto 0;overflow-x:auto}
+.comparison-table-wrap{width:min(var(--span-4),100%);margin:38px auto 0;overflow-x:auto}
 table{width:100%;border-collapse:collapse;table-layout:fixed;text-align:center}
 th,td{height:57px;border-bottom:1px solid #d8d8d8;padding:8px 12px;font-size:15px}
 thead th{height:40px;font-weight:600}.comparison-table-wrap th:first-child{width:35%;text-align:left;color:var(--muted)}
-td img,thead img{display:block;width:19px;height:19px;margin:0 auto}thead img{width:82px;height:29px}
+td img,thead img{display:block;width:19px;height:19px;margin:0 auto}thead img{width:57px;height:20px}
 
 .pricing{min-height:836px;padding:77px var(--grid-edge) 60px;background:#000;color:#fff;text-align:center}
 .pricing .section-kicker{color:#fff}.pricing>.section-intro{color:#fff}
@@ -210,68 +330,308 @@ td img,thead img{display:block;width:19px;height:19px;margin:0 auto}thead img{wi
 .popular{position:absolute;right:28px;top:21px;padding:1px 8px;border:1px solid var(--orange);color:var(--orange);font-size:10px;text-transform:uppercase}
 .business-cta{grid-column:1;align-self:end;width:186px;background:var(--orange);color:#000;font-weight:600}.business-cta img{filter:brightness(0)}
 .start-free:hover,.sticky-start:hover,.pill-dark:hover,.pill-light:hover,.pill-white:hover{background:var(--orange);border-color:var(--orange);color:#000}.pill-dark:hover img,.pill-white:hover img{filter:brightness(0)}.business-cta:hover{background:#000;color:#fff}.business-cta:hover img{filter:brightness(0) invert(1)}
-.pricing-trust{width:min(calc(((var(--wide) - var(--grid-gap)) * 2) / 3),100%);margin:39px auto 0;display:flex;justify-content:center;align-items:center;gap:30px;font-size:12px}.pricing-trust i{width:24px;height:24px;display:grid;place-items:center;font-style:normal}.pricing-trust i::before{content:"✳";color:var(--orange);font:400 21px/1 Arial,sans-serif}
+.pricing-trust{width:min(var(--span-4),100%);margin:39px auto 0;display:flex;justify-content:center;align-items:center;gap:30px;font-size:12px}.pricing-trust i{width:24px;height:24px;display:grid;place-items:center;font-style:normal}.pricing-trust i::before{content:"✳";color:var(--orange);font:400 21px/1 Arial,sans-serif}
 
 footer{position:relative;height:465px;padding:84px var(--grid-edge);background:#fff;overflow:hidden}
-footer>img{position:absolute;left:var(--grid-edge);bottom:0;width:min(1094px,calc(100% - (2 * var(--grid-edge))));height:auto}
+footer>img{position:absolute;left:var(--grid-edge);bottom:0;width:min(var(--span-4),var(--grid-w));height:auto}
 footer nav{position:absolute;right:var(--grid-edge);top:84px;display:flex;flex-direction:column;font-size:18px;line-height:35px}
 footer>p{position:absolute;right:var(--grid-edge);bottom:84px;margin:0}
 
 @media(min-width:901px){
   .feature-stage{--feature-card-sticky-top:max(179px,calc(50vh - 310px));--feature-label-sticky-top:calc(var(--feature-card-sticky-top) - 61px)}
   .feature-stage>.section-kicker{position:sticky;z-index:10;top:var(--feature-label-sticky-top);margin-bottom:36px;opacity:var(--feature-label-opacity,1);transform:translate3d(0,var(--feature-label-y,0),0);will-change:transform,opacity}
-  .feature-card{position:sticky;top:var(--feature-card-sticky-top);z-index:1;width:100%;margin-left:auto;margin-right:auto;transform:scale(var(--stack-scale,1)) translateY(var(--stack-y,0));transform-origin:50% 50%;box-shadow:0 28px 64px rgba(0,0,0,.07)}
+  /* Scale from the bottom edge, not the centre. Scaling about the centre moves
+     the receding card's top down by half the lost height (~13px), which the
+     -14px lift cancels almost exactly — its top edge then lands on the front
+     card's and shows as a hairline through the corner radius. Pinning the
+     bottom keeps the whole lost height as clearance. */
+  .feature-card{position:sticky;top:var(--feature-card-sticky-top);z-index:1;width:100%;margin-left:auto;margin-right:auto;transform:scale(var(--stack-scale,1)) translateY(var(--stack-y,0));transform-origin:50% 100%}
   .feature-card:nth-child(2){z-index:2}.feature-card:nth-child(3){z-index:3}.feature-card:nth-child(4){z-index:4}
+}
+
+/* Feature cards hold columns 2–5 on the 1920 canvas and take the full six once
+   that would leave them under ~880px. There is no intermediate step: a centred
+   five-column block sits on half-columns, so it could never line up. */
+@media(max-width:1500px){
+  .feature-stack{width:100%}
 }
 
 @media(max-width:1100px){
   .ambient-copy{display:none}.site-header nav{gap:25px;padding:0 38px}
   .architecture-comparison{grid-template-columns:1fr}.architecture-card{grid-column:auto;width:100%}
-  .feature-card{padding:55px 50px}.product-card{left:auto;right:90px}.editor-demo{right:38px;width:590px}
   .price-card{column-gap:18px;padding-left:28px;padding-right:28px}
+}
+
+/* The comparison table and the supporting grid need more room than four
+   columns give them long before the mobile layout kicks in, so they take the
+   full six. .make-sense then has no column 6 to sit in and drops below. */
+@media(max-width:1200px) and (min-width:901px){
+  .comparison-table-wrap,.pricing-trust{width:100%}
+  .supporting-features{width:100%;padding-bottom:220px}
+  .make-sense{left:auto;right:0;bottom:0;width:188px}
 }
 
 @media(max-width:1400px) and (min-width:901px){
   .price-card{column-gap:14px;padding-left:24px;padding-right:24px}.price-card ul{font-size:13px}
 }
 
+/* Two-up inside a two-column card stops working around 320px of card width —
+   the price line and the feature list both overrun. Stack the interior and
+   keep the three plans side by side. */
+@media(max-width:1150px) and (min-width:901px){
+  .price-card{grid-template-columns:minmax(0,1fr);height:auto;min-height:363px;padding-left:22px;padding-right:22px}
+  .price-card ul{grid-column:1;grid-row:auto;align-self:start;margin-top:20px;padding-left:16px;font-size:13px}
+  .price-card>a:not(.pill),.business-cta{margin-top:20px}
+  .business-cta{width:100%}
+  .popular{right:20px}
+}
+
 @media(max-width:900px){
-  :root{--grid-gutter:20px}
-  .site-header{top:18px;width:calc(100% - 40px);height:46px;grid-template-columns:1fr auto}.site-header nav{display:none}.start-free{width:110px;height:46px;font-size:14px}
-  .sticky-header{top:12px;width:calc(100% - 24px);height:48px;padding:0 5px 0 24px;grid-template-columns:88px 1fr 98px}.sticky-brand{width:68px;height:auto}.sticky-brand img{width:68px;height:auto}.sticky-header nav{display:none}.sticky-start{width:98px;height:38px;font-size:13px}
+  :root{--grid-gutter:20px;--grid-cols:4}
+  /* The top header keeps one link — FAQ, plus the language switch — as plain
+     text beside Start Free. The nav pill is dropped: at this width a white
+     capsule around two items reads as a second button competing with the
+     real one. */
+  .site-header{top:18px;width:calc(100% - 40px);height:46px;grid-template-columns:1fr auto auto;column-gap:16px}
+  .site-header nav{height:auto;padding:0;border-radius:0;background:transparent;gap:14px;font-size:14px;font-weight:500}
+  .site-header nav a:not([href$="faq.html"]){display:none}
+  .start-free{width:110px;height:46px;font-size:14px}
+  /* The sticky bar carries the full menu instead: it is the only navigation
+     on screen once the top header has scrolled away. Type and gaps scale with
+     the viewport so four labels still fit next to the logo and the button. */
+  .sticky-header{top:12px;width:calc(100% - 24px);height:48px;padding:0 5px 0 14px;grid-template-columns:auto minmax(0,1fr) auto;column-gap:6px}
+  .sticky-brand{width:56px;height:auto}.sticky-brand img{width:56px;height:auto}
+  .sticky-header nav{position:static;transform:none;display:flex;justify-content:center;gap:clamp(8px,2.6vw,16px);font-size:clamp(11px,3vw,13px)}
+  .sticky-start{width:auto;min-width:76px;height:36px;padding:0 12px;font-size:12px}
+  /* No pill to clear on the top header here, so the menu sits close to the
+     icon; on the sticky bar the globe is near the right edge, so the panel
+     hangs off its right side instead of straddling the viewport edge. */
+  .site-header .lang-menu{top:calc(100% + 16px)}
+  /* The sticky labels drop to ~12px here while the globe would stay at its
+     full 17px, so the icon starts out-shouting the words next to it. 20% off
+     puts it back in line with the type. */
+  .sticky-header .lang-switch{width:13.6px;height:13.6px}
+  .sticky-header .lang-menu{--lang-x:0;top:calc(100% + 26px);left:auto;right:-6px}
   .brand,.brand img{width:92px;height:auto}.hero{min-height:720px}.hero-content{padding-top:155px}.hero h1{font-size:58px;line-height:.98}.hero-copy{margin-top:28px}.proof-list{display:grid;grid-template-columns:1fr 1fr;max-width:390px;margin-left:auto;margin-right:auto;gap:10px 16px;font-size:12px}.proof-list img{width:16px;height:16px}
-  .notice-bar{width:calc(100% - 40px);padding:0 14px;font-size:10px}.notice-bar p{font-size:0}.notice-bar p::before{content:"Free forever for one additional language";font-size:10px}.notice-bar p~*{display:none}
+  /* One line, larger type: the promo half of the sentence is dropped so the
+     evergreen offer and the link both stay readable at full size. */
+  .hero>.notice-bar{width:calc(100% - 40px)}
+  /* nowrap text inside a wrapping row: it holds one line at every real phone
+     width and only drops to two below ~340px, instead of clipping. */
+  .notice-bar{height:auto;min-height:36px;padding:6px 14px;flex-wrap:wrap;gap:10px;font-size:clamp(10px,2.8vw,13px);white-space:nowrap}
+  .notice-bar .notice-sep,.notice-bar .notice-more{display:none}
+  .notice-bar img{width:16px;height:16px}
   .how-it-works,.comparison-section{padding:55px 20px 75px}.how-it-works h2,.comparison-section h2,.pricing>h2{font-size:32px;line-height:42px}.section-intro{font-size:14px;line-height:22px}
   .architecture-comparison{margin-top:38px;gap:16px}.architecture-card{height:410px;padding:24px 20px}.architecture-card h3{font-size:34px;line-height:40px}.architecture-foot{left:20px;bottom:20px;font-size:12px}
   .post-cloud{inset:176px 0 0}.post{transform:scale(.7);transform-origin:top left}.post:nth-child(1){left:21px}.post:nth-child(2){left:228px}.post:nth-child(3){left:435px}.post:nth-child(4){left:-83px;top:57px}.post:nth-child(5){left:124px;top:57px}.post:nth-child(6){left:331px;top:57px}
   .canonical-post{top:182px;width:calc(100% - 40px);max-width:none;height:72px;padding:0 17px}.canonical-post>img{width:68px;height:auto}.canonical-post strong,.language-count{font-size:15px}
-  .features{padding:0 20px}.feature-card{position:relative!important;left:auto;width:auto;margin-left:0;height:auto;min-height:700px;padding:43px 28px;border-radius:38px;display:block;transform:none!important;filter:none!important}.feature-card h2{font-size:36px;line-height:42px}.feature-lede{padding:25px 0 0;width:auto}.migration-steps{margin-top:38px}.migration-steps>div{grid-template-columns:35px 1fr}.migration-steps>div p{grid-column:2}.terminal{height:250px;margin:34px 0 0;padding:0 18px;font-size:12px}.terminal-head{height:48px}.terminal>p{margin-top:8px;line-height:20px}
-  .editor-card{min-height:720px}.editor-points{margin-top:50px}.editor-demo{--reveal-rest:translateZ(0);right:14px;bottom:28px;width:calc(100% - 28px);height:315px}.editor-demo-workspace{grid-template-columns:32px minmax(0,1fr) 142px}.editor-canvas{padding:20px 16px 14px}.editor-canvas h3{font-size:20px}.editor-art{height:92px;margin-top:17px}.editor-languages{padding:14px 9px 9px}.editor-language-list button{height:27px;font-size:9px}.editor-copy-button{margin-top:7px}
-  .seo-card{min-height:660px}.seo-bg{border-radius:38px}.seo-routes{position:absolute;left:28px;bottom:44px;width:75%;font-size:12px}.seo-routes p{grid-template-columns:160px 1fr}.seo-word{right:-35px;bottom:46px;width:70%}
-  .commerce-card{min-height:740px}.commerce-copy{position:absolute;left:28px;bottom:50px;width:45%;font-size:15px;line-height:22px}.product-card{right:0;bottom:0;width:50%;height:390px;padding:28px 18px 20px}.product-card>img{width:100%;height:210px}
-  .supporting-features{margin-top:60px;grid-template-columns:1fr;gap:38px;padding-bottom:160px}.make-sense{left:auto;right:0}
-  .feature-notice{width:100vw;padding-inline:var(--grid-gutter)}
-  .comparison-table-wrap{margin-top:30px}.comparison-table-wrap table{min-width:760px}
-  .pricing{padding:60px 20px}.price-grid{grid-template-columns:1fr;gap:16px}.price-card{grid-column:1;height:auto;min-height:340px}.price-card ul{font-size:14px}.pricing-trust{width:100%;flex-wrap:wrap;gap:14px 20px}
-  footer{height:360px;padding:60px 20px}footer>img{left:20px;bottom:0;width:70vw}footer nav{right:20px;top:60px}footer>p{right:20px;bottom:35px;font-size:12px}
+  /* Every feature card becomes a single flowing column. The desktop
+     composition stacks art on top of copy with absolute positioning, which has
+     nowhere to go once the card is one column wide, so each piece is returned
+     to the flow and ordered instead of overlapped. */
+  .features{padding:0 20px}
+  .feature-card{position:relative!important;left:auto;width:auto;margin-left:0;height:auto;min-height:0;padding:43px 28px;border-radius:38px;display:flex;flex-direction:column;transform:none!important;filter:none!important}
+  .feature-card>*:not(.seo-bg){position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto;min-width:0;max-width:100%;align-self:stretch}
+  .feature-card h2{font-size:36px;line-height:42px}.feature-lede{padding:25px 0 0}
+  .migration-steps{margin-top:38px}.migration-steps>div{grid-template-columns:35px 1fr}.migration-steps>div p{grid-column:2}
+  .terminal{height:250px;margin:34px 0 0;padding:0 18px;font-size:12px}.terminal-head{height:48px}.terminal>p{margin-top:8px;line-height:20px}
+  .editor-points{margin-top:36px}.editor-demo{--reveal-rest:translateZ(0);margin-top:32px;height:315px}.editor-demo-workspace{grid-template-columns:32px minmax(0,1fr) 142px}.editor-canvas{padding:2.15cqw 16px 14px}.editor-canvas h3{font-size:20px}.editor-art{height:108px;margin-top:13px}.editor-languages{padding:14px 9px 9px}.editor-language-list button{height:27px;font-size:9px}.editor-copy-button{margin-top:7px}
+  .seo-bg{border-radius:38px}
+  .seo-card .seo-word{order:1;align-self:center;width:min(340px,86%);margin:36px auto 0}
+  .seo-routes{order:2;margin-top:32px;font-size:13px}.seo-routes p{grid-template-columns:minmax(0,150px) 1fr}
+  .commerce-copy{margin-top:36px;font-size:15px;line-height:22px}.commerce-copy img{width:91px}
+  .product-card{margin-top:30px;height:auto;padding:28px 24px 24px}.product-card>img{width:100%;height:auto;max-height:240px}
+  .supporting-features{margin-top:60px;grid-template-columns:1fr;gap:38px;padding-bottom:0}
+  .make-sense{position:relative;left:auto;right:auto;bottom:auto;width:188px;justify-self:end}
+  .feature-notice{padding-inline:var(--grid-edge)}
+  /* Four narrow columns beat a table the width of two screens. */
+  .comparison-table-wrap{margin-top:30px}.comparison-table-wrap table{min-width:0}
+  .comparison-table-wrap th,.comparison-table-wrap td{height:auto;min-height:46px;padding:12px 5px;font-size:12px}
+  .comparison-table-wrap th:first-child{width:37%}
+  .comparison-table-wrap thead img{width:41px;height:auto}.comparison-table-wrap td img{width:17px;height:17px}
+  .pricing{padding:60px 20px}.price-grid{grid-template-columns:1fr;gap:16px}.price-card{grid-column:1;height:auto;min-height:340px}.price-card ul{font-size:14px}
+  /* Keep the three proofs and both stars on a single line — everything scales
+     with the viewport rather than wrapping. */
+  .pricing-trust{width:100%;flex-wrap:wrap;gap:clamp(4px,1.6vw,14px);font-size:clamp(8px,2.15vw,12px);white-space:nowrap}
+  .pricing-trust i{width:clamp(10px,2.6vw,24px);height:auto}
+  .pricing-trust i::before{font-size:clamp(11px,2.9vw,21px)}
+  /* Footer reflows to a left-aligned stack: menu, logo, then the small print. */
+  footer{height:auto;padding:60px 20px;display:flex;flex-direction:column;align-items:flex-start}
+  footer nav{position:relative;order:1;right:auto;top:auto;font-size:16px;line-height:32px}
+  footer>img{position:relative;order:2;left:auto;bottom:auto;width:var(--span-3);margin-top:34px}
+  footer>p{position:relative;order:3;right:auto;bottom:auto;margin-top:26px;font-size:12px}
 }
 
 /* Press G to inspect the six-column layout without changing the page flow. */
-.layout-grid{position:fixed;z-index:1000;inset:0 auto 0 50%;width:100%;max-width:1920px;transform:translateX(-50%);display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--grid-gap);padding:0 var(--grid-gutter);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s ease,visibility .15s ease}
+.layout-grid{position:fixed;z-index:1000;inset:0 auto 0 50%;width:100%;max-width:var(--grid-canvas);transform:translateX(-50%);display:grid;grid-template-columns:repeat(var(--grid-cols),minmax(0,1fr));gap:var(--grid-gap);padding:0 var(--grid-gutter);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s ease,visibility .15s ease}
 .layout-grid.is-visible{opacity:1;visibility:visible}
 .layout-grid span{height:100%;background:rgba(241,121,35,.14);border-left:1px solid rgba(241,121,35,.38);border-right:1px solid rgba(241,121,35,.38)}
-@media(max-width:900px){.layout-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:0 20px}.layout-grid span:nth-child(n+5){display:none}}
+@media(max-width:900px){.layout-grid span:nth-child(n+5){display:none}}
+
+/* Under ~390px the four labels, the logo and the button cannot share one bar:
+   the labels are nowrap, so they push over their neighbours instead of
+   shrinking. Navigation wins here — Start Free is still in the top header, the
+   notice bars and the pricing section. */
+@media(max-width:390px){
+  .sticky-header{grid-template-columns:auto minmax(0,1fr);padding:0 12px}
+  .sticky-start{display:none}
+  .sticky-brand,.sticky-brand img{width:50px;height:auto}
+  /* Spread across the space the button left behind, so the bar reads as
+     balanced rather than as a menu with a hole on the right. */
+  .sticky-header nav{justify-content:space-between;gap:9px;padding-left:10px;font-size:11px}
+}
 
 @media(max-width:520px){
   .hero h1{font-size:50px}.proof-list{grid-template-columns:1fr;max-width:220px}.hero-actions{gap:8px}.pill-dark,.pill-light{width:160px;padding-left:16px;gap:10px;font-size:13px}.micro-proof{font-size:10px}
   .architecture-card{height:390px}.canonical-post{width:calc(100% - 30px)}
-  .feature-card{min-height:730px}.migration-steps>div{margin-bottom:17px}.editor-card{min-height:690px}.editor-points ul{font-size:12px}.editor-demo{height:280px}.editor-demo-workspace{grid-template-columns:28px minmax(0,1fr) 118px}.editor-languages header em,.editor-copy-button{display:none}.editor-languages{padding-inline:6px}.editor-canvas{padding-inline:11px}.editor-canvas h3{font-size:17px}.editor-art{height:78px}.editor-current{padding-inline:5px}.editor-current>b{font-size:9px}
-  .seo-routes{width:90%}.seo-word{width:90%;right:-70px}.commerce-copy{width:43%;font-size:13px;line-height:19px}.product-card{width:53%;padding-left:14px;padding-right:14px}.product-card h3{font-size:16px}.product-card p{font-size:12px;line-height:17px}
-  .price-card{padding:23px 24px;grid-template-columns:1fr}.price-card ul{grid-column:1;grid-row:auto;align-self:start;margin-top:24px;font-size:12px}.price-card>a:not(.pill),.business-cta{margin-top:22px}.pricing-trust{font-size:11px}.pricing-trust i{width:20px;height:20px}.pricing-trust i::before{font-size:18px}
+  .migration-steps>div{margin-bottom:17px}.editor-points ul{font-size:12px}.editor-demo{height:280px}.editor-demo-workspace{grid-template-columns:28px minmax(0,1fr) 118px}.editor-languages header em,.editor-copy-button{display:none}.editor-languages{padding-inline:6px}.editor-canvas{padding-inline:11px}.editor-canvas h3{font-size:17px}.editor-art{height:94px}
+  .seo-card .seo-word{width:92%}.seo-routes{font-size:12px}.seo-routes p{grid-template-columns:minmax(0,132px) 1fr}
+  .commerce-copy{font-size:14px;line-height:21px}.product-card{padding-left:18px;padding-right:18px}.product-card>img{max-height:200px}
+  .comparison-table-wrap th,.comparison-table-wrap td{padding:11px 4px;font-size:11px}.comparison-table-wrap thead img{width:35px}
+  .price-card{padding:23px 24px;grid-template-columns:1fr}.price-card ul{grid-column:1;grid-row:auto;align-self:start;margin-top:24px;font-size:12px}.price-card>a:not(.pill),.business-cta{margin-top:22px}
 }
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}.ambient-copy.typing::after,.cursor{animation:none}.feature-card{transform:none!important;filter:none!important}.motion-reveal{opacity:1;transform:none;transition:none}
+  .hero-content .proof-list li.motion-reveal img{opacity:1;transform:none;transition:none}
 }
 
 @keyframes cursor-blink{50%{opacity:0}}
+
+/* ── FAQ page ──────────────────────────────────────────────────────────────
+   Reuses the landing shell (header, hero entrance, notice bar, footer) and
+   adds only what an inner page needs: a shorter hero, an editorial two-part
+   group layout, and the accordion itself. */
+/* The landing hero is a 759px stage for the ambient copy; an inner page just
+   needs the headline block, so the floor is dropped and the content re-centred
+   on the narrower measure. */
+.page-hero{min-height:0}
+.page-hero .hero-content{width:min(100%,820px);padding:186px 24px 96px}
+.page-hero .hero-copy{width:min(600px,100%)}
+/* Full bleed, with the copy pulled back onto the grid margin — the same
+   treatment as the bar above the footer. The wipe-in transform has to be
+   restated because the landing rules centre the bar with translateX(-50%). */
+.page-hero>.notice-bar{left:0;width:100%;padding-inline:var(--grid-edge);transform:none}
+.page-hero>.notice-bar.notice-motion-ready{transform:scaleX(0)}
+.page-hero>.notice-bar.notice-motion-ready.is-visible{transform:scaleX(1)}
+.faq-chips{flex-wrap:wrap;width:min(790px,100%);margin-left:auto;margin-right:auto;gap:10px}
+.faq-chip{height:40px;padding:0 20px;border:1px solid rgba(0,0,0,.16);background:#fff;font-size:14px;font-weight:500;justify-content:center}
+.faq-chip:hover{background:var(--orange);border-color:var(--orange);color:#000}
+
+.faq-sections{position:relative;padding:0 var(--grid-edge);background:#fff}
+/* Six columns: the heading holds 1–2 and the questions run across 3–6, so the
+   list lands on the same measure as the comparison table on the landing page. */
+.faq-group{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--grid-gap);padding:72px 0 76px;border-top:1px solid var(--orange)}
+.faq-group:first-child{border-top:0;padding-top:88px}
+.faq-group-head{grid-column:span 2;position:sticky;top:124px;align-self:start}
+.faq-index{margin:0;color:var(--orange);font-weight:600;line-height:1.2}
+.faq-group-head h2{margin:12px 0 0;font:700 32px/40px Brown,Arial,sans-serif;letter-spacing:-.01em}
+.faq-list{grid-column:3/-1}
+/* The group's one-line summary opens the question column rather than sitting
+   under the heading as small print — same size as the title, so the two
+   columns read as one sentence across the page. */
+.faq-lede{margin:0 0 34px;padding-right:52px;color:var(--ink);font:400 32px/40px Brown,Arial,sans-serif;letter-spacing:-.01em}
+
+.faq-item{border-bottom:1px solid #e4e4e4}
+.faq-list>.faq-item:first-of-type{border-top:1px solid #e4e4e4}
+.faq-q{position:relative;display:block;width:100%;margin:0;padding:24px 52px 24px 0;border:0;background:transparent;color:inherit;text-align:left;font:500 18px/1.5 Inter,Arial,sans-serif;cursor:pointer;transition:color .2s ease}
+.faq-q:hover,.faq-item.is-open>.faq-q{color:var(--orange)}
+.faq-q:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+/* A plus that loses its upright stroke on open — one mark doing two jobs, so
+   nothing jumps position between states. */
+.faq-mark{position:absolute;right:8px;top:29px;width:15px;height:15px}
+.faq-mark::before,.faq-mark::after{content:"";position:absolute;left:50%;top:50%;background:currentColor;transition:transform .32s cubic-bezier(.22,.72,.24,1)}
+.faq-mark::before{width:15px;height:1.5px;transform:translate(-50%,-50%)}
+.faq-mark::after{width:1.5px;height:15px;transform:translate(-50%,-50%)}
+.faq-item.is-open .faq-mark::after{transform:translate(-50%,-50%) scaleY(0)}
+/* 0fr → 1fr animates without measuring the panel in JS. The inner wrapper
+   carries the clip and drops out of the tab order once the close finishes. */
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.22,.72,.24,1)}
+.faq-a>div{overflow:hidden;visibility:hidden;transition:visibility 0s linear .42s}
+.faq-item.is-open>.faq-a{grid-template-rows:1fr}
+.faq-item.is-open>.faq-a>div{visibility:visible;transition-delay:0s}
+.faq-a p{margin:0 0 22px;padding-right:52px;color:var(--muted);line-height:25px}
+.faq-a p+p{margin-top:-8px}
+.faq-a em{color:var(--ink);font-style:normal;font-weight:500}
+.faq-a code{padding:2px 7px;background:#f1f1f1;color:var(--ink);font:500 13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+
+/* Shared closing card — dark on the FAQ page, light at the foot of the black
+   pricing section. Same geometry, inverted palette. */
+.cta-section{padding:26px 0 96px}
+.cta-card{width:100%;padding:64px clamp(30px,3.6vw,68px);border-radius:48px;background:#000;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:40px var(--grid-gap);text-align:left}
+.cta-kicker{margin:0;color:var(--orange);font-weight:600;line-height:1.2}
+.cta-card h2{margin:12px 0 0;font:700 clamp(28px,2.1vw,38px)/1.25 Brown,Arial,sans-serif;letter-spacing:-.01em}
+.cta-copy{width:min(460px,100%);margin:16px 0 0;color:rgba(255,255,255,.62);line-height:25px}
+.cta-copy a{color:#fff;text-decoration:underline;text-underline-offset:3px;transition:color .2s ease}
+.cta-copy a:hover{color:var(--orange)}
+.cta-copy em{color:inherit;font-style:normal;font-weight:600}
+/* Stretch, so a stacked pair ends up as wide as its longest label instead of
+   being clipped by a fixed width. */
+.cta-actions{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.cta-actions .pill{width:auto;min-width:196px}
+.cta-card.is-light{background:#fff;color:var(--ink)}
+.pricing>.cta-card{margin-top:52px}
+.cta-card.is-light .cta-copy{color:var(--muted)}
+.cta-card.is-light .cta-copy a{color:var(--ink)}
+.pill-ghost{border:1px solid rgba(255,255,255,.35);color:#fff}.pill-ghost img{filter:brightness(0) invert(1)}
+.pill-ghost:hover{background:var(--orange);border-color:var(--orange);color:#000}.pill-ghost:hover img{filter:brightness(0)}
+.faq-notice{position:static;width:auto;max-width:none;margin:0 calc(-1 * var(--grid-edge));padding-inline:var(--grid-edge);transform:none}
+
+/* Only the FAQ hero runs dark — everything from the orange notice bar down
+   keeps the paper page. The top header sits over the hero so it inverts with
+   it; the sticky header appears over the white content below and does not,
+   which is why every rule here is scoped to .page-hero or .site-header rather
+   than to the page. */
+.faq-page .page-hero{background:#0e0e0e;color:#fff}
+.faq-page .page-hero .hero-copy{color:#9a9a9a}
+/* The notice bar keeps its orange, so its text stays black while the hero
+   above it turns white. */
+.faq-page .page-hero .notice-bar{color:#000}
+.faq-page .page-hero .faq-chip{border-color:rgba(255,255,255,.24);background:transparent;color:#fff}
+/* The header pills swap roles over the dark hero: a white capsule there would
+   out-shout Start Free, so the nav takes a raised dark surface and the button
+   takes the white. */
+.faq-page .site-header nav,.faq-page .site-header .lang-menu{background:#1c1c1c;color:#fff}
+.faq-page .site-header .lang-menu{box-shadow:0 16px 36px rgba(0,0,0,.6)}
+/* Same specificity as the base current-language rule, so the orange marker has
+   to be restated here or the blanket white wins on source order. */
+.faq-page .site-header .lang-menu button{color:#fff}
+.faq-page .site-header .lang-menu button[aria-current="true"]{color:var(--orange)}
+.faq-page .start-free{background:#fff;color:#000}
+/* The globe is single-colour artwork, so a filter is enough. The wordmark is
+   not — inverting it turns the orange dot blue — so the top header points at
+   logo-light.svg instead, a copy with the black paths swapped and the dot left
+   alone. */
+.faq-page .site-header .lang-switch img{filter:invert(1)}
+
+@media(max-width:1200px) and (min-width:901px){
+  .faq-group-head{grid-column:span 6;position:static}
+  .faq-list{grid-column:1/-1;margin-top:34px}
+}
+
+@media(max-width:900px){
+  .page-hero .hero-content{padding:150px 20px 72px}
+  .page-hero>.notice-bar{width:100%}
+  .faq-chips{gap:8px}.faq-chip{height:34px;padding:0 14px;font-size:12px}
+  .faq-sections{padding:0 20px}
+  .faq-group{grid-template-columns:1fr;padding:48px 0 52px}
+  .faq-group:first-child{padding-top:58px}
+  .faq-group-head{grid-column:1;position:static}
+  .faq-group-head h2{margin-top:8px;font-size:28px;line-height:36px}
+  .faq-list{grid-column:1;margin-top:22px}
+  .faq-lede{margin-bottom:24px;padding-right:0;font-size:22px;line-height:30px}
+  .faq-q{padding:20px 40px 20px 0;font-size:16px;line-height:1.45}
+  .faq-mark{right:2px;top:25px;width:13px;height:13px}
+  .faq-mark::before{width:13px}.faq-mark::after{height:13px}
+  .faq-a p{padding-right:34px;font-size:14px;line-height:23px}
+  .cta-section{padding:8px 0 64px}
+  .cta-card{padding:44px 28px;border-radius:38px;grid-template-columns:1fr;gap:32px}
+  /* Full-width rows: a wrapped two-up leaves each pill too narrow for its
+     label and the arrow runs into the text. */
+  .cta-actions .pill{width:100%;min-width:0}
+  .faq-notice{margin-inline:-20px;padding-inline:20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .faq-a,.faq-a>div,.faq-mark::before,.faq-mark::after{transition:none}
+}
